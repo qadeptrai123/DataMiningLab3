@@ -1,0 +1,418 @@
+\section{Fast-Estimation}
+
+Mặc dù thuật toán Fast-Sampling có thời gian chạy tuyến tính trong khi vẫn duy trì các đảm bảo về mặt xấp xỉ, nhưng vẫn có $O(\log(kd))$ khi thực hiện chặn hội tụ xác suất, có thể ảnh hưởng trong thực tế của thuật toán khi xử lý các tập dữ liệu quy mô cực lớn. Để giải quyết vấn đề này, trong phần này, tác giả đề xuất một thuật toán dựa trên lấy mẫu nhanh hơn mang tên Fast-Estimation. Thuật toán Fast-Estimation có thể xấp xỉ hiệu quả tọa độ của từng cụm dự đoán trong thời gian chạy tuyến tính, với một sự đánh đổi nhỏ trong các đảm bảo về chất lượng phân cụm.
+
+Ý tưởng chính: trước tiên tạo ra các tọa độ ứng viên có khả năng xấp xỉ chặt chẽ tọa độ của các tâm tối ưu. Sau đó, trong mỗi chiều của từng cụm dự đoán, một bộ ước lượng (estimator) được xây dựng bằng cách lấy mẫu theo phân phối đều. Bộ ước lượng này được thiết kế để cung cấp các ước tính chi phí phân cụm chính xác cho các tập con tọa độ có kích thước $(1-\alpha)m_i$. Cụ thể, đối với mỗi chiều của từng cụm dự đoán, bộ ước lượng được xây dựng bằng cách chọn ngẫu nhiên một tập $S_{ij}$ từ $P_{ij}$. Mỗi tọa độ được lấy mẫu sau đó được gán một trọng số bằng nhau, vì vậy xấp xỉ chi phí phân cụm thông qua các mẫu trọng số thay vì tính toàn bộ cụm dự đoán. Với các bộ ước lượng đã xây dựng, việc tìm kiếm tập hợp các tọa độ có chi phí phân cụm tối thiểu có thể được thực hiện trong thời gian hạ tuyến tính (sub-linear), loại bỏ nhân với $O(\log(kd))$ khỏi thời gian chạy của thuật toán Fast-Sampling.
+
+\begin{algorithm}[H]
+\caption{Fast-Estimation}
+\label{alg:fast_estimation}
+\begin{algorithmic}[1]
+\Require Một bài toán $k$-means $(P, k, d)$, một tập các phân vùng $(P_1, P_2, ..., P_k)$ với tỷ lệ lỗi $\alpha$, và tham số $0 < \epsilon < 0.5$.
+\Ensure Một tập $C \subset \mathbb{R}^d$ các tâm với $|C| = k$.
+\For{$i \in [k]$}
+    \For{$j \in [d]$}
+        \State Lấy mẫu ngẫu nhiên và độc lập một tập $U_{ij}$ từ $P_{ij}$ với kích thước $O(\log(kd))$, sau đó khởi tạo $U'_{ij} = \emptyset$ và $\epsilon_1 = \frac{\epsilon}{126}$.
+        \For{$q = 0$ to $O(\log(m\Delta^2_{max}))$}
+            \State $l_{ij} = \sqrt{\frac{2^{q-1}}{(1-\alpha)m_i}}$.
+            \For{$u \in U_{ij}$}
+                \State $s(u) = \{ u + \epsilon_2\lambda l_{ij} : \lambda \in [-\frac{1}{\epsilon_2}, \frac{1}{\epsilon_2}] \cap \mathbb{Z} \}$, với $\epsilon_2 = \sqrt{\frac{\epsilon_1}{32}}$.
+                \State $U'_{ij} = U'_{ij} \cup s(u)$.
+            \EndFor
+        \EndFor
+        \State Lấy mẫu ngẫu nhiên và độc lập một tập $S_{ij}$ từ $P_{ij}$ với kích thước $O \left( \frac{\log(m^3d \log^3(m\Delta^2_{max})/\epsilon^2_1) \log(m\Delta^2_{max})}{\alpha\epsilon^4_1} \right)$, gán cho mỗi điểm trong $S_{ij}$ một trọng số $\frac{m_i}{|S_{ij}|}$.
+        \State Xây dựng bộ ước lượng $\omega$ sao cho $\forall u \in U'_{ij}$, $\omega(u) = \sum_{p \in S_{ij} \setminus F(u)} \frac{m_i}{|S_{ij}|} \delta^2(p, u)$, trong đó $F(u)$ là tập hợp $(1 + 3\epsilon_1)\alpha|S_{ij}|$ điểm xa $u$ nhất trong $S_{ij}$.
+        \State $c_{ij} = \arg \min_{u \in U'_{ij}} \omega(u)$.
+        \State Gọi $I_{ij}$ là tập hợp $(1 - 2\alpha - \alpha\epsilon)m_i$ tọa độ gần $c_{ij}$ nhất từ $P_{ij}$.
+    \EndFor
+    \State $\hat{c}_i = (I_{ij})_{j \in [d]}$.
+\EndFor
+\State \Return $\{\hat{c}_1, \hat{c}_2, ..., \hat{c}_k\}$.
+\end{algorithmic}
+\end{algorithm}
+
+\textbf{Phân tích thuật toán:}
+
+% TODO PB: why Không mất tính tổng quát. thay giả định = giả sử 
+
+Trong bước 3, đối với mỗi chiều của cụm dự đoán, thuật toán chọn một mẫu ngẫu nhiên $U_{ij}$ để xấp xỉ tọa độ của các tâm tối ưu. Theo Lemma 4, với xác suất hằng số, tồn tại ít nhất một tọa độ được lấy mẫu $u \in U_{ij}$ sao cho $\delta(u, Q'_{ij}) \leq \sqrt{2\delta^2(Q'_{ij}, \overline{Q'_{ij}})/|Q'_{ij}|}$. Sau đó, từ bước 4 liệt kê tất cả các độ dài khoảng ứng viên để xây dựng tập hợp các tọa độ ứng viên. Không mất tính tổng quát, có thể giả sử khoảng cách cặp tối thiểu giữa các tọa độ trong $P_{ij}$ là 1 và khoảng cách cặp tối đa là $\Delta_{max}$. Do đó, trong bước 5, tồn tại ít nhất một lần đoán $q$ cho độ dài thoả $\sqrt{\frac{2\delta^2(Q'_{ij}, \overline{Q'_{ij})}}{(1-\alpha)m_i}} \leq l_{ij} \leq \sqrt{\frac{4\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{(1-\alpha)m_i}}$. Tiếp theo, trong các bước 7-8, theo Lemma 5, cũng tồn tại ít nhất một tọa độ $u' \in U'_{ij}$ sao cho $u'$ đủ gần với trọng tâm của $Q'_{ij}$, tức là $\delta(u', Q'_{ij}) \leq \sqrt{\epsilon_1\delta^2(Q'_{ij}, \overline{Q'_{ij}})/|Q'_{ij}|}$.
+
+Đối với mỗi $u \in U'_{ij}$, gọi $\mathcal{N}_{ij}(u)$ là tập hợp $(1-\alpha)m_i$ tọa độ gần nhất từ $P_{ij}$ đến $u$. Gọi $O(u) = P_{ij} \setminus \mathcal{N}_{ij}(u)$ là tập hợp $\alpha m_i$ tọa độ xa nhất từ $P_{ij}$ đến $u$. Trước khi xây dựng bộ ước lượng $\omega$ (bước 9-10), tác giả bắt đầu bằng cách chia $\mathcal{N}_{ij}(u)$ thành $\gamma = \frac{(1+\epsilon_1) \log(m\Delta_{max}^2)}{\epsilon_1}$ khối. Cụ thể, đối với mỗi $u \in U'_{ij}$, $\mathcal{N}_{ij}(u)$ được phân rã thành $\gamma$ khối (ký hiệu là $\mathcal{B}_u^1, \mathcal{B}_u^2, \dots, \mathcal{B}_u^\gamma$) dựa trên khoảng cách từ các tọa độ trong $\mathcal{N}_{ij}(u)$ đến $u$, trong đó $\mathcal{B}_u^l = \{ x \in \mathcal{N}_{ij}(u) : (1+\epsilon_1)^l \leq \delta^2(x, u) < (1+\epsilon_1)^{l+1} \}$. 
+
+% BEGIN PB
+Các "khối" này có thể hình dung là các phần tiếp nối giữa khối cầu có bán kính $(1+\epsilon_1)^l$ và $(1+\epsilon_1)^{l+1}$ trong $\mathbb{R}^d$
+
+% TODO vẽ hình cầu
+% END PB
+
+Sau đó, các khối này được chia tiếp thành hai nhóm dựa trên kích thước: $\mathcal{L}(u) = \{ \mathcal{B}_u^l : |\mathcal{B}_u^l| \geq \frac{\epsilon_1^2 \alpha m_i}{(1+\epsilon_1) \log(m_i\Delta_{max}^2)}, l \in [\gamma] \}$ là nhóm các khối lớn và $\mathcal{S}(u) = \{ \mathcal{B}_u^1, \dots, \mathcal{B}_u^\gamma \} \setminus \mathcal{L}(u)$ là nhóm các khối nhỏ. 
+
+\textbf{Sự hội tụ xác suất:}
+
+Mục tiêu là xấp xỉ tốt từng khối lớn trong $\mathcal{L}(u)$ đồng thời cho phép bỏ qua các tọa độ trong các khối nhỏ.
+
+\begin{enumerate}
+    \item \textbf{Biến ngẫu nhiên:} Đối với mỗi mẫu $p \in S_{ij}$, xét biến ngẫu nhiên chỉ thị cho việc $p$ rơi vào một khối cụ thể.
+    \item \textbf{Áp dụng Bất đẳng thức Chernoff:} Với kích thước mẫu $|S_{ij}|$ được chọn, kỳ vọng số điểm rơi vào mỗi khối lớn đủ lớn để xác suất sai lệch quá $\epsilon_1$ lần kỳ vọng bị chặn bởi một hàm mũ âm. Cụ thể, $Pr(|X - \mathbb{E}[X]| \geq \epsilon_1 \mathbb{E}[X]) \leq 2e^{-\epsilon_1^2 \mathbb{E}[X]/3}$.
+    \item \textbf{Chặn hội tụ (Union Bound):} Bằng cách lấy tổng xác suất lỗi trên tất cả các khối và các tọa độ ứng viên, tác giả đảm bảo rằng bộ ước lượng $\omega$ hoạt động chính xác với xác suất cao trên toàn không gian ứng viên.
+\end{enumerate}
+
+Với bộ ước lượng đã được chứng minh là hội tụ về giá trị thực, việc tìm $c_{ij}$ tại bước 11 nhanh hơn vì số lượng ứng viên $|U'_{ij}|$ chỉ phụ thuộc logarit vào $\Delta_{max}$ và $m$, trong khi việc tính toán mỗi giá trị $\omega(u)$ chỉ tốn thời gian phụ thuộc vào kích thước mẫu $|S_{ij}|$ thay vì kích thước toàn bộ dữ liệu $m_i$. Cuối cùng, bằng cách sử dụng Lemma 7, Theorem 2 có thể được chứng minh để độ phức tạp thời gian tuyến tính $O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$ cho bài toán có hỗ trợ học.
+
+% L 8
+\begin{lemma}
+\label{lemma:large_block_concentration}
+Giả sử $S_{ij}$ là một mẫu được lấy ngẫu nhiên từ cụm dự đoán $P_{ij}$ với kích thước mẫu $|S_{ij}| = \tilde{O}(1/\alpha \epsilon_1^4)$. Với xác suất ít nhất $1 - \frac{\epsilon_1}{m^3d \log^2(m\Delta_{\max}^2)}$, các bất đẳng thức sau đây đồng thời xảy ra cho mọi khối lớn $\mathcal{B}_u^l \in \mathcal{L}(u)$ và tập các điểm xa nhất $\mathcal{O}(u)$:
+\[ (1 - \epsilon_1)\mathbb{E}[|\mathcal{B}_u^l \cap S_{ij}|] \leq |\mathcal{B}_u^l \cap S_{ij}| \leq (1 + \epsilon_1)\mathbb{E}[|\mathcal{B}_u^l \cap S_{ij}|] \]
+\[ (1 - \epsilon_1)\mathbb{E}[|\mathcal{O}(u) \cap S_{ij}|] \leq |\mathcal{O}(u) \cap S_{ij}| \leq (1 + \epsilon_1)\mathbb{E}[|\mathcal{O}(u) \cap S_{ij}|] \]
+\end{lemma}
+
+\begin{proof}
+Chúng ta sẽ phân tích chi tiết cho một khối lớn bất kỳ $\mathcal{B}_u^l \in \mathcal{L}(u)$. Quy trình tương tự cũng áp dụng cho tập $\mathcal{O}(u)$.
+
+\textbf{Bước 1: Kỳ vọng }
+
+Các tọa độ trong $P_{ij}$ được lấy mẫu độc lập và phân phối đều. Xác suất để một mẫu đơn lẻ rơi vào khối $\mathcal{B}_u^l$ là tỷ lệ kích thước $|\mathcal{B}_u^l|/|P_{ij}|$. Với tập mẫu kích thước $|S_{ij}|$, giá trị kỳ vọng số điểm rơi vào khối là:
+\begin{align*}
+ \mathbb{E}[|\mathcal{B}_u^l \cap S_{ij}|] = |S_{ij}| \cdot \frac{|\mathcal{B}_u^l|}{m_i} 
+\end{align*}
+do tuyến tính của kỳ vọng.
+
+Theo định nghĩa của thuật toán, kích thước mẫu $|S_{ij}|$ được là:
+\[ |S_{ij}| = \frac{c \log(m^3d \log^3(m\Delta_{\max}^2)/\epsilon_1^2) \log(m\Delta_{\max}^2)}{\alpha\epsilon_1^4} \]
+trong đó $c$ là một hằng số đủ lớn.
+Theo định nghĩa của tập hợp các khối lớn $\mathcal{L}(u)$, kích thước của khối $\mathcal{B}_u^l$ phải thỏa mãn chặn dưới:
+\[ |\mathcal{B}_u^l| \ge \frac{\epsilon_1^2 \alpha m_i}{(1+\epsilon_1)\log(m_i\Delta_{\max}^2)} \]
+
+\begin{align*}
+    \mathbb{E}[|\mathcal{B}_u^l \cap S_{ij}|] &= \left( \frac{c \log(m^3d \dots) \log(m\Delta_{\max}^2)}{\alpha\epsilon_1^4} \right) \cdot \left( \frac{|\mathcal{B}_u^l|}{m_i} \right) \\
+    &\geq \left( \frac{c \log(m^3d \dots) \log(m\Delta_{\max}^2)}{\alpha\epsilon_1^4} \right) \cdot \left( \frac{\epsilon_1^2 \alpha m_i}{(1+\epsilon_1)\log(m_i\Delta_{\max}^2) m_i} \right)
+\end{align*}
+
+Ta thu được:
+\begin{equation}
+    \label{fe:eq-EX}
+    \mathbb{E}[|\mathcal{B}_u^l \cap S_{ij}|] \geq \frac{c \log(m^3d \log^3(m\Delta_{\max}^2)/\epsilon_1^2)}{(1+\epsilon_1)\epsilon_1^2}
+\end{equation}
+
+\textbf{Bước 2: Áp dụng Bất đẳng thức Chernoff}
+
+Để chứng minh độ tập trung quanh giá trị kỳ vọng, ta sử dụng bất đẳng thức Chernoff dạng nhân \footnote{Sums of independent Bernoulli random variables \url{https://en.wikipedia.org/wiki/Chernoff_bound\#Sums_of_independent_Bernoulli_random_variables}}.
+\begin{enumerate}
+    \item \textbf{Bất đẳng thức:}
+    Gọi $X$ là tổng các biến ngẫu nhiên Bernoulli $X_1, \ldots , X_{m_i}$, $X_i = 1$ nếu điểm $i$ thuộc $\mathcal{B}_u^l \cap S_{ij}$. 
+    Áp dụng Bất đẳng thức Chernoff dạng nhân cho tổng các biến Bernoulli độc lập với độ lệch tương đối $\epsilon_1 \in (0,1)$:
+    \[ \Pr(|X - \mathbb{E}[X]| \geq \epsilon_1 \mathbb{E}[X]) \leq 2e^{-\frac{\epsilon_1^2 \mathbb{E}[X]}{3}} \]
+
+    \item \textbf{Thay thế cận dưới của kỳ vọng:}
+    % Từ \ref{fe:eq-EX}, ta có chặn dưới của kỳ vọng dựa trên kích thước mẫu $|S_{ij}|$ và định nghĩa khối lớn:
+    % \[ \mathbb{E}[X] \geq \frac{c \ln\left( \frac{m^3 d \log^3(m\Delta_{\max}^2)}{\epsilon_1^2} \right)}{(1+\epsilon_1)\epsilon_1^2} \]
+
+    \begin{align*}
+        \text{Số mũ} &= -\frac{\epsilon_1^2}{3} \cdot \mathbb{E}[X] \\
+        &\leq -\frac{\epsilon_1^2}{3} \cdot \frac{c \ln\left( \frac{m^3 d \log^3(m\Delta_{\max}^2)}{\epsilon_1^2} \right)}{(1+\epsilon_1)\epsilon_1^2} \\
+        &= -\frac{c}{3(1+\epsilon_1)} \ln\left( \frac{m^3 d \log^3(m\Delta_{\max}^2)}{\epsilon_1^2} \right)
+    \end{align*}
+ 
+    \item \textbf{Biến đổi:}
+    Đặt $\Lambda = \frac{m^3 d \log^3(m\Delta_{\max}^2)}{\epsilon_1^2}$. Khi đó, vế phải Chernoff:
+    \[ 2e^{-\frac{c}{3(1+\epsilon_1)} \ln(\Lambda)} = 2 \Lambda^{-\frac{c}{3(1+\epsilon_1)}} \]
+    
+    Để đảm bảo xác suất thất bại đủ nhỏ, ta chọn hằng số $c$ đủ lớn sao cho số mũ $\frac{c}{3(1+\epsilon_1)} \geq 1$. Khi đó:
+    \begin{align*}
+        \Pr(\text{Thất bại tại } \mathcal{B}_u^l) & \leq 2 \Lambda^{-\frac{c}{3(1+\epsilon_1)}}
+        \\ &\leq 2 \Lambda^{-1} \\
+        &= 2 \left( \frac{m^3 d \log^3(m\Delta_{\max}^2)}{\epsilon_1^2} \right)^{-1} \\
+        &= \frac{2\epsilon_1^2}{m^3 d \log^3(m\Delta_{\max}^2)}
+    \end{align*}
+
+    \[ \Pr(|X - \mathbb{E}[X]| \geq \epsilon_1 \mathbb{E}[X]) \leq O\left( \frac{\epsilon_1^2}{m^3 d \log^3(m\Delta_{\max}^2)} \right) \]
+\end{enumerate}
+
+\textbf{Bước 3: Chặn Union}
+
+Bổ đề yêu cầu bất đẳng thức đúng cho \textit{tất cả} các khối lớn. Số lượng khối lớn $\gamma$ bị chặn bởi $O(\log(m\Delta_{\max}^2)/\epsilon_1)$.
+Áp dụng Bất đẳng thức Union Bound để tính tổng xác suất thất bại:
+\begin{align*}
+    \Pr(\exists \mathcal{B}_u^l \text{ vi phạm}) &\leq \sum_{l=1}^{\gamma} \Pr(\text{Thất bại tại } \mathcal{B}_u^l) \\
+    &\leq \gamma \cdot O\left( \frac{\epsilon_1^2}{m^3 d \log^3(m\Delta_{\max}^2)} \right) \\
+    &\leq \frac{\epsilon_1}{m^3 d \log^2(m\Delta_{\max}^2)}
+\end{align*}
+Đối với tập ngoại lai $\mathcal{O}(u)$, vì kích thước $|\mathcal{O}(u)| = \alpha m_i$ lớn hơn kích thước tối thiểu của khối lớn, kết quả tương tự cũng được áp dụng.
+\end{proof}
+
+% L 9
+
+\begin{lemma}
+\label{lemma:small_blocks_bound}
+Gọi $\mathcal{J}(u)$ là tập hợp các tọa độ nằm trong các khối nhỏ đối với một tọa độ ứng viên $u$. Với xác suất ít nhất $1 - \frac{\epsilon_1}{m^3d \log^2(m\Delta_{\max}^2)}$, giao của tập mẫu $S_{ij}$ và $\mathcal{J}(u)$ bị chặn như sau:
+\[ |\mathcal{J}(u) \cap S_{ij}| \leq 2\epsilon_1\alpha|S_{ij}| \]
+\end{lemma}
+
+\begin{proof}
+Chứng minh này dựa trên việc áp dụng Bất đẳng thức Chernoff để giới hạn độ lệch của biến ngẫu nhiên so với kỳ vọng của nó.
+
+\textbf{Bước 1:}
+% Theo định nghĩa của các khối nhỏ trong thuật toán, tổng số lượng tọa độ trong các khối này chiếm một phần rất nhỏ của cụm dự đoán:
+% \[ |\mathcal{J}(u)| \leq \epsilon_1\alpha m_i \]
+
+Gọi biến ngẫu nhiên $X = |\mathcal{J}(u) \cap S_{ij}|$. Vì $S_{ij}$ được lấy mẫu ngẫu nhiên đều từ $P_{ij}$, giá trị kỳ vọng của $X$ được tính bằng tỷ lệ kích thước:
+\[ \mathbb{E}[X] = |S_{ij}| \cdot \frac{|\mathcal{J}(u)|}{m_i} \]
+
+\textbf{Bước 2: Chuẩn bị áp dụng Bất đẳng thức Chernoff}
+Chúng ta muốn chứng minh rằng $X$ không vượt quá ngưỡng $2\epsilon_1\alpha|S_{ij}|$. Để làm điều này, ta biểu diễn ngưỡng này dưới dạng độ lệch so với kỳ vọng $(1 + \lambda')\mathbb{E}[X]$.
+Ta cần tìm $\lambda'$ sao cho:
+\[ (1 + \lambda')\mathbb{E}[X] = 2\epsilon_1\alpha|S_{ij}| \]
+Thay thế $\mathbb{E}[X]$ vào phương trình trên:
+\[ (1 + \lambda') \left( |S_{ij}| \frac{|\mathcal{J}(u)|}{m_i} \right) = 2\epsilon_1\alpha|S_{ij}| \]
+Giải phương trình tìm $\lambda'$:
+\[ 1 + \lambda' = \frac{2\epsilon_1\alpha m_i}{|\mathcal{J}(u)|} \quad \Rightarrow \quad \lambda' = \frac{2\epsilon_1\alpha m_i}{|\mathcal{J}(u)|} - 1 \]
+vì $|\mathcal{J}(u)| \leq \epsilon_1\alpha m_i$, ta có tỷ số $\frac{\epsilon_1\alpha m_i}{|\mathcal{J}(u)|} \geq 1$, suy ra $\frac{2\epsilon_1\alpha m_i}{|\mathcal{J}(u)|} \geq 2$, do đó $\lambda' \geq 1$.
+
+\textbf{Bước 3: Bất đẳng thức}
+
+Đặt biến ngẫu nhiên $X = |\mathcal{J}(u) \cap S_{ij}|$. Ta muốn chặn trên xác suất $X$ vượt quá ngưỡng $2\epsilon_1\alpha|S_{ij}|$.
+Đặt độ lệch $\lambda' = \frac{2\epsilon_1\alpha m_i}{|\mathcal{J}(u)|} - 1$. Khi đó, ngưỡng cần chặn chính là $(1+\lambda')\mathbb{E}[X]$.
+
+Áp dụng Bất đẳng thức Chernoff dạng nhân:
+\[ \Pr(X \geq (1 + \lambda')\mathbb{E}[X]) \leq e^{-\frac{\mathbb{E}[X](\lambda')^2}{3}} \]
+
+Ta xét số mũ $\mathcal{E} = \frac{\mathbb{E}[X](\lambda')^2}{3}$. Thay thế $\mathbb{E}[X] = \frac{|S_{ij}||\mathcal{J}(u)|}{m_i}$ và giá trị của $\lambda'$:
+\[ \mathcal{E} = \frac{|S_{ij}||\mathcal{J}(u)|}{3m_i} \left( \frac{2\epsilon_1\alpha m_i}{|\mathcal{J}(u)|} - 1 \right)^2 \]
+
+Để tìm chặn dưới cho số mũ $\mathcal{E}$, ta thực hiện biến đổi đại số sau.
+Đặt $A = \frac{\epsilon_1\alpha m_i}{|\mathcal{J}(u)|}$.
+Theo định nghĩa khối nhỏ, $|\mathcal{J}(u)| \leq \epsilon_1\alpha m_i$, suy ra $A \geq 1$.
+Ta có: $(2A - 1)^2 \geq A^2 \Leftrightarrow A \geq 1$.
+
+Áp dụng vào biểu thức của $\mathcal{E}$:
+\begin{align*}
+    \mathcal{E} &\geq \frac{|S_{ij}||\mathcal{J}(u)|}{3m_i} \left( \frac{\epsilon_1\alpha m_i}{|\mathcal{J}(u)|} \right)^2 \\
+    &= \frac{|S_{ij}||\mathcal{J}(u)|}{3m_i} \cdot \frac{\epsilon_1^2 \alpha^2 m_i^2}{|\mathcal{J}(u)|^2} \\
+    &= \frac{\epsilon_1^2 \alpha^2 m_i |S_{ij}|}{3|\mathcal{J}(u)|}
+\end{align*}
+
+Để $\mathcal{E}$ nhỏ nhất, ta thay $|\mathcal{J}(u)|$ bằng giá trị lớn nhất:
+\[ \mathcal{E} \geq \frac{\epsilon_1^2 \alpha^2 m_i |S_{ij}|}{3(\epsilon_1 \alpha m_i)} = \frac{\epsilon_1 \alpha |S_{ij}|}{3} \]
+
+
+\textbf{Bước 4:}
+
+Theo thuật toán, kích thước mẫu $|S_{ij}|$ được chọn là:
+\[ |S_{ij}| = \Omega\left( \frac{\log(m^3d \log^3(m\Delta_{\max}^2)/\epsilon_1^2) \log(m\Delta_{\max}^2)}{\alpha \epsilon_1^4} \right) \]
+Thay thế $|S_{ij}|$ vào chặn dưới của số mũ $\mathcal{E}$ tìm được ở Bước 3:
+\[ \mathcal{E} \geq \frac{\epsilon_1 \alpha}{3} \cdot \frac{C \cdot \ln(\dots)}{\alpha \epsilon_1^4} = \frac{C \cdot \ln(\dots)}{3 \epsilon_1^3} \]
+Vì $\epsilon_1 < 1$ và $C$ là hằng số đủ lớn, ta có:
+\[ e^{-\mathcal{E}} \leq \frac{\epsilon_1}{m^3 d \log^2(m\Delta_{\max}^2)} \]
+Do đó:
+\[ \Pr(|\mathcal{J}(u) \cap S_{ij}| \geq 2\epsilon_1\alpha|S_{ij}|) \leq \frac{\epsilon_1}{m^3d \log^2(m\Delta_{\max}^2)} \]
+Lấy phần bù, ta có điều phải chứng minh.
+\end{proof}
+
+% L 10
+
+\begin{lemma}
+\label{lemma:cost_estimation}
+Cho một tọa độ ứng viên bất kỳ $u \in U'_{ij}$. Với xác suất cao (xác suất hằng số), ước lượng $\omega(u)$ thỏa mãn các chặn sau:
+\[ 
+\frac{\delta^2(P_{ij} \setminus \mathcal{F}^\dagger(u), u)}{1 + 7\epsilon_1} \leq \omega(u) \leq (1 + \epsilon_1)^2 \delta^2(\mathcal{N}_{ij}(u), u) 
+\]
+trong đó:
+\begin{itemize}
+    \item $\mathcal{F}^\dagger(u)$ là tập hợp gồm $(2 + 20\epsilon_1)\alpha m_i$ tọa độ xa nhất từ $P_{ij}$ đến $u$.
+    \item $\mathcal{N}_{ij}(u)$ là tập hợp gồm $(1-\alpha)m_i$ tọa độ gần nhất trong $P_{ij}$ đến $u$.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}
+Theo Bổ đề 8 và 9, với xác suất ít nhất $1 - \frac{\epsilon_1}{m^2 d \log^2(m \Delta_{\max}^2)}$, các điều kiện sau đây đồng thời xảy ra đối với tập mẫu ngẫu nhiên $S_{ij}$:
+\begin{enumerate}
+    \item Số lượng phần tử thuộc các khối nhỏ trong mẫu: $|\mathcal{J}(u) \cap S_{ij}| \leq 2\epsilon_1 \alpha |S_{ij}|$.
+    \item Số lượng phần tử ngoại lai trong mẫu: $|\mathcal{O}(u) \cap S_{ij}| \leq (1 + \epsilon_1)\alpha |S_{ij}|$.
+    \item Với mọi khối lớn $\mathcal{B}_u^l \in \mathcal{L}(u)$, số lượng phần tử trong mẫu xấp xỉ giá trị kỳ vọng:
+    \[ (1 - \epsilon_1) \frac{|S_{ij}|}{m_i} |\mathcal{B}_u^l| \leq |\mathcal{B}_u^l \cap S_{ij}| \leq (1 + \epsilon_1) \frac{|S_{ij}|}{m_i} |\mathcal{B}_u^l| \]
+\end{enumerate}
+Chúng ta áp dụng Bất đẳng thức Union Bound để đảm bảo các điều kiện này đúng cho mọi $u \in U'_{ij}$ với xác suất hằng số.
+
+\textbf{1. Chặn Trên}
+
+Mục tiêu là chứng minh $\omega(u) \leq (1 + \epsilon_1)^2 \delta^2(\mathcal{N}_{ij}(u), u)$.
+
+Gọi $\mathcal{F}'(u) = (\mathcal{J}(u) \cup \mathcal{O}(u)) \cap S_{ij}$ là tập hợp các điểm thuộc khối nhỏ và các điểm ngoại lai nằm trong mẫu. Kích thước của tập này bị chặn bởi:
+\[ |\mathcal{F}'(u)| = |\mathcal{J}(u) \cap S_{ij}| + |\mathcal{O}(u) \cap S_{ij}| \leq 2\epsilon_1 \alpha |S_{ij}| + (1 + \epsilon_1)\alpha |S_{ij}| = (1 + 3\epsilon_1)\alpha |S_{ij}| \]
+Theo định nghĩa trong thuật toán, $\mathcal{F}(u)$ là tập hợp gồm $(1 + 3\epsilon_1)\alpha |S_{ij}|$ điểm \textit{xa nhất} từ $S_{ij}$ đến $u$. Do đó, $|\mathcal{F}(u)| \geq |\mathcal{F}'(u)|$. Vì $\omega(u)$ tính tổng chi phí sau khi loại bỏ những điểm xa nhất ($\mathcal{F}(u)$), giá trị này sẽ nhỏ hơn hoặc bằng chi phí khi loại bỏ tập $\mathcal{F}'(u)$:
+\[ \omega(u) = \frac{m_i}{|S_{ij}|} \delta^2(S_{ij} \setminus \mathcal{F}(u), u) \leq \frac{m_i}{|S_{ij}|} \delta^2(S_{ij} \setminus \mathcal{F}'(u), u) \]
+Khi loại bỏ $\mathcal{F}'(u)$, phần còn lại của mẫu $S_{ij}$ chỉ chứa các điểm thuộc các khối lớn $\mathcal{L}(u)$. Ta có:
+\[ \delta^2(S_{ij} \setminus \mathcal{F}'(u), u) = \sum_{\mathcal{B}_u^l \in \mathcal{L}(u)} \delta^2(\mathcal{B}_u^l \cap S_{ij}, u) \]
+% Xét một khối lớn $\mathcal{B}_u^l$. Với mọi $x \in \mathcal{B}_u^l$, khoảng cách được định nghĩa sao cho $\delta^2(x, u) \approx (1+\epsilon_1)^l$.
+% Cụ thể, ta sử dụng chặn trên của khoảng cách và số lượng mẫu:
+\begin{align*}
+    \delta^2(\mathcal{B}_u^l \cap S_{ij}, u) &< |\mathcal{B}_u^l \cap S_{ij}| \cdot (1+\epsilon_1)^{l+1} \\
+    &\leq \left( (1+\epsilon_1) \frac{|S_{ij}|}{m_i} |\mathcal{B}_u^l| \right) \cdot (1+\epsilon_1)^{l+1} \quad \text{(từ Bổ đề 8)} \\
+    &= \frac{|S_{ij}|}{m_i} (1+\epsilon_1)^2 \left( |\mathcal{B}_u^l| (1+\epsilon_1)^l \right) \\
+    &\leq \frac{|S_{ij}|}{m_i} (1+\epsilon_1)^2 \delta^2(\mathcal{B}_u^l, u)
+\end{align*}
+% Bước cuối cùng sử dụng tính chất $\delta^2(x, u) \ge (1+\epsilon_1)^l$ cho các điểm trong khối. Tổng hợp lại trên tất cả các khối lớn (hợp các khối lớn là tập con của $\mathcal{N}_{ij}(u)$), ta có:
+\[ \omega(u) \leq \frac{m_i}{|S_{ij}|} \sum_{\mathcal{B}_u^l \in \mathcal{L}(u)} \frac{|S_{ij}|}{m_i} (1+\epsilon_1)^2 \delta^2(\mathcal{B}_u^l, u) \leq (1+\epsilon_1)^2 \delta^2(\mathcal{N}_{ij}(u), u) \]
+
+\textbf{2. Chặn Dưới}
+
+Với mỗi khối lớn $\mathcal{B}_u^l \in \mathcal{L}(u)$, gọi $\mathcal{Z}_u^l = \mathcal{F}(u) \cap \mathcal{B}_u^l$ là các điểm thuộc khối này bị loại bỏ trong mẫu. Gọi $\mathcal{H}_u^l$ là tập con (tùy ý) trong tập $\mathcal{B}_u^l$ sao cho:
+\[ |\mathcal{H}_u^l| = \left\lceil (1 + 3\epsilon_1) \frac{m_i}{|S_{ij}|} |\mathcal{Z}_u^l| \right\rceil \]
+Đặt $\mathcal{F}''(u)$ là tập hợp các điểm "bị loại bỏ" trên toàn bộ dữ liệu, bao gồm các điểm ngoại lai, các khối nhỏ và các phần tỉ lệ từ khối lớn:
+\[ \mathcal{F}''(u) = \mathcal{O}(u) \cup \mathcal{J}(u) \cup \left( \bigcup_{\mathcal{B}_u^l \in \mathcal{L}(u)} \mathcal{H}_u^l \right) \]
+Ta ước tính kích thước của $\mathcal{F}''(u)$:
+\begin{align*}
+    |\mathcal{F}''(u)| &\leq |\mathcal{O}(u)| + |\mathcal{J}(u)| + \sum_{\mathcal{B}_u^l} |\mathcal{H}_u^l| \\
+    &\leq \alpha m_i + \epsilon_1 \alpha m_i + (1 + 3\epsilon_1) \frac{m_i}{|S_{ij}|} \sum_{\mathcal{B}_u^l} |\mathcal{Z}_u^l|
+\end{align*}
+$\sum |\mathcal{Z}_u^l| \leq |\mathcal{F}(u)| \leq (1+3\epsilon_1)\alpha |S_{ij}|$. Do đó:
+\begin{align*}
+    |\mathcal{F}''(u)| &\leq \alpha m_i (1 + \epsilon_1) + (1 + 3\epsilon_1)^2 \alpha m_i \\
+  &\leq \alpha m_i (2 + 20\epsilon_1)
+\end{align*} 
+
+Theo định nghĩa, $\mathcal{F}^\dagger(u)$ là tập hợp gồm $(2+20\epsilon_1)\alpha m_i$ điểm xa nhất trong $P_{ij}$. Do đó, việc loại bỏ $\mathcal{F}^\dagger(u)$ sẽ làm giảm chi phí nhiều hơn hoặc bằng việc loại bỏ $\mathcal{F}''(u)$:
+\[ \delta^2(P_{ij} \setminus \mathcal{F}^\dagger(u), u) \leq \delta^2(P_{ij} \setminus \mathcal{F}''(u), u) \]
+Chi phí còn lại sau khi loại bỏ $\mathcal{F}''(u)$ là tổng chi phí của các khối lớn sau khi trừ đi $\mathcal{H}_u^l$. Sử dụng chặn trên khoảng cách $(1+\epsilon_1)^{l+1}$ trong khối $\mathcal{B}_u^l$:
+\[ \delta^2(P_{ij} \setminus \mathcal{F}''(u), u) = \sum_{\mathcal{B}_u^l} \delta^2(\mathcal{B}_u^l \setminus \mathcal{H}_u^l, u) \leq \sum_{\mathcal{B}_u^l} (1+\epsilon_1)^{l+1} (|\mathcal{B}_u^l| - |\mathcal{H}_u^l|) \]
+Từ Bổ đề 8, ta có $|\mathcal{B}_u^l| \leq \frac{m_i}{|S_{ij}|(1-\epsilon_1)} |\mathcal{B}_u^l \cap S_{ij}|$. Thay thế vào bất đẳng thức:
+\begin{align*}
+    |\mathcal{B}_u^l| - |\mathcal{H}_u^l| &\leq \frac{m_i}{|S_{ij}|(1-\epsilon_1)} |\mathcal{B}_u^l \cap S_{ij}| - (1+3\epsilon_1)\frac{m_i}{|S_{ij}|} |\mathcal{Z}_u^l| \\
+    &= \frac{m_i}{|S_{ij}|} \left( \frac{1}{1-\epsilon_1} |\mathcal{B}_u^l \cap S_{ij}| - (1+3\epsilon_1)|\mathcal{Z}_u^l| \right)
+\end{align*}
+
+% TODO why
+Với $\epsilon_1 < 0.5$, ta có $\frac{1}{1-\epsilon_1} \leq 1 + 3\epsilon_1$.
+\[ |\mathcal{B}_u^l| - |\mathcal{H}_u^l| \leq (1+3\epsilon_1)\frac{m_i}{|S_{ij}|} (|\mathcal{B}_u^l \cap S_{ij}| - |\mathcal{Z}_u^l|) \]
+Thay thế trở lại công thức tổng chi phí:
+\begin{align*}
+    \delta^2(P_{ij} \setminus \mathcal{F}^\dagger(u), u) &\leq \sum_{\mathcal{B}_u^l} (1+\epsilon_1)^{l+1} (1+3\epsilon_1)\frac{m_i}{|S_{ij}|} (|\mathcal{B}_u^l \cap S_{ij}| - |\mathcal{Z}_u^l|) \\
+    &= (1+\epsilon_1)(1+3\epsilon_1) \frac{m_i}{|S_{ij}|} \sum_{\mathcal{B}_u^l} (1+\epsilon_1)^l (|\mathcal{B}_u^l \cap S_{ij}| - |\mathcal{Z}_u^l|) \\
+    &\leq (1+7\epsilon_1) \frac{m_i}{|S_{ij}|} \sum_{\mathcal{B}_u^l} \delta^2((\mathcal{B}_u^l \cap S_{ij}) \setminus \mathcal{Z}_u^l, u)
+\end{align*}
+% TODO
+Do đó:
+\[ \delta^2(P_{ij} \setminus \mathcal{F}^\dagger(u), u) \leq (1+7\epsilon_1) \omega(u) \]
+\end{proof}
+
+% L 11
+
+\begin{lemma}
+\label{lemma:center_approximation}
+Với tập hợp các tọa độ $I_{ij}$ được xác định bởi thuật toán Fast-Estimation, chặn sau đây luôn thỏa mãn:
+\[ \delta^2(\overline{I_{ij}}, \overline{Q_{ij}}) \leq \frac{13\alpha - 15\alpha^2}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)} \frac{\delta^2(Q_{ij}, \overline{Q_{ij}})}{|Q_{ij}|} \]
+\end{lemma}
+
+\begin{proof}
+Chứng minh được chia thành ba giai đoạn chính: xác định sự tồn tại của ứng viên tốt, giới hạn chi phí của ứng viên được chọn, và sử dụng kỹ thuật cầu nối để giới hạn khoảng cách giữa các tâm.
+
+\textbf{1. Tọa độ ứng viên tốt}
+
+Theo Bổ đề 4 và Bổ đề 5, với xác suất hằng số, tồn tại ít nhất một tọa độ $u_1 \in U'_{ij}$ nằm rất gần trọng tâm của tập $Q'_{ij}$ (tập con của $Q_{ij}$ có chi phí nhỏ nhất với kích thước $(1-\alpha)m_i$). Cụ thể:
+\[ \delta^2(u_1, \overline{Q'_{ij}}) \leq \frac{\epsilon_1 \delta^2(Q'_{ij}, \overline{Q'_{ij}})}{|Q'_{ij}|} \]
+Sử dụng Bổ đề 1 , ta liên hệ chi phí của tập các điểm lân cận $\mathcal{N}_{ij}(u_1)$ với chi phí tối ưu:
+\[ \delta^2(\mathcal{N}_{ij}(u_1), u_1) \leq \delta^2(Q'_{ij}, u_1) = \delta^2(Q'_{ij}, \overline{Q'_{ij}}) + |Q'_{ij}| \delta^2(u_1, \overline{Q'_{ij}}) \]
+Thay thế chặn của $u_1$ vào, ta có:
+\[ \delta^2(\mathcal{N}_{ij}(u_1), u_1) \leq (1 + \epsilon_1) \delta^2(Q'_{ij}, \overline{Q'_{ij}}) \]
+
+\textbf{2. Giới hạn chi phí của tập được chọn $I_{ij}$}
+
+Gọi $c_{ij}$ là tọa độ được bộ ước lượng $\omega$ chọn ở Bước 11 của Thuật toán 2. Do $c_{ij}$ tối thiểu hóa $\omega$ trên $U'_{ij}$, ta có $\omega(c_{ij}) \leq \omega(u_1)$. Kết hợp với các chặn của bộ ước lượng từ Bổ đề 10:
+\[ \frac{\delta^2(P_{ij} \setminus \mathcal{F}^\dagger(c_{ij}), c_{ij})}{1 + 7\epsilon_1} \leq \omega(c_{ij}) \leq \omega(u_1) \leq (1 + \epsilon_1)^2 \delta^2(\mathcal{N}_{ij}(u_1), u_1) \]
+Từ đó suy ra chặn trên cho chi phí thực tế của $c_{ij}$:
+\[ \delta^2(I_{ij}, c_{ij}) \leq (1 + 7\epsilon_1)\omega(c_{ij}) \leq (1 + \epsilon_1)^3 (1 + 7\epsilon_1) \delta^2(Q'_{ij}, \overline{Q'_{ij}}) \]
+Bằng cách chọn $\epsilon_1 = \epsilon/126$, và $\delta^2(I_{ij}, \overline{I_{ij}}) \leq \delta^2(I_{ij}, c_{ij})$, ta thu được:
+\[ \delta^2(I_{ij}, \overline{I_{ij}}) \leq (1 + \epsilon/2)\delta^2(Q'_{ij}, \overline{Q'_{ij}}) \]
+
+\textbf{3. Giới hạn khoảng cách tâm bằng bắc cầu}
+
+Để giới hạn $\delta^2(\overline{I_{ij}}, \overline{Q_{ij}})$, ta sử dụng giao tập hợp $S = I_{ij} \cap Q_{ij}$ làm cầu nối và áp dụng Bất đẳng thức tam giác cho khoảng cách Euclid:
+\[ \delta(\overline{I_{ij}}, \overline{Q_{ij}}) \leq \delta(\overline{I_{ij}}, \overline{S}) + \delta(\overline{S}, \overline{Q_{ij}}) \]
+
+Áp dụng Bổ đề 6 (đã được chứng minh cho Fast-Sampling và mở rộng cho Fast-Estimation), ta có các chặn sau cho từng thành phần khoảng cách:
+
+\[ \delta^2(\overline{I_{ij}}, \overline{S}) \leq \frac{(2\alpha + \alpha\epsilon)(1+\epsilon)}{(1 - 3\alpha - \epsilon)} \frac{|Q'_{ij}|}{|I_{ij}||Q_{ij}|} \delta^2(Q_{ij}, \overline{Q_{ij}}) \]
+Do $|I_{ij}| = |Q'_{ij}|$:
+\[ \delta^2(\overline{I_{ij}}, \overline{S}) \leq \frac{(2\alpha + \alpha\epsilon)(1+\epsilon)(1-\alpha)}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)} \frac{\delta^2(Q_{ij}, \overline{Q_{ij}})}{|Q_{ij}|} \]
+
+Tương tự:
+\[ \delta^2(\overline{Q_{ij}}, \overline{S}) \leq \frac{2\alpha + \alpha\epsilon}{1 - 3\alpha - \epsilon} \frac{\delta^2(Q_{ij}, \overline{Q_{ij}})}{|Q_{ij}|} \]
+
+Kết hợp lại, bình phương tổng các khoảng cách và thực hiện các phép biến đổi đại số với điều kiện $\epsilon < 0.5$ và $\alpha < 1/3$, ta thu được chặn cuối cùng:
+\begin{align*}
+\delta^2(\overline{I_{ij}}, \overline{Q_{ij}}) &\leq \left( \sqrt{\delta^2(\overline{I_{ij}}, \overline{S})} + \sqrt{\delta^2(\overline{S}, \overline{Q_{ij}})} \right)^2 \\
+&\leq \frac{13\alpha - 15\alpha^2}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)} \frac{\delta^2(Q_{ij}, \overline{Q_{ij}})}{|Q_{ij}|}
+\end{align*}
+\end{proof}
+
+% T 2
+
+\begin{theorem}
+\label{thm:fast_estimation}
+Thuật toán Fast-Estimation xấp xỉ $(1 + O(\alpha))$ cho bài toán k-means có hỗ trợ học (learning-augmented) trong thời gian $O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$ với xác suất hằng số, với tỷ lệ lỗi nhãn $\alpha \in (0, 1/3 - \epsilon)$. 
+\end{theorem}
+
+\begin{proof}
+Chứng minh này đánh giá chất lượng của tập tâm được trả về bởi thuật toán và độ phức tạp của quy trình ước lượng dưới tuyến tính.
+
+\textbf{1. Phân tích Chất lượng Phân cụm}
+
+Giả sử $C = \{\hat{c}_1, \hat{c}_2, \dots, \hat{c}_k\}$ là tập hợp các tâm được thuật toán trả về, trong đó mỗi tâm $\hat{c}_i$ được cấu thành từ các tọa độ trên từng chiều $j$, ký hiệu là $c_{ij}$ (trong thuật toán được xác định là $\overline{I_{ij}}$).
+
+Tổng chi phí phân cụm $\delta^2(P, C)$ có thể được phân rã theo từng cụm tối ưu $P^*_i$ và từng chiều $j$:
+\[ \delta^2(P, C) \leq \sum_{i=1}^{k} \sum_{j=1}^{d} \delta^2(P^*_{ij}, c_{ij}) \]
+
+\[ \delta^2(P^*_{ij}, c_{ij}) = \delta^2(P^*_{ij}, \overline{P^*_{ij}}) + |P^*_{ij}| \delta^2(\overline{P^*_{ij}}, c_{ij}) \]
+
+Dựa vào Bổ đề 7 (được chứng minh dựa trên kết quả của Bổ đề 11 về khoảng cách giữa $\overline{I_{ij}}$ và $\overline{Q_{ij}}$), ta có chặn trên cho khoảng cách giữa các tâm:
+\[ \delta^2(\overline{P^*_{ij}}, c_{ij}) \leq \left( \frac{\alpha}{1-\alpha} + \frac{13\alpha - 15\alpha^2}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)} \right) \frac{\delta^2(P^*_{ij}, \overline{P^*_{ij}})}{|P^*_{ij}|} \]
+
+
+\begin{align*}
+\delta^2(P^*_{ij}, c_{ij}) &\leq \delta^2(P^*_{ij}, \overline{P^*_{ij}}) + |P^*_{ij}| \left[ \left( \frac{\alpha}{1-\alpha} + \frac{13\alpha - 15\alpha^2}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)} \right) \frac{\delta^2(P^*_{ij}, \overline{P^*_{ij}})}{|P^*_{ij}|} \right] \\
+&= \left( 1 + \frac{\alpha}{1-\alpha} + \frac{13\alpha - 15\alpha^2}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)} \right) \delta^2(P^*_{ij}, \overline{P^*_{ij}})
+\end{align*}
+Đặt $\mathcal{K}(\alpha) = \frac{\alpha}{1-\alpha} + \frac{13\alpha - 15\alpha^2}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)}$. Vì $\alpha < 1/3$, $\mathcal{K}(\alpha) = O(\alpha)$.
+Lấy tổng trên tất cả các cụm $i$ và các chiều $j$:
+\[ \delta^2(P, C) \leq (1 + \mathcal{K}(\alpha)) \sum_{i,j} \delta^2(P^*_{ij}, \overline{P^*_{ij}}) = (1 + O(\alpha)) \delta^2(P, C^*) \]
+
+
+\textbf{2. Phân tích Xác suất Thành công}
+
+Sự thành công của Fast-Estimation phụ thuộc vào độ chính xác của bộ ước lượng $\omega(u)$. Điều này được đảm bảo bởi Bổ đề 8 và Bổ đề 9 thông qua việc lấy mẫu ngẫu nhiên.
+
+\begin{enumerate}
+    \item \textbf{Định nghĩa Biến ngẫu nhiên:} Xét quá trình lấy mẫu $S_{ij}$ từ $P_{ij}$. Gọi biến ngẫu nhiên $X_p$, bằng 1 nếu điểm $p \in P_{ij}$ được chọn vào $S_{ij}$ và 0 nếu ngược lại. Tổng số điểm thuộc một tập con bất kỳ $A \subseteq P_{ij}$ rơi vào mẫu là $X = \sum_{p \in A} X_p$.
+    
+    \item \textbf{Kỳ vọng:} $\mathbb{E}[X] = \frac{|S_{ij}|}{|P_{ij}|}|A|$. Thuật toán kích thước mẫu $|S_{ij}|$ đủ lớn sao cho kỳ vọng số điểm trong các "khối lớn" thỏa mãn $\mathbb{E}[X] \geq \Omega(\frac{\log m}{\epsilon^2})$.
+    
+    \item \textbf{Áp dụng Chặn Chernoff:} Để chứng minh độ tập trung của giá trị ước lượng quanh giá trị kỳ vọng, ta sử dụng Bất đẳng thức Chernoff dạng nhân:
+    \[ \Pr(|X - \mathbb{E}[X]| \geq \epsilon_1 \mathbb{E}[X]) \leq 2e^{-\frac{\epsilon_1^2 \mathbb{E}[X]}{3}} \]
+    Với $\mathbb{E}[X] \approx \log m$, số mũ trở thành $-\Omega(\log m)$, dẫn đến xác suất sai lệch là nghịch đảo đa thức của $m$ (xấp xỉ $1/m^3$). 
+    
+    \item \textbf{Chặn Union (Union Bound):} Để đảm bảo thuật toán hoạt động đúng trên toàn cục, ta lấy tổng xác suất thất bại trên tất cả các chiều $d$, tất cả các cụm $k$, và tất cả các ứng viên $u$. Do xác suất thất bại cá lẻ rất nhỏ, tổng xác suất thất bại vẫn được giữ ở mức hằng số nhỏ.
+\end{enumerate}
+
+\textbf{3. Phân tích Thời gian Chạy}
+
+Thời gian chạy của thuật toán được phân tích theo từng giai đoạn xử lý:
+
+\begin{itemize}
+    \item \textbf{Xây dựng Ứng viên (Bước 3-7):} 
+    Việc lấy mẫu $U_{ij}$ mất thời gian $O(1)$. Thuật toán lặp qua $O(\log(m\Delta_{\max}))$ giá trị độ dài khoảng, mỗi lần tạo ra tập ứng viên. Tổng số lượng ứng viên được tạo ra là $O(\epsilon^{-1} \log(m\Delta_{\max}) \log(kd))$. 
+    
+    \item \textbf{Ước lượng Chi phí (Bước 10):}
+    Kích thước của bộ ước lượng (số lượng mẫu $S_{ij}$) là $\tilde{O}\left(\frac{1}{\alpha \epsilon^4}\right)$. Việc tính toán $\omega(u)$ cho tất cả các ứng viên đòi hỏi thời gian tỷ lệ thuận với số lượng ứng viên nhân với kích thước bộ ước lượng. Tổng thời gian cho bước này là:
+    \[ O(\text{số ứng viên}) \times O(\text{kích thước ước lượng}) = \tilde{O}\left(\frac{1}{\alpha \epsilon^5}\right) \]
+    bước này độc lập với kích thước dữ liệu $m$ (sublinear). 
+    
+    \item \textbf{Lựa chọn Cuối cùng (Bước 12):}
+    Sau khi chọn được tâm xấp xỉ $c_{ij}$, thuật toán cần tìm $(1-2\alpha-\alpha\epsilon)m_i$ điểm lân cận nhất trong $P_{ij}$. Sử dụng thuật toán lựa chọn tuyến tính (linear selection algorithm - Blum et al., 1973), bước này mất thời gian $O(m_i)$ cho mỗi chiều của mỗi cụm. 
+    
+    \item \textbf{Tổng}
+    Cộng gộp thời gian trên tất cả $k$ cụm và $d$ chiều:
+    \[ \sum_{i=1}^{k} \sum_{j=1}^{d} O(m_i) + k \cdot d \cdot \tilde{O}\left(\frac{1}{\alpha \epsilon^5}\right) = O(md) + \tilde{O}\left(\frac{kd}{\alpha \epsilon^5}\right) \]
+    
+\end{itemize}
+\end{proof}

@@ -1,0 +1,68 @@
+\section{GIỚI THIỆU}
+
+Phân cụm là bài toán học không giám sát đã được nghiên cứu sâu rộng trong nhiều thập kỷ qua. Trong số các mục tiêu phân cụm khác nhau, một trong những công thức phổ biến nhất là phân cụm $k$-means. Trong phân cụm $k$-means, bài toán được cho là một tập $P$ các điểm dữ liệu trong không gian Euclid $d$ chiều, và mục tiêu là tính toán một tập $C \subset \mathbb{R}^d$ các tâm với kích thước tối đa $k$ sao cho tổng bình phương khoảng cách từ các điểm dữ liệu trong $P$ đến các tâm gần nhất trong $C$ là nhỏ nhất. Bài toán $k$-means rất được quan tâm và được chứng minh là NP-khó \cite{Dasgupta2008}. Hơn nữa, kết quả các nghiên cứu chỉ ra rằng ngay cả việc tìm một nghiệm cho bài toán $k$-means với tỷ lệ xấp xỉ nhỏ hơn 1.07 cũng là NP-khó \cite{CohenAddad2019}. Tỷ lệ xấp xỉ tốt nhất hiện nay cho bài toán $k$-means là 5.912 \cite{CohenAddad2022}, dựa trên các phương pháp đối ngẫu nguyên thủy (primal-dual) và tập độc lập tựa lồng nhau (nested quasi-independent set). Đối với số chiều $d$ hoặc số cụm $k$ cố định, đã có một số thuật toán xấp xỉ $(1 + \epsilon)$ như \cite{Jaiswal2014, Friggstad2019}. Tuy nhiên, các thuật toán này với ngưỡng xấp xỉ rất chặt thường không mở rộng (scale) tốt cho các tập dữ liệu quy mô lớn. Do đó, nhiều phương pháp thực tiễn với thời gian tuyến tính đã được đề xuất, chẳng hạn như phương pháp $k$-means++ với tỷ lệ xấp xỉ $O(\log k)$ \cite{Arthur2007} và các phương pháp local search xấp xỉ hệ số hằng số \cite{Lattanzi2019}. Mặc dù các thuật toán thời gian tuyến tính này được sử dụng rộng rãi, tỷ lệ xấp xỉ lớn của chúng có thể làm giảm hiệu suất phân cụm trong các kịch bản đòi hỏi nghiệm phải rất tốt.
+
+
+Để vượt qua rào cản không thể xấp xỉ và phát triển các thuật toán thực tiễn hơn, một loạt các nghiên cứu đã tập trung vào các thuật toán có hỗ trợ học (learning-augmented) \cite{Mitzenmacher2022}. Đối với bài toán phân cụm, Gamlath và tác giả cộng sự \cite{Gamlath2022} đã đề xuất khôi phục phân cụm với nhãn nhiễu, trong đó các nhãn phân cụm dự đoán là thông tin bổ trợ. Bộ dự đoán có tham số tỷ lệ lỗi $\alpha \in [0, 1)$, sao cho kích thước của hiệu đối xứng giữa cụm dự đoán và cụm tối ưu tương ứng được chặn bởi $\alpha$ lần kích thước cụm tối ưu. Dựa trên mô hình này, người ta đề ra một thuật toán xấp xỉ $(1 + O(\alpha))$ với thời gian chạy đa thức khi giả định $k$ và $d$ cố định. Ergun và tác giả cộng sự \cite{Ergun2021} đã giới thiệu một mô hình phân cụm có hỗ trợ học khác, hướng đến việc thiết kế các thuật toán nhanh và thực tiễn. Trong mô hình này, bộ dự đoán cung cấp thông tin cho mỗi điểm dữ liệu dưới dạng nhãn dự đoán với độ tin cậy $\alpha$, đảm bảo rằng có tối đa một phần $\alpha$ dương tính giả và âm tính giả trong mỗi cụm dự đoán. Dựa trên mô hình này, một cải tiến xấp xỉ $(1 + O(\alpha))$ có thể đạt được với thời gian chạy gần tuyến tính.
+
+Trong bài báo này, tác giả tập trung chủ yếu vào bài toán phân cụm có hỗ trợ học (learning-augmented) được đề xuất bởi Ergun và tác giả cộng sự \cite{Ergun2021}. Động lực nghiên cứu bài toán này đến từ hai phía. Về mặt lý thuyết, $k$-means có hỗ trợ học có thể vượt qua rào cản không thể xấp xỉ, cho ra ngưỡng chất lượng rất chặt cùng khả năng mở rộng cao. Về mặt thực tế, các bộ dự đoán đáng tin cậy luôn có cho nhiều loại dữ liệu tự nhiên. Ví dụ, nhãn huấn luyện có thể đóng vai trò thông tin bổ trợ để tăng cường chất lượng phân cụm trên tập kiểm tra. Ngay cả khi không có nhãn, thực nghiệm cho thấy nhãn từ các phương pháp hiện có như $k$-means++ \cite{Arthur2007} hoặc các phương pháp heuristic như Lloyd \cite{Lloyd1982} cũng có thể là bộ dự đoán tốt. Tuy nhiên, như đã chỉ ra bởi Nguyen và tác giả cộng sự \cite{Nguyen2022}, ngay cả khi bộ dự đoán gần như tối ưu, chỉ cần một điểm dương tính giả nằm xa các tâm tối ưu cũng có thể ảnh hưởng nghiêm trọng đến cấu trúc phân cụm. Do đó, thách thức then chốt là thiết kế các thuật toán bền vững để giảm thiểu tác động của dương tính giả.
+
+Dựa trên các phương pháp thống kê, Ergun và tác giả cộng sự \cite{Ergun2021} đề xuất thuật toán ngẫu nhiên đạt mức xấp xỉ $(1 + 20\alpha)$ trong thời gian $O(md \log m)$. Tuy nhiên, thuật toán này yêu cầu các điều kiện khắt khe về tỷ lệ lỗi $\alpha$ và kích thước cụm tối ưu. Để khắc phục, Nguyen và tác giả cộng sự \cite{Nguyen2022} đề xuất phương pháp tìm kiếm xác định đạt kết quả xấp xỉ $(1 + O(\alpha))$ tốt hơn trong thời gian $O(md \log m)$ với $\alpha \in [0, 1/2)$. Các thuật toán hiện tại chủ yếu dựa trên chiến lược sắp xếp để xấp xỉ tâm tối ưu. Vì sắp xếp yêu cầu thời gian logarit và có cận dưới là $O(m \log m)$, điều này hạn chế khả năng mở rộng khi xử lý dữ liệu quy mô cực lớn. Ngoài ra, thời gian chạyđ này không thể cải thiện thông qua các kỹ thuật giảm chiều như phương pháp JL vì bản thân việc chiếu cũng tốn ít nhất $O(md \log m)$. Thách thức trung tâm trong việc thiết kế các thuật toán nhanh hơn là xấp xỉ hiệu quả các tâm tối ưu trong từng chiều mà không cần sử dụng các chiến lược dựa trên sắp xếp.
+
+% BEGIN PB
+\textbf{Đằng sau các thuật toán:}
+Việc sử dụng  sắp xếp trong các nghiên cứu trước đây nhằm xác định vị trí các điểm lân cận để lọc, nhưng điều này dẫn đến chi phí nhân với $\log m$. Mục tiêu của tác giả trong bài báo này là thay thế việc sắp xếp bằng các kỹ thuật lấy mẫu (sampling) và ước lượng (estimation). Bằng cách này, tác giả có thể xác định các khoảng chứa tâm tối ưu và tinh chỉnh chúng trong thời gian tuyến tính $O(md)$. Điều này cho phép thuật toán phá vỡ rào cản tính toán của các phương pháp dựa trên sắp xếp truyền thống mà vẫn giữ được độ chính xác xấp xỉ trong phạm vi sai số dự đoán $\alpha$.
+% END PB
+
+% TODO footcite O~, all
+\begin{table}[htbp]
+\centering
+\caption{Kết quả so sánh các thuật toán $k$-means có hỗ trợ học}
+\label{tab:theoretical_comparison}
+% \footnotesize
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccc}
+\hline
+Phương pháp và Tài liệu tham khảo & Tỷ lệ xấp xỉ & Khoảng lỗi nhãn $\alpha$ & Độ phức tạp thời gian \\ \hline
+Phân vùng và Sắp xếp \cite{Ergun2021} & $1 + 20\alpha$ & $[ \frac{10 \log m}{\sqrt{m}}, 1/7]$ & $O(md \log m)$ \\
+Sắp xếp \cite{Nguyen2022} & $1 + \frac{\alpha}{1-\alpha} + \frac{4\alpha}{(1-2\alpha)(1-\alpha)}$ & $[0, 1/2)$ & $O(md \log m)$ \\
+\textbf{Fast-Sampling (Tác giả)} & $1 + \frac{\alpha}{1-\alpha} + \frac{4\alpha+\alpha\epsilon}{(1-2\alpha)(1-\alpha)}$ & $[0, 1/2)$ & $O(\epsilon^{-1}md \log(kd))$ \\
+\textbf{Fast-Estimation (Tác giả)} & $1 + \frac{\alpha}{1-\alpha} + \frac{13\alpha-15\alpha^2}{(1-3\alpha-\epsilon)(1-2\alpha-\epsilon)}$ & $(0, 1/3-\epsilon)$ & $O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$ \\ \hline
+% BEGIN PB
+\textbf{Fast-Filtering (Tác giả)} & $1 + 6\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} + \frac{9(\sqrt{\alpha}+\alpha)}{(1-\alpha)(1-(3+\epsilon)\alpha)}$ & $O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$ \\ \hline
+% END PB
+\end{tabular}
+}
+\end{table}
+
+% BEGIN PB
+Nếu so sánh tỷ lệ xấp xỉ theo lý thuyết, các thuật toán của tác giả không tốt hơn so với các thuật toán sắp xếp.
+
+Tuy nhiên ở phần thực nghiệm Fast-Filtering cho thấy chi phí phân cụm giảm đi 1.5\%. Điều này có thể do mặc dù theo lí thuyết là tệ nhưng trong thực tế tỷ lệ xấp xỉ thường nhỏ hơn (tốt hơn).
+% END PB
+
+\section{Các công trình liên quan}
+
+Thuật toán $k$-means++ có tỷ lệ xấp xỉ $\Theta(\log k)$ so với đáp án phân cụm tối ưu, đồng thời cải thiện tốc độ, độ chính xác (accuracy) nếu biết nhãn. Mặc dù các thuật toán thời gian tuyến tính như $k$-means++ được sử dụng rộng rãi, nhưng không phừ hợp để dùng nếu cần độ chính xác cao (như kết quả thực nghiệm của bài báo này).  Thuật toán chỉ khác $k$-means ở bước đầu "seeding" (chọn các tâm ban đầu), việc chọn các tâm là lấy mẫu $D^2$ ($D^2$-sampling): 
+\begin{enumerate}
+    \item Chọn tâm cụm đầu tiên $c_1$  ngẫu nhiên từ tập dữ liệu $P$.
+    \item Chọn tâm cụm tiếp theo $c_i$, chọn $c_i = x$ với xác suất $P(x) \propto D(x)^2$:
+    \begin{equation*}
+        P(x) = \frac{D(x)^2}{\sum_{y \in P} D(y)^2}
+    \end{equation*}
+    \item Chạy thuật toán $k$-means.
+\end{enumerate}
+
+\subsection{Các thuật toán dựa trên sắp xếp}
+
+\begin{itemize}
+    \item \textbf{Thuật toán của Ergun và cộng sự \cite{Ergun2021}:} Phương pháp ngẫu nhiên này đạt được tỷ lệ xấp xỉ $(1 + 20\alpha)$ trong thời gian $O(md \log m)$.
+    \item \textbf{Thuật toán của Nguyen và cộng sự \cite{Nguyen2022}:} Tác giả đề xuất phương pháp tìm kiếm định tính để đạt được tỷ lệ xấp xỉ cải tiến $(1 + O(\alpha))$ cho $\alpha \in [0, 1/2)$ trong cùng thời gian $O(md \log m)$. 
+\end{itemize}
+
+Ngoài ra trong 2 bài báo trên, các tác giả còn đề xuất thuật toán $k$-medians. Các phương pháp này đều cần phí sắp xếp $O(\log m)$
+
+\subsection{Clustering tương tác}
+
+Giống với mô hình của bài báo này yêu cầu có 1 oracle cho biết các nhãn hay các cụm dự đoán $P_i$. 
+Thuật toán có thể đưa ra các câu hỏi dạng: "Điểm $p$ và điểm $q$ có thuộc cùng một cụm tối ưu hay không?" \cite{Balcan2008}. Một hướng tiếp cận nâng cao khác là phân cụm phân cấp Bayesian có tương tác \cite{Vikram2016}

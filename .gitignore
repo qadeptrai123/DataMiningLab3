@@ -1,0 +1,36 @@
+# LaTeX build files
+*.aux
+*.log
+*.out
+*.toc
+*.lot
+*.lof
+*.bbl
+*.blg
+*.dvi
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.run.xml
+*.bcf
+*.nav
+*.snm
+
+# PDF output (keep commented if you want to track PDFs, uncomment to ignore)
+# *.pdf
+
+# VS Code
+.vscode/
+.history/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+venv/
+.env
+
+# OS
+.DS_Store
+Thumbs.db

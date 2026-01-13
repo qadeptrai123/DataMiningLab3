@@ -1,0 +1,63 @@
+\section{THỰC NGHIỆM}
+
+Trong phần này, tác giả đưa ra các đánh giá thực nghiệm về hiệu suất của các thuật toán đề xuất. Tất cả các thuật toán được cài đặt và thực thi bằng ngôn ngữ Python \cite{Matsui2017}. Các thực nghiệm được thực hiện trên máy tính có bộ vi xử lý i7-12700KF và RAM 256GB. Kế thừa các nghiên cứu trước đó \cite{Ergun2021, Nguyen2022}, tác giả thực hiện mỗi thuật toán 10 lần và báo cáo kết quả trung bình cùng với độ lệch chuẩn.
+
+\textbf{Tập dữ liệu.} Đánh giá theo các nghiên cứu của \cite{Ergun2021} và \cite{Nguyen2022}, tác giả kiểm tra các thuật toán trên các tập dữ liệu CIFAR10 ($m = 10,000, d = 3,072$), PHY ($m = 10,000, d = 50$) và MNIST ($m = 1,797, d = 64$) với tỷ lệ lỗi $\alpha$ và số lượng cụm $k$ thay đổi . Tác giả cũng đánh giá hiệu suất trên các tập dữ liệu lớn khác từ Kho lưu trữ Học máy UCI, bao gồm SUSY ($m = 5,000,000, d = 18$) và HIGGS ($m = 11,000,000, d = 27$), cùng một tập dữ liệu quy mô cực lớn SIFT ($m = 100,000,000, d = 128$) từ nghiên cứu của \cite{Matsui2017}.
+
+\textbf{Thuật toán.} Trong các thực nghiệm, tác giả chủ yếu so sánh các thuật toán Fast-Sampling, Fast-Estimation và Fast-Filtering (phiên bản có đảm bảo lý thuyết) với các thuật toán có hỗ trợ học khác, bao gồm thuật toán của Ergun \cite{Ergun2021} (ký hiệu là Ergun) và thuật toán của Nguyen \cite{Nguyen2022} (ký hiệu là Det) \cite{Nguyen2022, Ergun2021}. Đối với thuật toán Fast-Sampling, kích thước mẫu được thiết lập là 4 và cố định $\epsilon = 1$ \cite{Matsui2017}. Đối với Fast-Filtering và Fast-Estimation, tác giả cố định $R_1 = 10, R_2 = m/20$ và $\epsilon = 0.3$, trong đó $m$ là kích thước của bài toán phân cụm \cite{Matsui2017}. Để chứng minh ưu thế của mô hình phân cụm có hỗ trợ học, tác giả cũng thực hiện so sánh với phương pháp $k$-means++ \cite{Arthur2007} không sử dụng thông tin dự đoán.
+
+\textbf{Mô tả bộ dự đoán.} Kế thừa phương pháp của \cite{Nguyen2022}, bộ dự đoán được tạo ra như sau: với mỗi tập dữ liệu, đầu tiên tác giả chạy phương pháp $k$-means++ \cite{Arthur2007} để khởi tạo, sau đó chạy thuật toán Lloyd \cite{Lloyd1982} cho đến khi hội tụ; các nhãn thu được được coi là phân hoạch nhãn tối ưu (ký hiệu là $\{P_1, \dots, P_k\}$) \cite{Arthur2007, Lloyd1982}. Để kiểm tra hiệu suất dưới các tỷ lệ lỗi khác nhau, tác giả thay đổi ngẫu nhiên nhãn của $\alpha m_i$ điểm gần $c_i$ nhất trong mỗi cụm $P_i$ để tạo ra các phân hoạch nhãn bị nhiễu $\{P'_1, \dots, P'_k\}$ làm bộ dự đoán, với $\alpha$ chạy từ $0.1$ đến $0.5$ \cite{Nguyen2022}.
+
+\textbf{Chi tiết cài đặt thuật toán.} Như đã được chỉ ra trong \cite{Nguyen2022}, trong hầu hết các tình huống thực tế, chúng ta không có quyền truy cập vào tỷ lệ lỗi $\alpha$ thực sự và phải thử các giá trị đoán khác nhau để chọn ra kết quả có chi phí tốt nhất \cite{Nguyen2022}. Do đó, đối với mỗi thuật toán, tác giả thực hiện lặp qua 15 giá trị tiềm năng của $\alpha$ phân bố đều trong khoảng $[0.01, 0.5]$ làm đầu vào . Giá trị $\alpha$ cho chi phí phân cụm thấp nhất sẽ được chọn làm kết quả cuối cùng . Thời gian chạy bao gồm tổng thời gian của 15 lần thử nghiệm này. Ngoài ra, tác giả cũng so sánh các giá trị ARI và NMI để đánh giá chất lượng phân cụm so với nhãn thực tế.
+
+
+\begin{table}[htbp]
+\centering
+\caption{So sánh các thuật toán trên tập dữ liệu SIFT với $k = 20$ và $\alpha$ thay đổi}
+\label{tab:sift_results}
+\footnotesize
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lcccccc}
+\hline
+Phương pháp & Tham chiếu $\alpha$ & Chi phí & NMI & ARI & Thời gian (s) \\ \hline
+\textit{Lloyd (Ref)} & 0.1 & 1.0542E+13 (844.18s) & - & - & - \\
+$k$-means++ \cite{Arthur2007} & 0.1 & 1.6884E+13 $\pm$ 1.45E+11 & 0.3285 $\pm$ 0.0138 & 0.1530 $\pm$ 0.0137 & 1000.89 $\pm$ 10.84 \\
+Ergun \cite{Ergun2021} & 0.1 & 9.9799E+12 $\pm$ 1.03E+05 & 0.9243 $\pm$ 0.0000 & 0.9181 $\pm$ 0.0001 & 16748.88 $\pm$ 5776.25 \\
+Det \cite{Nguyen2022} & 0.1 & 9.7791E+12 $\pm$ 0.00E+00 & 0.9490 $\pm$ 0.0000 & 0.9491 $\pm$ 0.0000 & 13152.95 $\pm$ 2160.94 \\
+\textbf{Fast-Sampling} & 0.1 & 9.7666E+12 $\pm$ 0.00E+00 & 0.9519 $\pm$ 0.0000 & 0.9531 $\pm$ 0.0000 & 13057.36 $\pm$ 1717.68 \\
+\textbf{Fast-Filtering} & 0.1 & 9.7150E+12 $\pm$ 2.90E+08 & 0.9316 $\pm$ 0.0090 & 0.9333 $\pm$ 0.0107 & 1006.31 $\pm$ 43.79 \\
+\textbf{Fast-Estimation} & 0.1 & 9.8007E+12 $\pm$ 3.74E+08 & 0.9465 $\pm$ 0.0003 & 0.9466 $\pm$ 0.0002 & 8874.66 $\pm$ 2871.26 \\ \hline
+\textit{Lloyd (Ref)} & 0.2 & 9.7055E+12 (1011.24s) & - & - & - \\
+$k$-means++ \cite{Arthur2007} & 0.2 & 1.6585E+13 $\pm$ 7.91E+10 & 0.3634 $\pm$ 0.0182 & 0.1940 $\pm$ 0.0221 & 1077.12 $\pm$ 71.57 \\
+Ergun \cite{Ergun2021} & 0.2 & 1.0210E+13 $\pm$ 2.89E+08 & 0.9043 $\pm$ 0.0000 & 0.8901 $\pm$ 0.0000 & 17410.75 $\pm$ 6132.76 \\
+Det \cite{Nguyen2022} & 0.2 & 9.9919E+12 $\pm$ 0.00E+00 & 0.9019 $\pm$ 0.0000 & 0.8867 $\pm$ 0.0000 & 13681.80 $\pm$ 2073.36 \\
+\textbf{Fast-Sampling} & 0.2 & 9.9576E+12 $\pm$ 0.00E+00 & 0.9037 $\pm$ 0.0000 & 0.8895 $\pm$ 0.0000 & 13270.53 $\pm$ 1989.65 \\
+\textbf{Fast-Filtering} & 0.2 & 9.7914E+12 $\pm$ 9.59E+08 & 0.8690 $\pm$ 0.0116 & 0.8515 $\pm$ 0.0146 & 1088.53 $\pm$ 92.09 \\
+\textbf{Fast-Estimation} & 0.2 & 1.0004E+13 $\pm$ 6.51E+08 & 0.9093 $\pm$ 0.0002 & 0.8979 $\pm$ 0.0002 & 9567.52 $\pm$ 2691.74 \\ \hline
+\textit{Lloyd (Ref)} & 0.3 & 9.2478E+12 (1330.99s) & - & - & - \\
+$k$-means++ \cite{Arthur2007} & 0.3 & 1.6561E+13 $\pm$ 9.48E+10 & 0.3531 $\pm$ 0.0278 & 0.1814 $\pm$ 0.0206 & 927.07 $\pm$ 31.75 \\
+Ergun \cite{Ergun2021} & 0.3 & 1.0526E+13 $\pm$ 4.08E+07 & 0.8663 $\pm$ 0.0000 & 0.8361 $\pm$ 0.0000 & 17586.20 $\pm$ 6488.30 \\
+Det \cite{Nguyen2022} & 0.3 & 1.0291E+13 $\pm$ 0.00E+00 & 0.8625 $\pm$ 0.0000 & 0.8299 $\pm$ 0.0000 & 13214.91 $\pm$ 1914.86 \\
+\textbf{Fast-Sampling} & 0.3 & 1.0238E+13 $\pm$ 0.00E+00 & 0.8743 $\pm$ 0.0000 & 0.8496 $\pm$ 0.0000 & 13032.26 $\pm$ 1657.72 \\
+\textbf{Fast-Filtering} & 0.3 & 9.9098E+12 $\pm$ 7.74E+09 & 0.8180 $\pm$ 0.0048 & 0.7833 $\pm$ 0.0064 & 1095.48 $\pm$ 66.17 \\
+\textbf{Fast-Estimation} & 0.3 & 1.0300E+13 $\pm$ 3.31E+08 & 0.8663 $\pm$ 0.0002 & 0.8371 $\pm$ 0.0002 & 8618.38 $\pm$ 2378.02 \\ \hline
+\textit{Lloyd (Ref)} & 0.4 & 8.9739E+12 (1342.73s) & - & - & - \\
+$k$-means++ \cite{Arthur2007} & 0.4 & 1.6814E+13 $\pm$ 4.91E+11 & 0.3582 $\pm$ 0.0111 & 0.1752 $\pm$ 0.0126 & 991.80 $\pm$ 148.57 \\
+Ergun \cite{Ergun2021} & 0.4 & 1.0924E+13 $\pm$ 4.27E+08 & 0.8273 $\pm$ 0.0000 & 0.7801 $\pm$ 0.0001 & 16291.70 $\pm$ 5926.28 \\
+Det \cite{Nguyen2022} & 0.4 & 1.0683E+13 $\pm$ 0.00E+00 & 0.8248 $\pm$ 0.0000 & 0.7749 $\pm$ 0.0000 & 12999.81 $\pm$ 2144.98 \\
+\textbf{Fast-Sampling} & 0.4 & 1.0613E+13 $\pm$ 0.00E+00 & 0.8353 $\pm$ 0.0000 & 0.7930 $\pm$ 0.0000 & 13658.40 $\pm$ 1766.14 \\
+\textbf{Fast-Filtering} & 0.4 & 1.0125E+13 $\pm$ 3.14E+09 & 0.7879 $\pm$ 0.0048 & 0.7393 $\pm$ 0.0032 & 1091.53 $\pm$ 94.64 \\
+\textbf{Fast-Estimation} & 0.4 & 1.0687E+13 $\pm$ 8.25E+08 & 0.8260 $\pm$ 0.0001 & 0.7781 $\pm$ 0.0003 & 8725.94 $\pm$ 2691.41 \\ \hline
+\textit{Lloyd (Ref)} & 0.5 & 8.7576E+12 (1412.61s) & - & - & - \\
+$k$-means++ \cite{Arthur2007} & 0.5 & 1.7542E+13 $\pm$ 2.81E+11 & 0.3313 $\pm$ 0.0073 & 0.1580 $\pm$ 0.0065 & 972.59 $\pm$ 60.40 \\
+Ergun \cite{Ergun2021} & 0.5 & 1.1414E+13 $\pm$ 4.92E+08 & 0.7885 $\pm$ 0.0000 & 0.7140 $\pm$ 0.0000 & 17256.11 $\pm$ 6160.91 \\
+Det \cite{Nguyen2022} & 0.5 & 1.1156E+13 $\pm$ 0.00E+00 & 0.7863 $\pm$ 0.0000 & 0.7105 $\pm$ 0.0000 & 13121.68 $\pm$ 1901.27 \\
+\textbf{Fast-Sampling} & 0.5 & 1.1089E+13 $\pm$ 0.00E+00 & 0.7963 $\pm$ 0.0000 & 0.7290 $\pm$ 0.0000 & 13042.91 $\pm$ 1762.42 \\
+\textbf{Fast-Filtering} & 0.5 & 1.0504E+13 $\pm$ 5.81E+09 & 0.7086 $\pm$ 0.0103 & 0.6133 $\pm$ 0.0097 & 1051.20 $\pm$ 34.37 \\
+\textbf{Fast-Estimation} & 0.5 & 1.1169E+13 $\pm$ 1.68E+09 & 0.7886 $\pm$ 0.0005 & 0.7153 $\pm$ 0.0012 & 8532.96 $\pm$ 2152.19 \\ \hline
+\end{tabular}
+}
+\end{table}
+
+
+\textbf{Kết quả.} Bảng 2 so sánh các thuật toán đề xuất với các phương pháp có hỗ trợ học khác trên tập dữ liệu SIFT. Kết quả cho thấy Fast-Sampling đạt chi phí tương đương với các phương pháp hiện đại nhất, trong khi Fast-Filtering liên tục vượt trội hơn với việc giảm trung bình $1.5\%$ chi phí phân cụm trên tất cả các tập dữ liệu . Về thời gian chạy, Fast-Filtering nhanh hơn đáng kể, đặc biệt trên các tập dữ liệu lớn và số chiều cao, đạt tốc độ nhanh hơn ít nhất 3 lần so với các phương pháp hiện hành . Trên tập dữ liệu SIFT, đây là phương pháp duy nhất nhanh hơn thuật toán Lloyd, với tốc độ nhanh hơn ít nhất 10 lần so với các phương pháp khác . Về giá trị NMI và ARI, các thuật toán của tác giả duy trì ổn định trên mức $0.80$ ở hầu hết các tập dữ liệu . Thuật toán Det  hoạt động tốt hơn trên các tập dữ liệu số chiều cao (SUSY, HIGGS), trong khi thuật toán của Ergun có ưu thế trên CIFAR10.

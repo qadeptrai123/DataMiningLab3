@@ -1,0 +1,371 @@
+\section{Fast-Filtering}
+
+Đối với Fast-Sampling và Fast-Estimation, các tâm được tạo ra bằng cách tìm xấp xỉ tọa độ trong từng chiều không gian. Tuy nhiên, quy trình lấy mẫu này có thể làm phát sinh các sai số tích lũy, dẫn đến sự suy giảm chất lượng phân cụm tổng thể. Trong phần này, dựa trên các thuật toán Fast-Sampling và Fast-Estimation, tác giả đề xuất một thuật toán heuristic thực tiễn hơn mang tên Fast-Filtering nhằm bảo toàn tốt hơn chất lượng phân cụm trong khi vẫn duy trì được thời gian chạy hiệu quả.
+
+Thuật toán đề xuất được trình bày trong Thuật toán~\ref{alg:fast_filter}, với ý tưởng chủ đạo là trực tiếp tìm kiếm các xấp xỉ tâm cho từng cụm dự đoán thay vì xấp xỉ từng chiều độc lập. Tại bước 2, một tập hợp các mẫu được rút ra một cách ngẫu nhiên và độc lập từ mỗi cụm dự đoán để đóng vai trò là các tâm ứng viên. Sau đó, trong các bước 3-4, các bộ ước lượng được xây dựng dựa trên những ý tưởng tương tự từ thuật toán Fast-Estimation. Dựa trên các bộ ước lượng này, tâm ứng viên có chi phí phân cụm tối thiểu được lựa chọn tại bước 5 để xác định các khoảng chứa $(1-\alpha)m_i$ điểm gần nhất. Cuối cùng, tại bước 7, các trọng tâm của các tập điểm đã xác định được chọn làm các tâm cuối cùng. Trong Phụ lục A.4, tác giả cung cấp phân tích lý thuyết cho thuật toán Fast-Filtering và chỉ ra rằng, với việc điều chỉnh số lượng lân cận gần nhất cùng kích thước mẫu $R_1$ và $R_2$, thuật toán này có thể đưa ra một nghiệm xấp xỉ $(1 + O(\sqrt{\alpha}))$.
+
+\begin{algorithm}
+\caption{Fast-Filtering}
+\label{alg:fast_filter}
+\begin{algorithmic}[1]
+\Require Bài toán $k$-means $(P, k, d)$, tập các phân vùng $(P_1, P_2, \dots, P_k)$ với tỷ lệ lỗi $\alpha$, các tham số $R_1 > 0, R_2 > 0$ và $0 < \epsilon < 1$.
+\Ensure Một tập $C \subset \mathbb{R}^d$ các tâm với $|C| \leq k$.
+\For{$i = 1 .. k$}
+\State Lấy mẫu ngẫu nhiên và độc lập một tập $U_i$ từ $P_i$ với kích thước $R_1$.
+\State Lấy mẫu ngẫu nhiên và độc lập một tập $S_i$ từ $P_i$ với kích thước $R_2$, và gán cho mỗi điểm trong $S_i$ một trọng số $\frac{m_i}{|S_i|}$.
+\State Xây dựng bộ ước lượng $\omega$ sao cho $\forall u \in U_i, \omega(u) = \sum_{p \in S_i \setminus F(u)} \frac{m_i}{|S_i|} \delta^2(p, u)$, trong đó $F(u)$ là tập hợp $(1+\epsilon)\alpha|S_i|$ điểm trong $S_i$ có khoảng cách xa nhất đối với $u$.
+\State $c_i = \arg \min_{u \in U_i} \omega(u)$.
+\State Gọi $I_i$ là tập hợp $(1-\alpha)m_i$ điểm trong $P_i$ gần $c_i$ nhất.
+\State $\hat{c}_i = \bar{I}_i$.
+\EndFor
+
+\Return $\{\hat{c}_1, \hat{c}_2, \dots, \hat{c}_k\}$.
+\end{algorithmic}
+\end{algorithm}
+
+\textbf{Giải thích thuật toán:}
+
+Thuật toán này giải quyết vấn đề "sai số tích lũy" bằng cách làm trực tiếp trên vecto thay vì gộp kết quả từ $d$ bài toán đơn chiều.
+
+\begin{itemize}
+    \item \textbf{Ước lượng nhanh:} Ý tưởng giống Fast-Estimation. Tại bước 4, thay vì tính toán tổng bình phương khoảng cách $\delta^2$ trên toàn bộ tập dữ liệu $P_i$ (vốn tốn thời gian $O(m_i d)$), tác giả sử dụng tập mẫu $S_i$ có kích thước $R_2$ nhỏ hơn nhiều. Trọng số $\frac{m_i}{|S_i|}$ đảm bảo rằng kỳ vọng của bộ ước lượng $\omega(u)$ sẽ hội tụ về giá trị chi phí thực tế của cụm.
+    
+    \item \textbf{Loại bỏ nhiễu (Filtering):} Một đóng góp quan trọng của tác giả là việc định nghĩa tập $F(u)$ gồm các điểm xa nhất. Trong bài toán có hỗ trợ học, cụm dự đoán $P_i$ có thể chứa tới $\alpha m_i$ điểm âm tính giả (nhiễu). Nếu các điểm nhiễu này nằm rất xa tâm thực, chúng sẽ kéo trọng tâm lệch khỏi vị trí tối ưu. Việc loại bỏ $F(u)$ trong quá trình ước lượng giúp "cô lập" ảnh hưởng của các điểm ngoại lệ này, giúp việc chọn $c_i$ trở nên bền bỉ (robust) hơn.
+    
+    \item \textbf{Trọng tâm:} Sau khi đã xác định được một tâm ứng viên tốt $c_i$, thuật toán thực hiện một bước tinh chỉnh tại bước 6 và 7. Tập $I_i$ đại diện cho phần "lõi" sạch nhất của cụm. Theo Lemma 1, trọng tâm $\bar{I}_i$ là điểm duy nhất tối thiểu hóa tổng bình phương khoảng cách tới tất cả các điểm trong tập đó. Do đó, $\hat{c}_i$ chính là nghiệm tối ưu địa phương cho tập điểm đã được lọc nhiễu.
+\end{itemize}
+
+Sự kết hợp giữa lấy mẫu ngẫu nhiên để tìm ứng viên và bộ lọc thống kê để đánh giá chi phí cho phép Fast-Filtering đạt được sự cân bằng giữa tốc độ tính toán và độ chính xác phân cụm.
+
+% T 3
+\begin{theorem}
+\label{thm:fast_filtering_correctness}
+Cho $R_1 = O\left( \frac{\log k}{1 - 2\alpha} \right)$ và $R_2 = O\left( \frac{\log(m^3d \log^3(m\Delta^2)/\epsilon^2) \log(m\Delta^2)}{\alpha \epsilon^4} \right)$, trong đó $\Delta$ là tỷ lệ chiều của tập dữ liệu. Với xác suất hằng số, Thuật toán 4 (Fast-Filtering) trả về nghiệm xấp xỉ $(1 + O(\sqrt{\alpha}))$ cho bài toán k-means có hỗ trợ học trong thời gian $O(md) + \tilde{O}\left( \frac{kd}{\epsilon^4(1-2\alpha)\alpha} \right)$ với $\alpha \in (0, 1/3 - \epsilon)$.
+\end{theorem}
+
+\begin{proof}
+Chứng minh được chia thành ba giai đoạn chính: phân tích thành công của việc lấy mẫu ứng viên, độ tin cậy của bộ ước lượng chi phí, và tổng hợp chi phí phân cụm cuối cùng.
+
+\textbf{1. Xác suất lấy mẫu thành công}
+
+Mục tiêu là đảm bảo tập ứng viên $U_i$ chứa ít nhất một điểm "tốt" nằm gần tâm tối ưu thực sự $c^*_i$ (ký hiệu là $\overline{P^*_i}$ trong các phần trước, ở đây ta dùng $c^*_i$ để đồng nhất với ký hiệu trong bài báo cho Fast-Filtering).
+
+Định nghĩa tập $G_2(P^*_i) = \{x \in P^*_i : \delta^2(x, c^*_i) \leq 2 \delta^2(P^*_i, c^*_i) / |P^*_i|\}$. Theo Bổ đề 4 , $|P_i \cap P^*_i| \geq (1-\alpha)\max(|P_i|, |P^*_i|)$, ta suy ra:
+\[ |P_i \cap G_2(P^*_i)| \geq |P_i \cap P^*_i| - |P^*_i \setminus G_2(P^*_i)| \geq (1-\alpha)|P^*_i| - \frac{|P^*_i|}{2} = \left(\frac{1}{2}-\alpha\right)|P^*_i| \]
+Tỷ lệ điểm tốt trong $P_i$ là $\zeta_i = \frac{|P_i \cap G_2(P^*_i)|}{|P_i|} \geq (1-\alpha)(\frac{1}{2}-\alpha)$.
+Với kích thước mẫu $R_1 = \Theta(\frac{1}{1-2\alpha}\log(\frac{k}{\eta}))$, xác suất để tập $U_i$ chứa ít nhất một điểm tốt $u_i \in G_2(P^*_i)$ là rất cao.
+% Áp dụng Bất đẳng thức Union Bound trên $k$ cụm, Hệ quả 3 (Corollary 3) khẳng định rằng với xác suất hằng số, điều này đúng cho mọi cụm $i \in [k]$. 
+
+\textbf{2. Độ tin cậy của Bộ ước lượng}
+
+Tiếp theo, ta cần đảm bảo bộ ước lượng $\omega(u)$ chọn ra được tâm $c_i$ tốt từ tập $U_i$.
+% Với kích thước mẫu $R_2$ được chọn đủ lớn, Hệ quả 4 (Corollary 4) dựa trên Bổ đề 10 cho thấy bộ ước lượng xấp xỉ chính xác chi phí thực tế.
+Do tồn tại $u_i \in G_2(P^*_i)$ trong tập ứng viên, chi phí của nó bị chặn bởi:
+\[ \delta^2(H_i(u_i), u_i) \leq \delta^2(Q_i, u_i) \leq 3\delta^2(P^*_i, c^*_i) \]
+Vì thuật toán chọn $c_i$ để tối thiểu hóa $\omega$, ta có kết quả quan trọng:
+\[ \delta^2(P_i \setminus \mathcal{Z}^\dagger(c_i), c_i) \leq 4\delta^2(P^*_i, c^*_i) \]
+Điều này đảm bảo rằng tâm được chọn $c_i$ (và tập hợp sau lọc $I_i$) có chất lượng tốt, làm tiền đề cho Bổ đề 12. 
+
+\textbf{3. Tổng chi phí}
+
+Ta đánh giá tổng chi phí của giải pháp cuối cùng $C = \{\overline{I_1}, \dots, \overline{I_k}\}$. Tổng chi phí là tổng chi phí của từng cụm tối ưu $P^*_i$ được gán cho tâm tương ứng $\overline{I_i}$:
+\[ \delta^2(P, C) \leq \sum_{i=1}^k \delta^2(P^*_i, \overline{I_i}) \]
+Sử dụng kết quả trực tiếp từ Bổ đề 14 (Lemma 14), ta có chặn trên cho từng cụm:
+\[ \delta^2(P^*_i, \overline{I_i}) \leq \left( 1 + \frac{O(\sqrt{\alpha})}{(1-\alpha)(1-(3+\epsilon)\alpha)} \right) \delta^2(P^*_i, c^*_i) \]
+Lấy tổng trên tất cả $k$ cụm:
+\[ \delta^2(P, C) \leq \left( 1 + \frac{O(\sqrt{\alpha})}{(1-\alpha)(1-(3+\epsilon)\alpha)} \right) \sum_{i=1}^k \delta^2(P^*_i, c^*_i) \]
+Biểu thức trong ngoặc có thể được đơn giản hóa thành $(1 + O(\sqrt{\alpha}))$ khi $\alpha$ nhỏ và $\epsilon$ là hằng số. Vậy thuật toán đạt tỷ lệ xấp xỉ $(1 + O(\sqrt{\alpha}))$. 
+
+\textbf{4. Thời gian chạy}
+
+\begin{itemize}
+    \item \textbf{Lấy mẫu (Bước 2 \& 3):} Việc lấy mẫu $U_i$ và $S_i$ mất thời gian $O(1)$ cho mỗi cụm (hoặc phụ thuộc kích thước mẫu nhưng độc lập với $m$).
+    \item \textbf{Ước lượng (Bước 4 \& 5):} Tính toán $\omega(u)$ cho tất cả $u \in U_i$ đòi hỏi tính khoảng cách giữa các cặp điểm trong $U_i$ và $S_i$. Thời gian cho mỗi cụm là $O(R_1 \cdot R_2 \cdot d)$. Tổng thời gian ước lượng là:
+    \[ k \cdot O\left( \frac{\log k}{1-2\alpha} \cdot \frac{\text{polylog}(m)}{\alpha \epsilon^4} \cdot d \right) = \tilde{O}\left( \frac{kd}{\epsilon^4(1-2\alpha)\alpha} \right) \]
+    \item \textbf{Lọc và tính tâm (Bước 6 \& 7):} Tìm $(1-\alpha)m_i$ lân cận gần nhất cho tâm $c_i$ đã chọn đòi hỏi quét qua $P_i$. Sử dụng thuật toán chọn tuyến tính (Linear Selection), bước này mất $O(m_i d)$. Tổng thời gian cho $k$ cụm là $\sum O(m_i d) = O(md)$.
+\end{itemize}
+Tổng hợp lại, độ phức tạp thời gian là $O(md) + \tilde{O}\left( \frac{kd}{\epsilon^4(1-2\alpha)\alpha} \right)$. 
+\end{proof}
+
+% C 3
+
+\begin{corollary}
+\label{cor:sampling_success}
+Cho kích thước mẫu $R_1 = \Theta\left( \frac{\log k}{1 - 2\alpha} \right)$. Với mỗi cụm dự đoán $i \in [k]$, với xác suất hằng số, tồn tại ít nhất một điểm dữ liệu $u$ trong tập mẫu $U_i$ sao cho $u \in G_2(P^*_i)$, trong đó $G_2(P^*_i)$ là tập hợp các điểm nằm gần tâm tối ưu.
+\end{corollary}
+
+\begin{proof}
+Mục tiêu là đánh giá xác suất lấy mẫu thành công một điểm từ tập $G_2(P^*_i)$ nằm trong cụm dự đoán $P_i$. 
+
+% \textbf{Bước 1: Xác định kích thước của tập điểm "tốt"}
+
+% Định nghĩa tập $G_2(P^*_i) = \{x \in P^*_i : \delta^2(x, c^*_i) \leq 2\delta^2(P^*_i, c^*_i) / |P^*_i|\}$. Theo Bổ đề 4, ta biết rằng ít nhất một nửa số điểm trong cụm tối ưu là điểm tốt :
+% \[ |G_2(P^*_i)| \geq \frac{1}{2}|P^*_i| \]
+% Suy ra, số lượng các điểm "xấu" (nằm xa tâm) trong cụm tối ưu bị chặn bởi $|P^*_i \setminus G_2(P^*_i)| < \frac{1}{2}|P^*_i|$.
+
+% \textbf{Bước 2: Giao với cụm dự đoán}
+
+% Thuật toán thực hiện lấy mẫu từ cụm dự đoán $P_i$. Ta cần ước tính số lượng điểm tốt nằm trong $P_i$. Ta có:
+% \[ |P_i \cap G_2(P^*_i)| \geq |P^*_i \cap P_i| - |P^*_i \setminus G_2(P^*_i)| \]
+% Theo định nghĩa của mô hình học tăng cường, $|P_i \cap P^*_i| \geq (1-\alpha)|P^*_i|$. Kết hợp với kết quả từ Bước 1:
+% \[ |P_i \cap G_2(P^*_i)| \geq (1-\alpha)|P^*_i| - \frac{1}{2}|P^*_i| = \left( \frac{1}{2} - \alpha \right)|P^*_i| \]
+
+% \textbf{Bước 3: Xác suất lấy mẫu thành công}
+
+Gọi $\zeta_i$ là xác suất chọn được một điểm thuộc $G_2(P^*_i)$ khi lấy mẫu ngẫu nhiên đều từ $P_i$:
+\[ \zeta_i = \frac{|P_i \cap G_2(P^*_i)|}{|P_i|} \]
+Thay thế kết quả từ Bước 2 vào tử số:
+\[ \zeta_i \geq \frac{(\frac{1}{2} - \alpha)|P^*_i|}{|P_i|} \]
+Ta cần chặn trên cho $|P_i|$. Từ giả thiết $|Q_i| \ge (1-\alpha)|P_i|$ và $Q_i \subseteq P^*_i$, ta suy ra $|P_i| \le \frac{|P^*_i|}{1-\alpha}$. Thay thế vào biểu thức trên:
+\[ \zeta_i \geq \left( \frac{1}{2} - \alpha \right) \frac{|P^*_i|}{\frac{|P^*_i|}{1-\alpha}} = \left( \frac{1}{2} - \alpha \right)(1-\alpha) = \frac{(1-2\alpha)(1-\alpha)}{2} \]
+Lưu ý rằng với $\alpha < 1/2$, giá trị $\zeta_i$ luôn dương.
+
+% \textbf{Bước 4: Xác suất thất bại trên một cụm}
+
+Giả sử ta lấy $R_1$ mẫu độc lập. Xác suất để \textit{tất cả} các mẫu đều không thuộc tập điểm tốt là:
+\[ \Pr(\text{Thất bại tại cụm } i) = (1 - \zeta_i)^{R_1} \leq e^{-\zeta_i R_1} \]
+Để xác suất này nhỏ hơn một ngưỡng $\frac{\eta}{k}$, ta cần chọn $R_1$ sao cho:
+\[ e^{-\zeta_i R_1} \leq \frac{\eta}{k} \iff -\zeta_i R_1 \leq \ln\left(\frac{\eta}{k}\right) \iff R_1 \geq \frac{1}{\zeta_i} \ln\left(\frac{k}{\eta}\right) \]
+Thay thế chặn dưới của $\zeta_i$:
+\[ R_1 \geq \frac{2}{(1-2\alpha)(1-\alpha)} \ln\left(\frac{k}{\eta}\right) \]
+Điều này phù hợp với định nghĩa $R_1 = \Theta\left( \frac{\log k}{1 - 2\alpha} \right)$.
+
+% \textbf{Bước 5: Áp dụng Chặn Union cho toàn bộ các cụm}
+
+Để đảm bảo thành công trên tất cả $k$ cụm đồng thời:
+\[ \Pr(\exists i \in [k] : U_i \cap G_2(P^*_i) = \emptyset) \leq \sum_{i=1}^k \frac{\eta}{k} = \eta \]
+Như vậy, với xác suất ít nhất $1-\eta$ (xác suất hằng số), thuật toán tìm được ít nhất một ứng viên tốt cho mọi cụm $i \in [k]$ .
+\end{proof}
+
+% C 4
+
+\begin{corollary}
+\label{cor:estimator_bounds}
+Giả sử kích thước mẫu $R_2$ được định nghĩa là:
+\[ R_2 = O\left( \frac{\log(m^3d \log^3(m\Delta^2)/\epsilon_1^2) \log(m\Delta^2)}{\alpha\epsilon_1^4} \right) \]
+Với một điểm dữ liệu bất kỳ $u \in U_i$, với xác suất cao, bộ ước lượng $\omega(u)$ thỏa mãn:
+\[ \frac{\delta^2(P_i \setminus \mathcal{Z}^\dagger(u), u)}{1 + 7\epsilon_1} \leq \omega(u) \leq (1 + \epsilon_1)^2 \delta^2(H_i(u), u) \]
+trong đó $H_i(u)$ là tập hợp $(1-\alpha)m_i$ điểm gần $u$ nhất trong $P_i$, và $\mathcal{Z}^\dagger(u)$ là tập hợp $(2 + 20\epsilon_1)\alpha m_i$ điểm xa $u$ nhất.
+\end{corollary}
+
+\begin{proof}
+Chứng minh dựa trên sự tập trung của các mẫu ngẫu nhiên $S_i$ trong các khối hình học quanh $u$.
+
+% \textbf{1. Sự tập trung của các Khối lớn (Áp dụng Bất đẳng thức Chernoff)}
+
+% Chúng ta phân hoạch tập $P_i$ thành các khối $\mathcal{B}_u^l$ dựa trên khoảng cách đến $u$. Gọi $\mathcal{L}(u)$ là tập hợp các "khối lớn" (những khối chứa đủ nhiều điểm để áp dụng luật số lớn).
+% \begin{itemize}
+%     \item \textbf{Biến chỉ báo:} Với mỗi mẫu $j \in S_i$, gọi $X_j = 1$ nếu điểm mẫu rơi vào khối lớn $\mathcal{B}_u^l \in \mathcal{L}(u)$, và $X_j = 0$ nếu ngược lại.
+%     \item \textbf{Tính Kỳ vọng:} Kỳ vọng số điểm trong mẫu thuộc khối là $E[X] = |S_i| \cdot \frac{|\mathcal{B}_u^l|}{m_i}$. Với $R_2$ (tức $|S_i|$) được chọn như trên, ta đảm bảo $E[X] \geq \Omega(\frac{\log m}{\epsilon_1^2})$.
+%     \item \textbf{Áp dụng Bất đẳng thức Chernoff:}
+%     \[ \Pr(|X - E[X]| \geq \epsilon_1 E[X]) \leq 2e^{-\frac{\epsilon_1^2 E[X]}{3}} \]
+%     Với $E[X]$ đủ lớn, xác suất thất bại nhỏ hơn đa thức nghịch đảo của $m$. Do đó, với xác suất cao, ta có:
+%     \[ (1-\epsilon_1)\frac{|S_i|}{m_i}|\mathcal{B}_u^l| \leq |\mathcal{B}_u^l \cap S_i| \leq (1+\epsilon_1)\frac{|S_i|}{m_i}|\mathcal{B}_u^l| \]
+% \end{itemize}
+
+% \textbf{2. Thiết lập Chặn trên}
+
+Gọi $\mathcal{F}'(u)$ là tập hợp các điểm thuộc mẫu $S_i$ nằm trong các khối nhỏ hoặc là điểm ngoại lai. Ta đã biết $|\mathcal{F}'(u)| \leq (1 + 3\epsilon_1)\alpha|S_i|$. Khi tính $\omega(u)$, thuật toán loại bỏ một lượng điểm tương ứng, do đó chi phí chỉ còn phụ thuộc vào các khối lớn.
+Xét tổng chi phí trên mẫu:
+\[ \omega(u) \leq \frac{m_i}{|S_i|} \sum_{\mathcal{B}_u^l \in \mathcal{L}(u)} \delta^2(\mathcal{B}_u^l \cap S_i, u) \]
+Sử dụng tính chất khoảng cách trong khối $\delta^2(x, u) \leq (1+\epsilon_1)^{l+1}$ và chặn trên của số lượng mẫu :
+\begin{align*}
+    \delta^2(\mathcal{B}_u^l \cap S_i, u) &\leq (1+\epsilon_1)^{l+1} |\mathcal{B}_u^l \cap S_i| \\
+    &\leq (1+\epsilon_1)^{l+1} (1+\epsilon_1) \frac{|S_i|}{m_i} |\mathcal{B}_u^l| \\
+    &= \frac{|S_i|}{m_i} (1+\epsilon_1)^2 \left( (1+\epsilon_1)^l |\mathcal{B}_u^l| \right)
+\end{align*}
+Lưu ý rằng $(1+\epsilon_1)^l |\mathcal{B}_u^l| \approx \delta^2(\mathcal{B}_u^l, u)$. Tổng hợp lại trên các khối lớn (là tập con của $H_i(u)$):
+\[ \omega(u) \leq (1 + \epsilon_1)^2 \delta^2(H_i(u), u) \]
+
+% \textbf{3. Thiết lập Chặn dưới}
+
+Ta sử dụng bất đẳng thức đại số: với $\epsilon_1$ nhỏ, $\frac{1}{1 - \epsilon_1} \leq 1 + 3\epsilon_1$.
+Từ kết quả tập trung ở Bước 1, ta suy ra kích thước thực tế của khối lớn trong $P_i$:
+\[ |\mathcal{B}_u^l| \leq \frac{m_i}{|S_i|(1 - \epsilon_1)} |\mathcal{B}_u^l \cap S_i| \leq (1 + 3\epsilon_1) \frac{m_i}{|S_i|} |\mathcal{B}_u^l \cap S_i| \]
+Nhân cả hai vế với bình phương khoảng cách (xấp xỉ $(1+\epsilon_1)^l$) và lấy tổng trên các khối lớn (lưu ý rằng việc loại bỏ $\mathcal{Z}^\dagger(u)$ tương ứng với việc giữ lại các khối này):
+\begin{align*}
+    \delta^2(P_i \setminus \mathcal{Z}^\dagger(u), u) &\leq \sum (1+\epsilon_1)^{l+1} (1+3\epsilon_1) \frac{m_i}{|S_i|} |\mathcal{B}_u^l \cap S_i| \\
+    &\leq (1+3\epsilon_1)(1+\epsilon_1) \frac{m_i}{|S_i|} \sum (1+\epsilon_1)^l |\mathcal{B}_u^l \cap S_i| \\
+    &\approx (1+4\epsilon_1) \omega(u)
+\end{align*}
+Để đảm bảo tính chặt chẽ cho mọi số hạng bậc cao, bài báo sử dụng hệ số an toàn là $1+7\epsilon_1$:
+\[ \delta^2(P_i \setminus \mathcal{Z}^\dagger(u), u) \leq (1 + 7\epsilon_1) \omega(u) \]
+Sắp xếp lại bất đẳng thức ta thu được chặn dưới cần chứng minh .
+\end{proof}
+
+% L 12
+\begin{lemma}
+\label{lemma:distance_bound_fast_filtering}
+Khoảng cách giữa trọng tâm của tập hợp đã lọc $\overline{I_i}$ và tâm tối ưu $c^*_i$ bị chặn như sau:
+\[ \delta^2(\overline{I_i}, c^*_i) \leq \frac{9\delta^2(P^*_i, c^*_i)}{(1 - (3 + \epsilon)\alpha)m_i} \]
+\end{lemma}
+
+\begin{proof}
+Chứng minh được chia thành ba bước chính: xác định kích thước các tập hợp liên quan, đánh giá phương sai trong cụm, và áp dụng bất đẳng thức tam giác để tìm chặn trên.
+
+\textbf{1. Xác định kích thước các tập hợp điểm}
+
+Theo định nghĩa của quy trình lọc trong thuật toán \ref{alg:fast_filter}, tập $I_i$ được tạo thành bằng cách loại bỏ tập $\mathcal{Z}^\dagger(c_i)$ gồm các điểm xa nhất từ tâm ứng viên $c_i$. Kích thước của phần bị loại bỏ là $|\mathcal{Z}^\dagger(c_i)| = (2 + 20\epsilon_1)\alpha m_i$.
+Do đó, kích thước của tập hợp giữ lại là:
+\[ |I_i| = m_i - (2 + 20\epsilon_1)\alpha m_i = (1 - (2 + 20\epsilon_1)\alpha)m_i \]
+
+Tiếp theo, ta xét phần giao giữa tập đã lọc $I_i$ và cụm tối ưu $P^*_i$.
+Ta biết rằng số lượng điểm "sai nhãn" (nhiễu) trong cụm dự đoán $P_i$ tối đa là $|P_i \setminus P^*_i| \leq \alpha m_i$.
+Trong trường hợp xấu nhất, toàn bộ các điểm nhiễu này vẫn nằm trong $I_i$. Do đó, số lượng điểm thuộc cụm tối ưu thực sự nằm trong $I_i$ bị chặn dưới bởi:
+\[ |I_i \cap P^*_i| \geq |I_i| - |P_i \setminus P^*_i| \]
+Thay thế kích thước của $|I_i|$ vào:
+\[ |I_i \cap P^*_i| \geq (1 - (2 + 20\epsilon_1)\alpha)m_i - \alpha m_i = (1 - (3 + 20\epsilon_1)\alpha)m_i \]
+
+\textbf{2. Đánh giá phương sai của tập đã lọc}
+
+Dựa trên Hệ quả 4 (Corollary 4) trong bài báo , tâm $c_i$ được chọn bởi bộ ước lượng thỏa mãn điều kiện về chi phí với xác suất cao:
+\[ \delta^2(I_i, c_i) \leq 4\delta^2(P^*_i, c^*_i) \]
+Theo tính chất của trọng tâm, tổng bình phương khoảng cách từ các điểm trong một tập hợp đến trọng tâm của nó ($\overline{I_i}$) luôn nhỏ hơn hoặc bằng tổng bình phương khoảng cách đến bất kỳ điểm nào khác ($c_i$). Do đó:
+\[ \delta^2(I_i, \overline{I_i}) \leq \delta^2(I_i, c_i) \leq 4\delta^2(P^*_i, c^*_i) \]
+
+\textbf{3. Áp dụng Bất đẳng thức tam giác nới lỏng}
+
+Để chặn khoảng cách $\delta^2(\overline{I_i}, c^*_i)$, ta xét tổng khoảng cách trên các điểm trung gian $p$ thuộc giao tập $I_i \cap P^*_i$. Ta có đẳng thức trung bình:
+\[ \delta^2(\overline{I_i}, c^*_i) = \frac{1}{|I_i \cap P^*_i|} \sum_{p \in I_i \cap P^*_i} \delta^2(\overline{I_i}, c^*_i) \]
+
+% TODO prove relaxed
+Áp dụng bất đẳng thức tam giác nới lỏng (relaxed triangle inequality) dạng $(a+b)^2 \leq (1 + \frac{1}{\lambda})a^2 + (1 + \lambda)b^2$. Ở đây ta chọn $\lambda = 2$ để tối ưu hóa các hệ số theo bài báo:
+\[ \delta^2(\overline{I_i}, c^*_i) \leq (1 + 0.5)\delta^2(\overline{I_i}, p) + (1 + 2)\delta^2(p, c^*_i) \]
+Thay thế vào công thức tổng:
+\[ \delta^2(\overline{I_i}, c^*_i) \leq \frac{1}{|I_i \cap P^*_i|} \sum_{p \in I_i \cap P^*_i} \left[ 1.5 \delta^2(\overline{I_i}, p) + 3 \delta^2(p, c^*_i) \right] \]
+
+Ta thực hiện chặn trên cho từng thành phần của tử số:
+\begin{itemize}
+    \item Tổng khoảng cách từ $p$ đến $\overline{I_i}$: Vì $p \in I_i$, tổng này nhỏ hơn tổng trên toàn bộ tập $I_i$:
+    \[ \sum_{p \in I_i \cap P^*_i} \delta^2(\overline{I_i}, p) \leq \delta^2(I_i, \overline{I_i}) \]
+    \item Tổng khoảng cách từ $p$ đến $c^*_i$: Vì $p \in P^*_i$, tổng này nhỏ hơn tổng chi phí của cụm tối ưu:
+    \[ \sum_{p \in I_i \cap P^*_i} \delta^2(p, c^*_i) \leq \delta^2(P^*_i, c^*_i) \]
+\end{itemize}
+
+Thay thế các bất đẳng thức này vào biểu thức chính:
+\[ \delta^2(\overline{I_i}, c^*_i) \leq \frac{1.5 \delta^2(I_i, \overline{I_i}) + 3 \delta^2(P^*_i, c^*_i)}{|I_i \cap P^*_i|} \]
+
+Sử dụng kết quả từ Bước 2 ($\delta^2(I_i, \overline{I_i}) \leq 4\delta^2(P^*_i, c^*_i)$) và Bước 1 cho mẫu số:
+\begin{align*}
+\delta^2(\overline{I_i}, c^*_i) &\leq \frac{1.5(4\delta^2(P^*_i, c^*_i)) + 3\delta^2(P^*_i, c^*_i)}{(1 - (3 + 20\epsilon_1)\alpha)m_i} \\
+&= \frac{(6 + 3)\delta^2(P^*_i, c^*_i)}{(1 - (3 + 20\epsilon_1)\alpha)m_i} \\
+&= \frac{9\delta^2(P^*_i, c^*_i)}{(1 - (3 + 20\epsilon_1)\alpha)m_i}
+\end{align*}
+Cuối cùng, dựa vào điều kiện thiết lập tham số trong thuật toán là $20\epsilon_1 \leq \epsilon$ (với $\epsilon_1 = \epsilon/126$), ta có chặn cuối cùng:
+\[ \delta^2(\overline{I_i}, c^*_i) \leq \frac{9\delta^2(P^*_i, c^*_i)}{(1 - (3 + \epsilon)\alpha)m_i} \]
+\end{proof}
+
+% Lemma 13 Improved
+
+\begin{lemma}
+\label{lemma:cost_bound_true_positives_explicit}
+Chi phí phân cụm của tập $Q_i$ đối với tâm của tập hợp đã lọc $\overline{I_i}$ thỏa mãn chặn cụ thể sau:
+\[ \delta^2(Q_i, \overline{I_i}) \leq \delta^2(Q_i, c^*_i) + \left( 5\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} \right) \delta^2(P^*_i, c^*_i) \]
+\end{lemma}
+
+\begin{proof}
+Chúng ta phân tích sự chênh lệch chi phí bằng cách phân rã tập hợp dựa trên sai số của bộ lọc (Filter).
+
+\textbf{1. Phân rã tập hợp và chi phí}
+Gọi $A_i = Q_i \setminus I_i$ là tập các điểm thuộc $Q_i$ bị loại bỏ (False Negatives của bộ lọc).
+Gọi $B_i = I_i \setminus Q_i$ là tập các điểm nhiễu được giữ lại (False Positives của bộ lọc).
+
+Ta có đẳng thức phân rã chi phí như sau:
+\[ 
+\delta^2(Q_i, \overline{I_i}) - \delta^2(Q_i, c^*_i) = \underbrace{[\delta^2(I_i, \overline{I_i}) - \delta^2(I_i, c^*_i)]}_{\leq 0} + [\delta^2(A_i, \overline{I_i}) - \delta^2(A_i, c^*_i)] + [\delta^2(B_i, c^*_i) - \delta^2(B_i, \overline{I_i})] 
+\]
+Vì $\overline{I_i}$ là trọng tâm của $I_i$, số hạng đầu tiên luôn $\leq 0$. Ta tập trung chặn hai số hạng còn lại.
+
+\textbf{2. Áp dụng bất đẳng thức tam giác nới lỏng}
+Sử dụng bất đẳng thức $\delta^2(x, y) \leq (1+\lambda)\delta^2(x, z) + (1+\frac{1}{\lambda})\delta^2(z, y)$ với $\lambda = \sqrt{\alpha}$.
+
+Đối với tập $A_i$ (tương tự cho $B_i$):
+\begin{align*}
+    \delta^2(A_i, \overline{I_i}) - \delta^2(A_i, c^*_i) &\leq \sum_{a \in A_i} \left( (1+\sqrt{\alpha})\delta^2(a, c^*_i) + (1+\frac{1}{\sqrt{\alpha}})\delta^2(c^*_i, \overline{I_i}) - \delta^2(a, c^*_i) \right) \\
+    &= \sqrt{\alpha}\delta^2(A_i, c^*_i) + |A_i|\left(1+\frac{1}{\sqrt{\alpha}}\right)\delta^2(c^*_i, \overline{I_i})
+\end{align*}
+
+Tương tự cho $B_i$:
+\[ \delta^2(B_i, c^*_i) - \delta^2(B_i, \overline{I_i}) \leq \sqrt{\alpha}\delta^2(B_i, \overline{I_i}) + |B_i|\left(1+\frac{1}{\sqrt{\alpha}}\right)\delta^2(c^*_i, \overline{I_i}) \]
+
+Tổng hợp lại:
+\begin{align}
+\label{eq:l_13}
+    \delta^2(Q_i, \overline{I_i}) - \delta^2(Q_i, c^*_i) &\leq \sqrt{\alpha}[\delta^2(A_i, c^*_i) + \delta^2(B_i, \overline{I_i})] \\+& \left(1+\frac{1}{\sqrt{\alpha}}\right)(|A_i| + |B_i|)\delta^2(\overline{I_i}, c^*_i)
+\end{align}
+
+\textbf{3.}
+Theo giả thiết bài toán và Bổ đề 12:
+\begin{itemize}
+    \item Tổng kích thước sai số: $|A_i| + |B_i| \leq 3\alpha m_i + \alpha m_i = 4\alpha m_i$.
+    \item Hệ số khoảng cách tâm: 
+    \[ \left(1+\frac{1}{\sqrt{\alpha}}\right)(|A_i| + |B_i|) \leq \frac{\sqrt{\alpha}+1}{\sqrt{\alpha}} \cdot 4\alpha m_i = 4\sqrt{\alpha}(1+\sqrt{\alpha}) m_i \]
+    \item Khoảng cách giữa các tâm (từ Lemma 12): $\delta^2(\overline{I_i}, c^*_i) \leq \frac{9\delta^2(P^*_i, c^*_i)}{(1 - (3+\epsilon)\alpha)m_i}$.
+    \item Chi phí trong cụm: $\delta^2(A_i, c^*_i) \leq \delta^2(P^*_i, c^*_i)$ và $\delta^2(B_i, \overline{I_i}) \leq 4\delta^2(P^*_i, c^*_i)$.
+\end{itemize}
+
+Thay thế các giá trị này vào phương trình \ref{eq:l_13}:
+\begin{align*}
+    \delta^2(Q_i, \overline{I_i}) - \delta^2(Q_i, c^*_i)  &\leq \sqrt{\alpha}[\delta^2(P^*_i, c^*_i) + 4\delta^2(P^*_i, c^*_i)] + 4\sqrt{\alpha}(1+\sqrt{\alpha}) m_i \cdot \frac{9\delta^2(P^*_i, c^*_i)}{(1 - (3+\epsilon)\alpha)m_i} \\
+    &= 5\sqrt{\alpha}\delta^2(P^*_i, c^*_i) + \frac{36(\sqrt{\alpha} + \alpha)}{1 - (3+\epsilon)\alpha}\delta^2(P^*_i, c^*_i)
+\end{align*}
+
+Kết luận:
+\[ \delta^2(Q_i, \overline{I_i}) \leq \delta^2(Q_i, c^*_i) + \left( 5\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} \right) \delta^2(P^*_i, c^*_i) \]
+\end{proof}
+
+
+% Lemma 14 Improved
+
+\begin{lemma}
+\label{lemma:total_optimal_cost_explicit}
+Tổng chi phí phân cụm của cụm tối ưu $P^*_i$ đối với trọng tâm $\overline{I_i}$ bị chặn bởi:
+\[ \delta^2(P^*_i, \overline{I_i}) \leq \left( 1 + 6\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} + \frac{9(\sqrt{\alpha}+\alpha)}{(1-\alpha)(1-(3+\epsilon)\alpha)} \right) \delta^2(P^*_i, c^*_i) \]
+\end{lemma}
+
+\begin{proof}
+
+\[ \delta^2(P^*_i, \overline{I_i}) = \delta^2(Q_i, \overline{I_i}) + \delta^2(R_i, \overline{I_i}) \]
+
+\textbf{Bước 1: Chặn trên cho $Q_i$}
+Sử dụng kết quả  từ Bổ đề 13:
+\[ \delta^2(Q_i, \overline{I_i}) \leq \delta^2(Q_i, c^*_i) + \left( 5\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} \right) \delta^2(P^*_i, c^*_i) \]
+
+\textbf{Bước 2: Chặn trên cho $R_i$ (False Negatives của dự đoán)}
+Áp dụng bất đẳng thức tam giác nới lỏng với $\lambda = \sqrt{\alpha}$ cho mỗi $p \in R_i$:
+\begin{align*}
+    \delta^2(R_i, \overline{I_i}) &\leq (1+\sqrt{\alpha})\delta^2(R_i, c^*_i) + |R_i|\left(1+\frac{1}{\sqrt{\alpha}}\right)\delta^2(c^*_i, \overline{I_i}) \\
+    &= \delta^2(R_i, c^*_i) + \sqrt{\alpha}\delta^2(R_i, c^*_i) + |R_i|\frac{\sqrt{\alpha}+1}{\sqrt{\alpha}}\delta^2(c^*_i, \overline{I_i})
+\end{align*}
+
+Ta có các chặn kích thước và chi phí:
+\begin{itemize}
+    \item $|R_i| \leq \frac{\alpha m_i}{1-\alpha}$ (do điều kiện $P_i$ chứa ít nhất $(1-\alpha)$ phần tử của $P^*_i$).
+    \item $\delta^2(R_i, c^*_i) \leq \delta^2(P^*_i, c^*_i)$.
+\end{itemize}
+
+Thay thế vào biểu thức của $R_i$:
+\begin{align*}
+    \delta^2(R_i, \overline{I_i}) &\leq (1+\sqrt{\alpha})\delta^2(R_i, c^*_i) + \left(\frac{\alpha m_i}{1-\alpha}\right)\frac{\sqrt{\alpha}+1}{\sqrt{\alpha}} \cdot \frac{9\delta^2(P^*_i, c^*_i)}{(1 - (3+\epsilon)\alpha)m_i} \\
+    &\leq (1+\sqrt{\alpha})\delta^2(R_i, c^*_i) + \frac{9(\sqrt{\alpha}+\alpha)}{(1-\alpha)(1-(3+\epsilon)\alpha)}\delta^2(P^*_i, c^*_i)
+\end{align*}
+
+\textbf{Bước 3: Tổng hợp}
+Cộng bước 1 + 2, và $\delta^2(Q_i, c^*_i) + \delta^2(R_i, c^*_i) = \delta^2(P^*_i, c^*_i)$.
+
+\begin{align*}
+    \delta^2(P^*_i, \overline{I_i}) &\leq \underbrace{\delta^2(Q_i, c^*_i) + \delta^2(R_i, c^*_i)}_{\delta^2(P^*_i, c^*_i)} + \underbrace{\sqrt{\alpha}\delta^2(R_i, c^*_i)}_{\leq \sqrt{\alpha}\delta^2(P^*_i, c^*_i)} \\
+    &+ \left( 5\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} \right) \delta^2(P^*_i, c^*_i) \\
+    &+ \frac{9(\sqrt{\alpha}+\alpha)}{(1-\alpha)(1-(3+\epsilon)\alpha)}\delta^2(P^*_i, c^*_i)
+\end{align*}
+
+Gộp các hệ số chứa $\sqrt{\alpha}$: $1\sqrt{\alpha} + 5\sqrt{\alpha} = 6\sqrt{\alpha}$.
+Ta thu được bất đẳng thức cuối cùng:
+\[ \delta^2(P^*_i, \overline{I_i}) \leq \left( 1 + 6\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} + \frac{9(\sqrt{\alpha}+\alpha)}{(1-\alpha)(1-(3+\epsilon)\alpha)} \right) \delta^2(P^*_i, c^*_i) \]
+
+hay: 
+
+\[ \delta^2(P^*_i, \overline{I_i}) \leq \left( 1 + \frac{O(\sqrt{\alpha})}{(1-\alpha)(1-(3+\epsilon)\alpha)} \right) \delta^2(P^*_i, c^*_i) \] 
+
+với $\alpha \in [0, 1)$
+\end{proof}
