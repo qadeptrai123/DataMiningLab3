@@ -17,12 +17,15 @@ Cho một tập hợp $L(P) = \{P_1, P_2, \dots, P_k\}$ đóng vai trò là bộ
 \end{equation}
 
 % BEGIN PB
-Đây là tỷ lệ "khung hình" (aspect ratio). Đây là tỷ lệ nên việc chuẩn hóa ví dụ như các đặc trưng liên tục thành đoạn [0, 1] cũng ít ảnh hưởng đến "khung hình".
+Cụm từ ``Aspect Ratio'' được tác giả đề cập khi dịch về tiếng Việt để
+quen thuộc nhất thì chúng em sẽ gọi là \textbf{tỷ lệ khung hình}. 
+Về bản chất thì cũng chỉ là tỉ lệ giữa khoảng cách lớn nhất của 2 điểm 
+và khoảng cách nhỏ nhất của 2 điểm.
 % END PB
 
 Với một số nguyên dương $t$, gọi $[t]$ là tập hợp các số nguyên từ 1 đến $t$.
 
-\textbf{Bài toán $k$-means có hỗ trợ học.} Cho tập dữ liệu $P \subset \mathbb{R}^d$ gồm $m$ điểm, gọi $C^*$ và $P(C^*) = \{P^*_1, P^*_2, \dots, P^*_k\}$ lần lượt là một lời giải tối ưu và phân hoạch tương ứng. Trong thiết lập có hỗ trợ học, giả định rằng có quyền truy cập vào một bộ dự đoán dưới dạng phân hoạch nhãn $L(P) = \{P_1, P_2, \dots, P_k\}$ được tham số hóa bởi tỷ lệ lỗi nhãn $\alpha \in [0, 1)$, thỏa mãn điều kiện $|P_i \cap P^*_i| \geq (1-\alpha) \max\{|P_i|, |P^*_i|\}$. Mục tiêu của bài toán là tìm tập $C \subset \mathbb{R}^d$ các tâm sao cho $\delta^2(P, C)$ đạt giá trị nhỏ nhất.
+\textbf{Bài toán $k$-means hỗ trợ học:} Cho tập dữ liệu $P \subset \mathbb{R}^d$ gồm $m$ điểm, gọi $C^*$ và $P(C^*) = \{P^*_1, P^*_2, \dots, P^*_k\}$ lần lượt là một lời giải tối ưu và phân hoạch tương ứng. Trong thiết lập có hỗ trợ học, giả định rằng có quyền truy cập vào một bộ dự đoán dưới dạng phân hoạch nhãn $L(P) = \{P_1, P_2, \dots, P_k\}$ được tham số hóa bởi tỷ lệ lỗi nhãn $\alpha \in [0, 1)$, thỏa mãn điều kiện $|P_i \cap P^*_i| \geq (1-\alpha) \max\{|P_i|, |P^*_i|\}$. Mục tiêu của bài toán là tìm tập $C \subset \mathbb{R}^d$ các tâm sao cho $\delta^2(P, C)$ đạt giá trị nhỏ nhất.
 
 % BEGIN PB
 Các hệ quả toán học trong phần này dựa trên tính chất cơ bản của không gian Euclid, trọng tâm $\overline{V}$ là điểm duy nhất tối thiểu hóa tổng bình phương khoảng cách (SSE) tới mọi điểm trong tập $V$. Logic của các bổ đề dưới đây cho phép phân rã chi phí phân cụm thành hai thành phần: chi phí trong cụm (độ liên kết - cohesion) và chi phí do khoảng cách từ tâm dự đoán đến tâm tối ưu.
