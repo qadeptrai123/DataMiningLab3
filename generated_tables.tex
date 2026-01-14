@@ -1,0 +1,191 @@
+\begin{table}[!htbp]
+\centering
+\caption{So sánh các thuật toán trên tập dữ liệu MNIST với $k = 20$ và các $\alpha$ khác nhau}
+\label{tab:mnist_k_20}
+\footnotesize
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccc}
+\hline
+Phương pháp & $\alpha$ & Chi phí & Thời gian (s) \\ \hline
+$k$-means++ & \multirow{6}{*}{0.1} & 1.5499E+6 $\pm$ 0.00E+6 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 9.7689E+5 $\pm$ 0.01E+5 & 0.35 $\pm$ 0.79 \\
+Det &  & 9.6121E+5 $\pm$ 0.00E+5 & 0.14 $\pm$ 0.24 \\
+\textbf{Fast-Sampling} &  & 9.6051E+5 $\pm$ 0.01E+5 & 0.10 $\pm$ 0.11 \\
+\textbf{Fast-Filtering} &  & 9.5217E+5 $\pm$ 0.00E+5 & 0.96 $\pm$ 2.82 \\
+\textbf{Fast-Estimation} &  & 9.6083E+5 $\pm$ 0.00E+5 & 1.68 $\pm$ 0.56 \\
+\hline
+$k$-means++ & \multirow{6}{*}{0.2} & 1.5488E+6 $\pm$ 0.00E+6 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 1.0038E+6 $\pm$ 0.00E+6 & 0.09 $\pm$ 0.00 \\
+Det &  & 9.8419E+5 $\pm$ 0.00E+5 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 9.8921E+5 $\pm$ 0.01E+5 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & 9.5672E+5 $\pm$ 0.01E+5 & 0.02 $\pm$ 0.00 \\
+\textbf{Fast-Estimation} &  & 9.9053E+5 $\pm$ 0.01E+5 & 1.49 $\pm$ 0.03 \\
+\hline
+$k$-means++ & \multirow{6}{*}{0.3} & 1.5763E+6 $\pm$ 0.00E+6 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 1.0676E+6 $\pm$ 0.00E+6 & 0.09 $\pm$ 0.01 \\
+Det &  & 1.0429E+6 $\pm$ 0.00E+6 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 1.0515E+6 $\pm$ 0.00E+6 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & 9.8784E+5 $\pm$ 0.05E+5 & 0.02 $\pm$ 0.00 \\
+\textbf{Fast-Estimation} &  & 1.0594E+6 $\pm$ 0.00E+6 & 1.74 $\pm$ 0.11 \\
+\hline
+$k$-means++ & \multirow{6}{*}{0.4} & 1.5361E+6 $\pm$ 0.00E+6 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 1.1802E+6 $\pm$ 0.01E+6 & 0.09 $\pm$ 0.01 \\
+Det &  & 1.1325E+6 $\pm$ 0.00E+6 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 1.1487E+6 $\pm$ 0.00E+6 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & 1.0641E+6 $\pm$ 0.01E+6 & 0.02 $\pm$ 0.00 \\
+\textbf{Fast-Estimation} &  & 1.1627E+6 $\pm$ 0.00E+6 & 1.66 $\pm$ 0.11 \\
+\hline
+$k$-means++ & \multirow{6}{*}{0.5} & 1.5447E+6 $\pm$ 0.00E+6 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 1.2925E+6 $\pm$ 0.01E+6 & 0.09 $\pm$ 0.00 \\
+Det &  & 1.2199E+6 $\pm$ 0.00E+6 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 1.2479E+6 $\pm$ 0.01E+6 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & 1.1382E+6 $\pm$ 0.02E+6 & 0.02 $\pm$ 0.00 \\
+\textbf{Fast-Estimation} &  & 1.2714E+6 $\pm$ 0.01E+6 & 1.67 $\pm$ 0.06 \\
+\hline
+\end{tabular}
+}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\caption{So sánh các thuật toán trên tập dữ liệu PHY với $k = 20$ và các $\alpha$ khác nhau}
+\label{tab:phy_k_20}
+\footnotesize
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccc}
+\hline
+Phương pháp & $\alpha$ & Chi phí & Thời gian (s) \\ \hline
+$k$-means++ & \multirow{6}{*}{0.1} & 4.2404E+11 $\pm$ 0.00E+11 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 3.0295E+11 $\pm$ 0.00E+11 & 1.83 $\pm$ 0.03 \\
+Det &  & 3.0243E+11 $\pm$ 0.00E+11 & 1.72 $\pm$ 0.02 \\
+\textbf{Fast-Sampling} &  & 3.0708E+11 $\pm$ 0.03E+11 & 1.73 $\pm$ 0.02 \\
+\textbf{Fast-Filtering} &  & 3.0058E+11 $\pm$ 0.00E+11 & 0.52 $\pm$ 0.01 \\
+\textbf{Fast-Estimation} &  & 3.0312E+11 $\pm$ 0.00E+11 & 4.41 $\pm$ 0.09 \\
+\hline
+$k$-means++ & \multirow{6}{*}{0.2} & 4.2960E+11 $\pm$ 0.00E+11 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 3.0259E+11 $\pm$ 0.00E+11 & 1.90 $\pm$ 0.06 \\
+Det &  & 2.9950E+11 $\pm$ 0.00E+11 & 1.77 $\pm$ 0.05 \\
+\textbf{Fast-Sampling} &  & 3.1725E+11 $\pm$ 0.08E+11 & 1.77 $\pm$ 0.04 \\
+\textbf{Fast-Filtering} &  & 2.9296E+11 $\pm$ 0.00E+11 & 0.54 $\pm$ 0.02 \\
+\textbf{Fast-Estimation} &  & 2.9847E+11 $\pm$ 0.00E+11 & 4.48 $\pm$ 0.11 \\
+\hline
+$k$-means++ & \multirow{6}{*}{0.3} & 4.4100E+11 $\pm$ 0.00E+11 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 3.1841E+11 $\pm$ 0.00E+11 & 1.86 $\pm$ 0.03 \\
+Det &  & 3.1647E+11 $\pm$ 0.00E+11 & 1.75 $\pm$ 0.03 \\
+\textbf{Fast-Sampling} &  & 3.6652E+11 $\pm$ 0.22E+11 & 1.75 $\pm$ 0.02 \\
+\textbf{Fast-Filtering} &  & 3.0376E+11 $\pm$ 0.00E+11 & 0.53 $\pm$ 0.02 \\
+\textbf{Fast-Estimation} &  & 3.1518E+11 $\pm$ 0.01E+11 & 4.52 $\pm$ 0.09 \\
+\hline
+$k$-means++ & \multirow{6}{*}{0.4} & 4.2917E+11 $\pm$ 0.00E+11 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 3.2085E+11 $\pm$ 0.00E+11 & 1.93 $\pm$ 0.09 \\
+Det &  & 3.1753E+11 $\pm$ 0.00E+11 & 1.82 $\pm$ 0.07 \\
+\textbf{Fast-Sampling} &  & 4.1587E+11 $\pm$ 0.53E+11 & 1.81 $\pm$ 0.07 \\
+\textbf{Fast-Filtering} &  & 3.3653E+11 $\pm$ 0.02E+11 & 0.57 $\pm$ 0.05 \\
+\textbf{Fast-Estimation} &  & 3.2070E+11 $\pm$ 0.03E+11 & 4.70 $\pm$ 0.25 \\
+\hline
+$k$-means++ & \multirow{6}{*}{0.5} & 4.1570E+11 $\pm$ 0.00E+11 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 3.3498E+11 $\pm$ 0.00E+11 & 1.91 $\pm$ 0.02 \\
+Det &  & 3.3418E+11 $\pm$ 0.00E+11 & 1.79 $\pm$ 0.02 \\
+\textbf{Fast-Sampling} &  & 6.0591E+11 $\pm$ 0.71E+11 & 1.79 $\pm$ 0.02 \\
+\textbf{Fast-Filtering} &  & 5.3623E+11 $\pm$ 0.08E+11 & 0.56 $\pm$ 0.01 \\
+\textbf{Fast-Estimation} &  & 3.5253E+11 $\pm$ 0.09E+11 & 4.65 $\pm$ 0.09 \\
+\hline
+\end{tabular}
+}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\caption{So sánh các thuật toán trên tập dữ liệu MNIST với $\alpha = 0.2$ và các $k$ khác nhau}
+\label{tab:mnist_alpha_0.2}
+\footnotesize
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccc}
+\hline
+Phương pháp & $k$ & Chi phí & Thời gian (s) \\ \hline
+$k$-means++ & \multirow{6}{*}{10} & 1.9715E+6 $\pm$ 0.00E+6 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 1.2377E+6 $\pm$ 0.00E+6 & 0.34 $\pm$ 0.84 \\
+Det &  & 1.2247E+6 $\pm$ 0.00E+6 & 0.14 $\pm$ 0.26 \\
+\textbf{Fast-Sampling} &  & 1.2286E+6 $\pm$ 0.00E+6 & 0.09 $\pm$ 0.12 \\
+\textbf{Fast-Filtering} &  & 1.2033E+6 $\pm$ 0.00E+6 & 0.91 $\pm$ 2.70 \\
+\textbf{Fast-Estimation} &  & 1.2284E+6 $\pm$ 0.00E+6 & 0.93 $\pm$ 0.46 \\
+\hline
+$k$-means++ & \multirow{6}{*}{20} & 1.5553E+6 $\pm$ 0.00E+6 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 1.0218E+6 $\pm$ 0.00E+6 & 0.08 $\pm$ 0.00 \\
+Det &  & 1.0050E+6 $\pm$ 0.00E+6 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 1.0091E+6 $\pm$ 0.00E+6 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & 9.7466E+5 $\pm$ 0.01E+5 & 0.02 $\pm$ 0.00 \\
+\textbf{Fast-Estimation} &  & 1.0109E+6 $\pm$ 0.00E+6 & 1.42 $\pm$ 0.02 \\
+\hline
+$k$-means++ & \multirow{6}{*}{30} & 1.3400E+6 $\pm$ 0.00E+6 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 9.1410E+5 $\pm$ 0.02E+5 & 0.10 $\pm$ 0.00 \\
+Det &  & 8.9023E+5 $\pm$ 0.00E+5 & 0.07 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 8.9485E+5 $\pm$ 0.02E+5 & 0.07 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & 8.6099E+5 $\pm$ 0.02E+5 & 0.02 $\pm$ 0.00 \\
+\textbf{Fast-Estimation} &  & 8.9815E+5 $\pm$ 0.01E+5 & 2.03 $\pm$ 0.02 \\
+\hline
+$k$-means++ & \multirow{6}{*}{40} & 1.2122E+6 $\pm$ 0.00E+6 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 8.4602E+5 $\pm$ 0.02E+5 & 0.11 $\pm$ 0.00 \\
+Det &  & 8.2038E+5 $\pm$ 0.00E+5 & 0.07 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 8.2439E+5 $\pm$ 0.01E+5 & 0.08 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & 7.9457E+5 $\pm$ 0.02E+5 & 0.03 $\pm$ 0.00 \\
+\textbf{Fast-Estimation} &  & 8.2751E+5 $\pm$ 0.02E+5 & 2.57 $\pm$ 0.02 \\
+\hline
+$k$-means++ & \multirow{6}{*}{50} & 1.1198E+6 $\pm$ 0.00E+6 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 7.9767E+5 $\pm$ 0.01E+5 & 0.13 $\pm$ 0.00 \\
+Det &  & 7.6681E+5 $\pm$ 0.00E+5 & 0.08 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 7.7212E+5 $\pm$ 0.01E+5 & 0.09 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & 7.4135E+5 $\pm$ 0.03E+5 & 0.03 $\pm$ 0.00 \\
+\textbf{Fast-Estimation} &  & 7.7461E+5 $\pm$ 0.01E+5 & 3.15 $\pm$ 0.03 \\
+\hline
+\end{tabular}
+}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\caption{So sánh các thuật toán trên tập dữ liệu PHY với $\alpha = 0.2$ và các $k$ khác nhau}
+\label{tab:phy_alpha_0.2}
+\footnotesize
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccc}
+\hline
+Phương pháp & $k$ & Chi phí & Thời gian (s) \\ \hline
+$k$-means++ & \multirow{6}{*}{10} & 1.3896E+12 $\pm$ 0.00E+12 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 1.0724E+12 $\pm$ 0.00E+12 & 1.83 $\pm$ 0.28 \\
+Det &  & 1.0508E+12 $\pm$ 0.00E+12 & 1.86 $\pm$ 0.28 \\
+\textbf{Fast-Sampling} &  & 1.0862E+12 $\pm$ 0.02E+12 & 1.87 $\pm$ 0.27 \\
+\textbf{Fast-Filtering} &  & 1.0503E+12 $\pm$ 0.00E+12 & 0.48 $\pm$ 0.07 \\
+\textbf{Fast-Estimation} &  & 1.0572E+12 $\pm$ 0.00E+12 & 2.80 $\pm$ 0.55 \\
+\hline
+$k$-means++ & \multirow{6}{*}{20} & 4.3380E+11 $\pm$ 0.00E+11 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 3.1454E+11 $\pm$ 0.01E+11 & 1.76 $\pm$ 0.04 \\
+Det &  & 3.1232E+11 $\pm$ 0.00E+11 & 1.67 $\pm$ 0.03 \\
+\textbf{Fast-Sampling} &  & 3.3108E+11 $\pm$ 0.05E+11 & 1.68 $\pm$ 0.03 \\
+\textbf{Fast-Filtering} &  & 3.0627E+11 $\pm$ 0.01E+11 & 0.50 $\pm$ 0.03 \\
+\textbf{Fast-Estimation} &  & 3.1133E+11 $\pm$ 0.01E+11 & 3.97 $\pm$ 0.10 \\
+\hline
+$k$-means++ & \multirow{6}{*}{30} & 2.4487E+11 $\pm$ 0.00E+11 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 1.7833E+11 $\pm$ 0.00E+11 & 1.82 $\pm$ 0.04 \\
+Det &  & 1.7397E+11 $\pm$ 0.00E+11 & 1.66 $\pm$ 0.04 \\
+\textbf{Fast-Sampling} &  & 1.8913E+11 $\pm$ 0.05E+11 & 1.66 $\pm$ 0.03 \\
+\textbf{Fast-Filtering} &  & 1.6851E+11 $\pm$ 0.00E+11 & 0.44 $\pm$ 0.02 \\
+\textbf{Fast-Estimation} &  & 1.7307E+11 $\pm$ 0.00E+11 & 5.67 $\pm$ 0.14 \\
+\hline
+$k$-means++ & \multirow{6}{*}{40} & 1.7576E+11 $\pm$ 0.00E+11 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 1.2996E+11 $\pm$ 0.00E+11 & 1.74 $\pm$ 0.04 \\
+Det &  & 1.2673E+11 $\pm$ 0.00E+11 & 1.52 $\pm$ 0.02 \\
+\textbf{Fast-Sampling} &  & 1.3748E+11 $\pm$ 0.04E+11 & 1.52 $\pm$ 0.02 \\
+\textbf{Fast-Filtering} &  & 1.2047E+11 $\pm$ 0.00E+11 & 0.25 $\pm$ 0.01 \\
+\textbf{Fast-Estimation} &  & 1.2572E+11 $\pm$ 0.00E+11 & 6.36 $\pm$ 0.23 \\
+\hline
+$k$-means++ & \multirow{6}{*}{50} & 1.4411E+11 $\pm$ 0.00E+11 & 0.00 $\pm$ 0.00 \\
+Ergun &  & 1.1537E+11 $\pm$ 0.00E+11 & 1.82 $\pm$ 0.08 \\
+Det &  & 1.1176E+11 $\pm$ 0.00E+11 & 1.53 $\pm$ 0.06 \\
+\textbf{Fast-Sampling} &  & 1.2206E+11 $\pm$ 0.03E+11 & 1.53 $\pm$ 0.06 \\
+\textbf{Fast-Filtering} &  & 1.0566E+11 $\pm$ 0.00E+11 & 0.27 $\pm$ 0.02 \\
+\textbf{Fast-Estimation} &  & 1.1040E+11 $\pm$ 0.00E+11 & 7.19 $\pm$ 0.45 \\
+\hline
+\end{tabular}
+}
+\end{table}
