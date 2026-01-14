@@ -1,8 +1,66 @@
 \section{Fast-Sampling (k-median)}
 
-% BEGIN PB
-Tác giả chưa thực nghiệm
-% END
+Trong mục này, tác giả trình bày cách mở rộng các phương pháp dựa trên lấy mẫu được đề xuất cho bài toán $k$-median có hỗ trợ học. Thách thức chính ở đây nảy sinh từ sự khác biệt trong các mục tiêu tối ưu hóa. Cụ thể, đối với một tập hợp tọa độ $S \subset \mathbb{R}^d$ bất kỳ, tâm hình học của $S$ không còn đóng vai trò là tâm phân cụm tối ưu cho $S$ theo mục tiêu $k$-median, khiến việc xác định các tọa độ hoặc tâm ứng viên chất lượng cao trở nên khó khăn. Kết quả là, các thuật toán $k$-median có hỗ trợ học hiện có thường gặp khó khăn trong việc đạt được các đảm bảo xấp xỉ chất lượng cao.
+
+Để vượt qua thách thức này, mục tiêu của tác giả là sử dụng các chiến lược dựa trên lấy mẫu để xây dựng một tập $U_i$ các tâm nằm gần các tâm phân cụm tối ưu cho mỗi cụm dự đoán $P_i$. Sau đó, bằng cách rời rạc hóa lưới, tác giả có thể tạo ra các tâm ứng viên có khả năng xấp xỉ tốt các tâm phân cụm tối ưu. Cuối cùng, bằng cách liệt kê các tâm ứng viên đã xây dựng, tác giả chứng minh rằng chi phí phân cụm của mỗi cụm tối ưu có thể được xấp xỉ tốt bằng cách sử dụng tâm tốt nhất được chọn từ quá trình liệt kê.
+
+\begin{table}[h!]
+\centering
+\caption{Kết quả so sánh các thuật toán $k$-median có hỗ trợ học}
+\label{tab:kmedian_comparison}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccc}
+\hline
+\textbf{Phương pháp và Tài liệu tham khảo} & \textbf{Tỷ lệ xấp xỉ} & \textbf{Khoảng lỗi nhãn $\alpha$} & \textbf{Độ phức tạp thời gian} \\ \hline
+Phân vùng và Sắp xếp \cite{Ergun2021} & $1 + \tilde{O}((k\alpha)^{1/4})$ & Hằng số nhỏ & $O(md \log^3 m + \text{poly}(k, \log m))$ \\
+Sắp xếp \cite{Nguyen2022} & $1 + \frac{\alpha(7+10\alpha-10\alpha^2)}{(1-\alpha)(1-2\alpha)}$ & $[0, 1/2)$ & $O\left(\frac{md \log^3 m \log^2(k/\delta)}{1-2\alpha}\right)$ \\
+\textbf{Fast-Sampling (Tác giả)} & $1 + \frac{\alpha(6+4\epsilon-4\alpha-3\epsilon\alpha)}{(1-\alpha)(1-2\alpha)}$ & $(0, 1/2)$ & $O\left(\frac{md \log(kd) \log(m\Delta)}{1-2\alpha} \cdot \left(\frac{\sqrt{d}}{\epsilon\alpha}\right)^{O(d)}\right)$ \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+Bảng 3 cung cấp một so sánh chi tiết các kết quả cho bài toán $k$-median có hỗ trợ học. Tác giả cũng đưa ra một biểu đồ (Hình 2) về tỷ lệ xấp xỉ so với tỷ lệ lỗi $\alpha$. Có thể thấy từ bảng rằng kết quả tốt nhất hiện nay đạt được xấp xỉ $(1 + O(\alpha))$ với $\alpha \in [0, 1/2)$ \cite{Nguyen2022}. So với các kết quả tiên tiến nhất, thuật toán Fast-Sampling có thể đạt được các đảm bảo chất lượng phân cụm tốt hơn với thời gian chạy kém hơn một chút đối với số chiều $d$ cố định.
+
+Mô tả cụ thể cho thuật toán $k$-median có hỗ trợ học được trình bày trong Thuật toán 5. Ý tưởng chung đằng sau thuật toán là trước tiên tạo ra các tâm ứng viên có thể xấp xỉ chặt chẽ các tâm phân cụm tối ưu cho mỗi cụm dự đoán. Sau đó, bằng cách chọn tâm tốt nhất với chi phí $k$-median nhỏ nhất, tác giả chứng minh rằng thuật toán đề xuất có thể đưa ra các đảm bảo xấp xỉ tốt hơn cho bài toán $k$-median có hỗ trợ học. Dưới đây, tác giả đưa ra phân tích cụ thể cho thuật toán được đề xuất.
+
+\begin{algorithm}
+\caption{Fast-Sampling ($k$-median)}
+\label{alg:kmedian_sampling}
+\begin{algorithmic}[1]
+\Require Bài toán $k$-median $(P, k, d)$, tập các phân vùng $(P_1, \dots, P_k)$ với tỷ lệ lỗi $\alpha$, tham số $\epsilon \in (0, 1]$.
+\Ensure Tập $C \subset \mathbb{R}^d$ gồm $k$ tâm sao cho $|C| = k$.
+\For{mỗi $i \in [k]$}
+    \State Lấy mẫu ngẫu nhiên và độc lập tập $U_i$ từ $P_i$ với kích thước $O\left(\frac{\log(kd)}{1-2\alpha}\right)$, sau đó khởi tạo $U'_i = \emptyset$.
+    \For{$q = 0$ đến $O(\log(m\Delta))$}
+        \State $l_i = 2^{q-1}/(1-\alpha)m_i$.
+        \For{mỗi $u \in U_i$}
+            \State Gọi $G(u)$ là lưới tâm $u$ với độ dài cạnh $2l_i$.
+            \State Phân rã $G(u)$ thành các lưới con nhỏ hơn với độ dài cạnh $(1-\alpha)\alpha\epsilon_1 l_i/\sqrt{d}$, và gọi $s(u)$ là tập các tâm của các lưới con này, với $\epsilon_1 < \epsilon/4$.
+            \State $U'_i = U'_i \cup s(u)$.
+        \EndFor
+    \EndFor
+    \State $u_i = \arg\min_{u \in U'_i} \delta(\mathcal{N}_i(u), u)$, trong đó $\mathcal{N}_i(u)$ là tập $(1-\alpha)m_i$ điểm trong $P_i$ gần $u$ nhất.
+    \State $\hat{c}_i = u_i$.
+\EndFor
+\State \Return $\{\hat{c}_1, \hat{c}_2, \dots, \hat{c}_k\}$.
+\end{algorithmic}
+\end{algorithm}
+
+Không mất tính tổng quát, tác giả có thể giả định rằng khoảng cách từng đôi tối thiểu giữa các điểm dữ liệu trong $P$ là 1 trong khi khoảng cách từng đôi tối đa là $\Delta$. Lưu ý rằng điều này có thể thực hiện được bằng các kỹ thuật tỉ lệ chuẩn. Theo Bổ đề 4, trong mỗi bước 2 của Thuật toán 5, với xác suất ít nhất $1 - 1/k$, có thể tìm thấy ít nhất một tâm $u \in U_i$ sao cho $\delta(u, c^*_i) \leq 2\delta(P^*_i, c^*_i)/|P^*_i| \leq \frac{2\delta(P^*_i, c^*_i)}{(1-\alpha)m_i}$, trong đó bước cuối cùng tuân theo thực tế là $|P^*_i| \geq |Q_i| \geq (1 - \alpha)m_i$. Sau đó, trong bước 3 của Thuật toán 5, vì thuật toán liệt kê tất cả các giá trị có thể giữa 1 và $\log(m\Delta)$, tồn tại ít nhất một dự đoán cho bán kính phân cụm (bước 4 của Thuật toán 5) sao cho $\delta(P^*_i, c^*_i)/(1 - \alpha)m_i \leq l_i \leq 2\delta(P^*_i, c^*_i)/(1 - \alpha)m_i$. Do đó, trong bước 6 của Thuật toán 5, lưới có tâm tại $u$ với độ dài cạnh $2l_i$ ($G(u)$) sẽ chứa tâm phân cụm tối ưu $c^*_i$. Sau đó, trong bước 7 của Thuật toán 5, bằng cách phân rã lưới $G(u)$ thành các lưới con nhỏ hơn với độ dài cạnh $(1 - \alpha)\alpha\epsilon_1 l_i / \sqrt{d}$ cho một số $\epsilon_1 < \epsilon/4$, tâm phân cụm tối ưu $c^*_i$ cũng phải thuộc về một trong các lưới con. Vì lưới con có độ dài cạnh $(1 - \alpha)\alpha\epsilon_1 l_i / \sqrt{d}$, cũng tồn tại ít nhất một $u' \in U'_i$ sao cho $u'$ đủ gần với $c^*_i$, tức là $\delta(u', c^*_i) \leq (1 - \alpha)\alpha\epsilon_1 l_i \leq \alpha\epsilon\delta(P^*_i, c^*_i)/m_i$. Gọi $u_i$ là điểm được chọn trong bước 9 của Thuật toán 5. Đối với bất kỳ điểm dữ liệu nào $u \in U'_i$, gọi $N_i(u)$ là tập hợp các điểm gần nhất $(1 - \alpha)m_i$ trong $P_i$ tới $u$. Do đó, ta có
+
+\begin{align*}
+\delta(\mathcal{N}_i(u_i), u_i) &\leq \delta(\mathcal{N}_i(u'), u') \\
+&\leq \delta(\mathcal{N}_i(u'), c^*_i) + |\mathcal{N}_i(u')|\delta(u', c^*_i) \\
+&\leq \delta(\mathcal{N}_i(u_i), c^*_i) + m_i \cdot \left( \frac{\alpha\epsilon\delta(P^*_i, c^*_i)}{m_i} \right) \\
+&\leq \delta(\mathcal{N}_i(u_i), c^*_i) + \alpha\epsilon\delta(P^*_i, c^*_i)
+\end{align*}
+
+Trong đó:
+\begin{itemize}
+    \item Bất đẳng thức đầu tiên tuân theo tính tối tiểu của $u_i$ trong tập $U'_i$.
+    \item Bất đẳng thức thứ hai áp dụng bất đẳng thức tam giác cho từng điểm trong $\mathcal{N}_i(u')$.
+    \item Bước cuối cùng sử dụng giới hạn $| \mathcal{N}_i(u_i) | \leq m_i$ và khoảng cách tâm $\delta(u', c^*_i)$ đã thiết lập.
+\end{itemize}
 
 % C 5
 \begin{corollary}
@@ -60,9 +118,9 @@ Kết hợp các bất đẳng thức từ Bước 2 và Bước 3:
 \end{lemma}
 
 \begin{proof}
-Chứng minh được thực hiện qua ba bước: xác định kích thước phần giao giữa tập lân cận và cụm tối ưu, thiết lập giới hạn chi phí, và áp dụng bất đẳng thức tam giác để cô lập khoảng cách giữa hai tâm.
 
-\textbf{Bước 1: Kích thước tập giao}
+\begin{enumerate}
+\item \textbf{Kích thước tập giao}
 
 Thuật toán chọn tập $\mathcal{N}_i(u_i)$ gồm $(1-\alpha)m_i$ điểm gần $u_i$ nhất trong cụm dự đoán $P_i$.
 Theo giả thiết của mô hình, số lượng điểm trong $P_i$ không thuộc cụm tối ưu $P^*_i$ (dương tính giả) tối đa là $\alpha m_i$ (vì $|P_i \setminus P^*_i| \le \alpha m_i$).
@@ -72,13 +130,13 @@ Thay thế các giá trị kích thước vào:
 \[ |\mathcal{N}_i(u_i) \cap P^*_i| \geq (1 - \alpha)m_i - \alpha m_i = (1 - 2\alpha)m_i \]
 Điều này đảm bảo rằng phần giao chứa một lượng điểm đáng kể .
 
-\textbf{Bước 2: Thiết lập chặn trên cho chi phí của tâm thuật toán}
+\item \textbf{Chặn trên cho chi phí}
 
 Dựa vào tính chất tối ưu trong Bước 9 của Thuật toán 5, $u_i$ là điểm tối thiểu hóa chi phí k-median đối với tập lân cận của nó. Theo Hệ quả 5 (Corollary 5) đã chứng minh trước đó, với xác suất cao, chi phí này bị chặn bởi:
 \[ \delta(\mathcal{N}_i(u_i), u_i) \leq (1 + \alpha\epsilon)\delta(P^*_i, c^*_i) \]
 % (Lưu ý: Bất đẳng thức này xuất phát từ việc so sánh $u_i$ với một ứng viên tốt $u'$ trong lưới, và sử dụng tính chất $\delta(u', c^*_i) \leq \alpha\epsilon\delta(P^*_i, c^*_i)/m_i$).
 
-\textbf{Bước 3: Bất đẳng thức Tam giác}
+\item \textbf{Bất đẳng thức tam giác}
 
 % Để chặn khoảng cách $\delta(u_i, c^*_i)$, ta xét tổng khoảng cách đi qua các điểm trung gian $p$ nằm trong phần giao $\mathcal{N}_i(u_i) \cap P^*_i$.
 Áp dụng bất đẳng thức tam giác cho mọi $p$:
@@ -99,6 +157,8 @@ Thay thế các chặn trên vào tử số và sử dụng chặn dưới của
     \delta(u_i, c^*_i) &\leq \frac{(1 + \alpha\epsilon)\delta(P^*_i, c^*_i) + \delta(P^*_i, c^*_i)}{(1 - 2\alpha)m_i} \\
     &= \frac{(2 + \alpha\epsilon)\delta(P^*_i, c^*_i)}{(1 - 2\alpha)m_i}
 \end{align*}
+
+\end{enumerate}
 \end{proof}
 
 % L 16
@@ -187,19 +247,20 @@ trong đó $c^*_i$ là tâm tối ưu của cụm thứ $i$.
 Chúng ta phân tích tổng chi phí bằng cách chia cụm tối ưu $P^*_i$ thành hai phần rời nhau dựa trên kết quả dự đoán của mô hình: phần giao với cụm dự đoán ($P^*_i \cap P_i$) và phần bị dự đoán sai ($P^*_i \setminus P_i$).
 \[ \delta(P^*_i, u_i) = \delta(P^*_i \cap P_i, u_i) + \delta(P^*_i \setminus P_i, u_i) \]
 
-\textbf{Bước 1: Giới hạn chi phí của phần giao (True Positives)}
+\begin{enumerate}
+\item \textbf{Giới hạn chi phí của phần giao (dương tính thật)}
 
 Xét tập hợp $Q_i = P^*_i \cap P_i$. Áp dụng trực tiếp kết quả từ Bổ đề 16, ta có chặn trên cho chi phí của tập này đối với tâm $u_i$:
 \[ \delta(P^*_i \cap P_i, u_i) \leq \delta(P^*_i \cap P_i, c^*_i) + \frac{\alpha(4 + 3\epsilon)}{1 - 2\alpha} \delta(P^*_i, c^*_i) \]
 
-\textbf{Bước 2: Giới hạn chi phí của phần sai lệch (False Negatives)}
+\item \textbf{Giới hạn chi phí của phần sai lệch (âm tính giả)}
 
 Với các điểm $p \in P^*_i \setminus P_i$ (các điểm thuộc cụm tối ưu nhưng không nằm trong cụm dự đoán $P_i$), ta sử dụng bất đẳng thức tam giác qua tâm tối ưu $c^*_i$:
 \[ \delta(p, u_i) \leq \delta(p, c^*_i) + \delta(c^*_i, u_i) \]
 Lấy tổng trên toàn bộ tập $P^*_i \setminus P_i$:
 \[ \delta(P^*_i \setminus P_i, u_i) \leq \delta(P^*_i \setminus P_i, c^*_i) + |P^*_i \setminus P_i| \delta(c^*_i, u_i) \]
 
-\textbf{Bước 3: Đánh giá kích thước và thay thế khoảng cách tâm}
+\item \textbf{Khoảng cách tâm}
 
 Ta có 
 \begin{align*}
@@ -216,7 +277,7 @@ Thay thế vào biểu thức ở Bước 2:
     &= \frac{\alpha(2 + \alpha\epsilon)}{(1 - \alpha)(1 - 2\alpha)} \delta(P^*_i, c^*_i)
 \end{align*}
 
-\textbf{Bước 4: Tổng hợp}
+\item \textbf{Tổng hợp}
 
 Cộng gộp kết quả từ Bước 1 và Bước 3:
 \begin{align*}
@@ -225,7 +286,7 @@ Cộng gộp kết quả từ Bước 1 và Bước 3:
 \end{align*}
 
 \begin{align*}
-    \mathcal{K} &= \frac{\alpha(4 + 3\epsilon)(1 - \alpha) + \alpha(2 + \alpha\epsilon)}{(1 - \alpha)(1 - 2\alpha)} \\
+    \text{Hệ số vế phải} &= \frac{\alpha(4 + 3\epsilon)(1 - \alpha) + \alpha(2 + \alpha\epsilon)}{(1 - \alpha)(1 - 2\alpha)} \\
     &= \frac{(4\alpha + 3\alpha\epsilon - 4\alpha^2 - 3\alpha^2\epsilon) + (2\alpha + \alpha^2\epsilon)}{(1 - \alpha)(1 - 2\alpha)} \\
     &= \frac{6\alpha - 4\alpha^2 + 3\alpha\epsilon - 2\alpha^2\epsilon}{(1 - \alpha)(1 - 2\alpha)}
 \end{align*}
@@ -233,4 +294,5 @@ Ta nhận thấy rằng $3\alpha\epsilon - 2\alpha^2\epsilon = \alpha\epsilon(3-
 Vì $\alpha < 1$, ta có $3\alpha\epsilon - 2\alpha^2\epsilon \leq 4\alpha\epsilon - 3\alpha^2\epsilon$ (do hiệu số là $\alpha\epsilon(1-\alpha) > 0$).
 Do đó, ta có thể nới lỏng chặn trên để khớp với công thức tổng quát của Bổ đề:
 \[ \delta(P^*_i, u_i) \leq \left( 1 + \frac{6\alpha + 4\alpha\epsilon - 4\alpha^2 - 3\epsilon\alpha^2}{(1-\alpha)(1-2\alpha)} \right) \delta(P^*_i, c^*_i) \]
+\end{enumerate}
 \end{proof}

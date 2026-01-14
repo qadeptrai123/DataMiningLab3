@@ -70,7 +70,8 @@ Giả sử $S_{ij}$ là một mẫu được lấy ngẫu nhiên từ cụm dự
 \begin{proof}
 Chúng ta sẽ phân tích chi tiết cho một khối lớn bất kỳ $\mathcal{B}_u^l \in \mathcal{L}(u)$. Quy trình tương tự cũng áp dụng cho tập $\mathcal{O}(u)$.
 
-\textbf{Bước 1: Kỳ vọng }
+\begin{enumerate}
+\item \textbf{Kỳ vọng }
 
 Các tọa độ trong $P_{ij}$ được lấy mẫu độc lập và phân phối đều. Xác suất để một mẫu đơn lẻ rơi vào khối $\mathcal{B}_u^l$ là tỷ lệ kích thước $|\mathcal{B}_u^l|/|P_{ij}|$. Với tập mẫu kích thước $|S_{ij}|$, giá trị kỳ vọng số điểm rơi vào khối là:
 \begin{align*}
@@ -95,9 +96,9 @@ Ta thu được:
     \mathbb{E}[|\mathcal{B}_u^l \cap S_{ij}|] \geq \frac{c \log(m^3d \log^3(m\Delta_{\max}^2)/\epsilon_1^2)}{(1+\epsilon_1)\epsilon_1^2}
 \end{equation}
 
-\textbf{Bước 2: Áp dụng Bất đẳng thức Chernoff}
+\item \textbf{Áp dụng Bất đẳng thức Chernoff}
 
-Để chứng minh độ tập trung quanh giá trị kỳ vọng, ta sử dụng bất đẳng thức Chernoff dạng nhân \footnote{Sums of independent Bernoulli random variables \url{https://en.wikipedia.org/wiki/Chernoff_bound\#Sums_of_independent_Bernoulli_random_variables}}.
+% Để chứng minh độ tập trung quanh giá trị kỳ vọng, ta sử dụng bất đẳng thức Chernoff dạng nhân  \footnote{Sums of independent Bernoulli random variables \url{https://en.wikipedia.org/wiki/Chernoff_bound\#Sums_of_independent_Bernoulli_random_variables}}.
 \begin{enumerate}
     \item \textbf{Bất đẳng thức:}
     Gọi $X$ là tổng các biến ngẫu nhiên Bernoulli $X_1, \ldots , X_{m_i}$, $X_i = 1$ nếu điểm $i$ thuộc $\mathcal{B}_u^l \cap S_{ij}$. 
@@ -129,7 +130,7 @@ Ta thu được:
     \[ \Pr(|X - \mathbb{E}[X]| \geq \epsilon_1 \mathbb{E}[X]) \leq O\left( \frac{\epsilon_1^2}{m^3 d \log^3(m\Delta_{\max}^2)} \right) \]
 \end{enumerate}
 
-\textbf{Bước 3: Chặn Union}
+\item \textbf{Chặn Union}
 
 Bổ đề yêu cầu bất đẳng thức đúng cho \textit{tất cả} các khối lớn. Số lượng khối lớn $\gamma$ bị chặn bởi $O(\log(m\Delta_{\max}^2)/\epsilon_1)$.
 Áp dụng Bất đẳng thức Union Bound để tính tổng xác suất thất bại:
@@ -139,6 +140,7 @@ Bổ đề yêu cầu bất đẳng thức đúng cho \textit{tất cả} các k
     &\leq \frac{\epsilon_1}{m^3 d \log^2(m\Delta_{\max}^2)}
 \end{align*}
 Đối với tập ngoại lai $\mathcal{O}(u)$, vì kích thước $|\mathcal{O}(u)| = \alpha m_i$ lớn hơn kích thước tối thiểu của khối lớn, kết quả tương tự cũng được áp dụng.
+\end{enumerate}
 \end{proof}
 
 % L 9
@@ -152,14 +154,14 @@ Gọi $\mathcal{J}(u)$ là tập hợp các tọa độ nằm trong các khối 
 \begin{proof}
 Chứng minh này dựa trên việc áp dụng Bất đẳng thức Chernoff để giới hạn độ lệch của biến ngẫu nhiên so với kỳ vọng của nó.
 
-\textbf{Bước 1:}
+\begin{enumerate}
 % Theo định nghĩa của các khối nhỏ trong thuật toán, tổng số lượng tọa độ trong các khối này chiếm một phần rất nhỏ của cụm dự đoán:
 % \[ |\mathcal{J}(u)| \leq \epsilon_1\alpha m_i \]
 
-Gọi biến ngẫu nhiên $X = |\mathcal{J}(u) \cap S_{ij}|$. Vì $S_{ij}$ được lấy mẫu ngẫu nhiên đều từ $P_{ij}$, giá trị kỳ vọng của $X$ được tính bằng tỷ lệ kích thước:
+\item Gọi biến ngẫu nhiên $X = |\mathcal{J}(u) \cap S_{ij}|$. Vì $S_{ij}$ được lấy mẫu ngẫu nhiên đều từ $P_{ij}$, giá trị kỳ vọng của $X$ được tính bằng tỷ lệ kích thước:
 \[ \mathbb{E}[X] = |S_{ij}| \cdot \frac{|\mathcal{J}(u)|}{m_i} \]
 
-\textbf{Bước 2: Chuẩn bị áp dụng Bất đẳng thức Chernoff}
+\item \textbf{Chuẩn bị áp dụng Bất đẳng thức Chernoff}
 Chúng ta muốn chứng minh rằng $X$ không vượt quá ngưỡng $2\epsilon_1\alpha|S_{ij}|$. Để làm điều này, ta biểu diễn ngưỡng này dưới dạng độ lệch so với kỳ vọng $(1 + \lambda')\mathbb{E}[X]$.
 Ta cần tìm $\lambda'$ sao cho:
 \[ (1 + \lambda')\mathbb{E}[X] = 2\epsilon_1\alpha|S_{ij}| \]
@@ -169,7 +171,7 @@ Giải phương trình tìm $\lambda'$:
 \[ 1 + \lambda' = \frac{2\epsilon_1\alpha m_i}{|\mathcal{J}(u)|} \quad \Rightarrow \quad \lambda' = \frac{2\epsilon_1\alpha m_i}{|\mathcal{J}(u)|} - 1 \]
 vì $|\mathcal{J}(u)| \leq \epsilon_1\alpha m_i$, ta có tỷ số $\frac{\epsilon_1\alpha m_i}{|\mathcal{J}(u)|} \geq 1$, suy ra $\frac{2\epsilon_1\alpha m_i}{|\mathcal{J}(u)|} \geq 2$, do đó $\lambda' \geq 1$.
 
-\textbf{Bước 3: Bất đẳng thức}
+\item \textbf{Bất đẳng thức}
 
 Đặt biến ngẫu nhiên $X = |\mathcal{J}(u) \cap S_{ij}|$. Ta muốn chặn trên xác suất $X$ vượt quá ngưỡng $2\epsilon_1\alpha|S_{ij}|$.
 Đặt độ lệch $\lambda' = \frac{2\epsilon_1\alpha m_i}{|\mathcal{J}(u)|} - 1$. Khi đó, ngưỡng cần chặn chính là $(1+\lambda')\mathbb{E}[X]$.
@@ -195,9 +197,7 @@ Ta có: $(2A - 1)^2 \geq A^2 \Leftrightarrow A \geq 1$.
 Để $\mathcal{E}$ nhỏ nhất, ta thay $|\mathcal{J}(u)|$ bằng giá trị lớn nhất:
 \[ \mathcal{E} \geq \frac{\epsilon_1^2 \alpha^2 m_i |S_{ij}|}{3(\epsilon_1 \alpha m_i)} = \frac{\epsilon_1 \alpha |S_{ij}|}{3} \]
 
-
-\textbf{Bước 4:}
-
+\item 
 Theo thuật toán, kích thước mẫu $|S_{ij}|$ được chọn là:
 \[ |S_{ij}| = \Omega\left( \frac{\log(m^3d \log^3(m\Delta_{\max}^2)/\epsilon_1^2) \log(m\Delta_{\max}^2)}{\alpha \epsilon_1^4} \right) \]
 Thay thế $|S_{ij}|$ vào chặn dưới của số mũ $\mathcal{E}$ tìm được ở Bước 3:
@@ -207,6 +207,8 @@ Vì $\epsilon_1 < 1$ và $C$ là hằng số đủ lớn, ta có:
 Do đó:
 \[ \Pr(|\mathcal{J}(u) \cap S_{ij}| \geq 2\epsilon_1\alpha|S_{ij}|) \leq \frac{\epsilon_1}{m^3d \log^2(m\Delta_{\max}^2)} \]
 Lấy phần bù, ta có điều phải chứng minh.
+
+\end{enumerate}
 \end{proof}
 
 % L 10
@@ -356,7 +358,7 @@ Thuật toán Fast-Estimation xấp xỉ $(1 + O(\alpha))$ cho bài toán k-mean
 \begin{proof}
 Chứng minh này đánh giá chất lượng của tập tâm được trả về bởi thuật toán và độ phức tạp của quy trình ước lượng dưới tuyến tính.
 
-\textbf{1. Phân tích Chất lượng Phân cụm}
+\textbf{1. Chất lượng Phân cụm}
 
 Giả sử $C = \{\hat{c}_1, \hat{c}_2, \dots, \hat{c}_k\}$ là tập hợp các tâm được thuật toán trả về, trong đó mỗi tâm $\hat{c}_i$ được cấu thành từ các tọa độ trên từng chiều $j$, ký hiệu là $c_{ij}$ (trong thuật toán được xác định là $\overline{I_{ij}}$).
 
@@ -378,12 +380,12 @@ Lấy tổng trên tất cả các cụm $i$ và các chiều $j$:
 \[ \delta^2(P, C) \leq (1 + \mathcal{K}(\alpha)) \sum_{i,j} \delta^2(P^*_{ij}, \overline{P^*_{ij}}) = (1 + O(\alpha)) \delta^2(P, C^*) \]
 
 
-\textbf{2. Phân tích Xác suất Thành công}
+\textbf{2. Xác suất thành công}
 
 Sự thành công của Fast-Estimation phụ thuộc vào độ chính xác của bộ ước lượng $\omega(u)$. Điều này được đảm bảo bởi Bổ đề 8 và Bổ đề 9 thông qua việc lấy mẫu ngẫu nhiên.
 
 \begin{enumerate}
-    \item \textbf{Định nghĩa Biến ngẫu nhiên:} Xét quá trình lấy mẫu $S_{ij}$ từ $P_{ij}$. Gọi biến ngẫu nhiên $X_p$, bằng 1 nếu điểm $p \in P_{ij}$ được chọn vào $S_{ij}$ và 0 nếu ngược lại. Tổng số điểm thuộc một tập con bất kỳ $A \subseteq P_{ij}$ rơi vào mẫu là $X = \sum_{p \in A} X_p$.
+    \item \textbf{Biến ngẫu nhiên:} Xét quá trình lấy mẫu $S_{ij}$ từ $P_{ij}$. Gọi biến ngẫu nhiên $X_p$, bằng 1 nếu điểm $p \in P_{ij}$ được chọn vào $S_{ij}$ và 0 nếu ngược lại. Tổng số điểm thuộc một tập con bất kỳ $A \subseteq P_{ij}$ rơi vào mẫu là $X = \sum_{p \in A} X_p$.
     
     \item \textbf{Kỳ vọng:} $\mathbb{E}[X] = \frac{|S_{ij}|}{|P_{ij}|}|A|$. Thuật toán kích thước mẫu $|S_{ij}|$ đủ lớn sao cho kỳ vọng số điểm trong các "khối lớn" thỏa mãn $\mathbb{E}[X] \geq \Omega(\frac{\log m}{\epsilon^2})$.
     
@@ -394,23 +396,23 @@ Sự thành công của Fast-Estimation phụ thuộc vào độ chính xác c�
     \item \textbf{Chặn Union (Union Bound):} Để đảm bảo thuật toán hoạt động đúng trên toàn cục, ta lấy tổng xác suất thất bại trên tất cả các chiều $d$, tất cả các cụm $k$, và tất cả các ứng viên $u$. Do xác suất thất bại cá lẻ rất nhỏ, tổng xác suất thất bại vẫn được giữ ở mức hằng số nhỏ.
 \end{enumerate}
 
-\textbf{3. Phân tích Thời gian Chạy}
+\textbf{3. Thời gian chạy}
 
 Thời gian chạy của thuật toán được phân tích theo từng giai đoạn xử lý:
 
 \begin{itemize}
-    \item \textbf{Xây dựng Ứng viên (Bước 3-7):} 
-    Việc lấy mẫu $U_{ij}$ mất thời gian $O(1)$. Thuật toán lặp qua $O(\log(m\Delta_{\max}))$ giá trị độ dài khoảng, mỗi lần tạo ra tập ứng viên. Tổng số lượng ứng viên được tạo ra là $O(\epsilon^{-1} \log(m\Delta_{\max}) \log(kd))$. 
+    \item \textbf{Ứng viên (Bước 3-7):} 
+    Việc lấy mẫu $U_{ij}$ mất thời gian $O(\log kd)$. Thuật toán lặp qua $O(\log(m\Delta_{\max}))$ giá trị độ dài khoảng, mỗi lần tạo ra tập ứng viên. Tổng số lượng ứng viên được tạo ra là $O(\epsilon^{-1} \log(m\Delta_{\max}) \log(kd))$. 
     
-    \item \textbf{Ước lượng Chi phí (Bước 10):}
+    \item \textbf{Ước lượng chi phí (Bước 10):}
     Kích thước của bộ ước lượng (số lượng mẫu $S_{ij}$) là $\tilde{O}\left(\frac{1}{\alpha \epsilon^4}\right)$. Việc tính toán $\omega(u)$ cho tất cả các ứng viên đòi hỏi thời gian tỷ lệ thuận với số lượng ứng viên nhân với kích thước bộ ước lượng. Tổng thời gian cho bước này là:
     \[ O(\text{số ứng viên}) \times O(\text{kích thước ước lượng}) = \tilde{O}\left(\frac{1}{\alpha \epsilon^5}\right) \]
     bước này độc lập với kích thước dữ liệu $m$ (sublinear). 
     
-    \item \textbf{Lựa chọn Cuối cùng (Bước 12):}
+    \item \textbf{Lựa chọn (Bước 12):}
     Sau khi chọn được tâm xấp xỉ $c_{ij}$, thuật toán cần tìm $(1-2\alpha-\alpha\epsilon)m_i$ điểm lân cận nhất trong $P_{ij}$. Sử dụng thuật toán lựa chọn tuyến tính (linear selection algorithm - Blum et al., 1973), bước này mất thời gian $O(m_i)$ cho mỗi chiều của mỗi cụm. 
     
-    \item \textbf{Tổng}
+    \item
     Cộng gộp thời gian trên tất cả $k$ cụm và $d$ chiều:
     \[ \sum_{i=1}^{k} \sum_{j=1}^{d} O(m_i) + k \cdot d \cdot \tilde{O}\left(\frac{1}{\alpha \epsilon^5}\right) = O(md) + \tilde{O}\left(\frac{kd}{\alpha \epsilon^5}\right) \]
     
