@@ -2,13 +2,37 @@
 \label{sec:proofs}
 
 \setcounter{theorem}{0}
-\setcounter{lemma}{3}
+\setcounter{lemma}{0}
 \setcounter{corollary}{0}
 
+\subsection{\textsc{Kiến thức cơ sở}}
 
-\subsection{\textsc{Fast-Sapmling}}
+% L 1
+\begin{lemma}
+Cho tập $X \subset \mathbb{R}^d$ có kích thước $m$ và một điểm dữ liệu bất kỳ $c \in \mathbb{R}^d$, ta luôn có:
+\begin{equation}
+    \delta^2(X, c) = \delta^2(X, \overline{X}) + m \cdot \delta^2(c, \overline{X})
+\end{equation}
+\cite{Arthur2007}
+\end{lemma}
+
+\begin{proof}
+    Ta khai triển vế trái dựa trên định nghĩa khoảng cách Euclid:
+    \begin{align*}
+    \delta^2(X, c) &= \sum_{x \in X} \|x - c\|^2 \\
+    &= \sum_{x \in X} \|(x - \overline{X}) + (\overline{X} - c)\|^2 \\
+    &= \sum_{x \in X} \left( \|x - \overline{X}\|^2 + \|\overline{X} - c\|^2 + 2\langle x - \overline{X}, \overline{X} - c \rangle \right) \\
+    &= \sum_{x \in X} \|x - \overline{X}\|^2 + \sum_{x \in X} \|\overline{X} - c\|^2 + 2 \left\langle \sum_{x \in X}(x - \overline{X}), \overline{X} - c \right\rangle
+    \end{align*}
+    Theo định nghĩa trọng tâm, ta có $\overline{X} = \frac{1}{|X|}\sum_{x \in X} x$, suy ra $\sum_{x \in X}(x - \overline{X}) = \sum x - |X|\overline{X} = 0$.
+    Do đó, thành phần tích vô hướng (số hạng thứ 3) bằng 0. Ta thu được:
+    \[ \delta^2(X, c) = \delta^2(X, \overline{X}) + m \cdot \| \overline{X} - c \|^2 \]
+\end{proof}
+
+\subsection{\textsc{Fast-Sampling}}
 
 
+\setcounter{lemma}{3}
 % L 4
 
 %TODO remove Bước -> \begin{enumerate}
