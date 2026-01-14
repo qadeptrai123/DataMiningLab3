@@ -54,7 +54,41 @@ Cho tập $J \subset \mathbb{R}$, gọi $J_1 \subseteq J$ với $|J_1| \geq (1-\
 \end{lemma}
 
 % BEGIN PB
-Bổ đề trên cũng đúng với $J \subset \mathbb{R}^d$, mặc dù tác giả chỉ ghi trên $\mathbb{R}$, xem chứng minh ở . % TODO \ref
+Bổ đề trên cũng đúng với $J \subset \mathbb{R}^d$, mặc dù tác giả chỉ ghi trên $\mathbb{R}$, xem chứng minh ở \ref{sec:proofs}.
+ % TODO \ref
+
+
+\definecolor{wewdxt}{rgb}{0.43, 0.43, 0.45} % Grey for lines
+\definecolor{rvwvcq}{rgb}{0.08, 0.40, 0.75} % Blue for points
+\begin{figure}[htbp]
+    \centering
+\begin{tikzpicture}[line cap=round, line join=round, >=triangle 45, x=1cm, y=1cm]
+    % 1. WIDENED CLIP: Expanded the left boundary from -2.95 to -6.0 to show the whole circle
+    \clip(-6.0, -1.0) rectangle (4.0, 7.0);
+
+    % Draw the Circles and Line
+    \draw [line width=1.5pt, color=wewdxt] (-2.61, 2.96) circle (2.738cm);
+    \draw [line width=1.5pt, color=wewdxt] (-1.83, 3.44) circle (1.387cm);
+    \draw [line width=1.5pt, color=wewdxt] (-1.83, 3.44) -- (-2.61, 2.96);
+
+    % 2. POINTS AND LABELS: 
+    % We place the node inside the drawing command for the point so it stays attached.
+    \begin{scriptsize}
+        % Point J
+        \fill [color=rvwvcq] (-2.61, 2.96) circle (2.5pt) node[below left, color=rvwvcq] {$\overline{J}$};
+        
+        % Point B
+        \fill [color=rvwvcq] (0.07, 3.52) circle (2.5pt) node[right, color=rvwvcq] {$B$};
+        
+        % Point J1
+        \fill [color=rvwvcq] (-1.83, 3.44) circle (2.5pt) node[above right, color=rvwvcq] {$\overline{J_1}$};
+        
+        % Point D
+        \fill [color=rvwvcq] (-2.85, 4.38) circle (2.5pt) node[above left, color=rvwvcq] {$D$};
+    \end{scriptsize}
+\end{tikzpicture}
+\caption{Minh họa Bổ đề 2 trong không gian $\mathbb{R}^d$: Khoảng cách giữa tâm tập tổng thể $\overline{J}$ và tâm tập con $\overline{J_1}$ được chặn bởi hàm chi phí của $J$.}
+\end{figure}
 
 Bổ đề trên xuất phát từ quan sát liên hệ chi phí và kích thước tập con của cụm tối ưu. Ta muốn tìm $Q_i = P_i \cap P_i^*$ và lấy $\overline{Q_i}$ làm đáp án cho cụm $i$, điều này tự nhiên xuất phát từ dữ kiện $Q_i$ của bài toán có hỗ trợ học. 
 \begin{align*}
@@ -71,7 +105,7 @@ Dùng bổ đề trên, ta có chặn trên chi phí phân cụm:
 
 Như vậy ta có xấp xỉ $\left(1 + \frac{\alpha}{1 - \alpha} \right)$ cho 1 cụm và cũng như cho bài toán. Cũng chính là chặn dưới và lí do xuất hiện của nó trong tỷ lệ xấp xỉ trong \ref{tab:theoretical_comparison}.
 
-Khó khăn là $Q_i$ chưa biết, vì vậy 3 thuật toán chính dưới đây tập trung vào việc loại bỏ các điểm outlier trong $P_i$, tìm một trọng tâm gần $\overline{Q_i}$, như vậy đồng thời giảm được khoảng cách đến $\overline{P_i^*}$ và chi phí. 
+Khó khăn là $Q_i$ chưa biết, vì vậy các thuật toán chính dưới đây tập trung vào việc loại bỏ các điểm outlier trong $P_i$, tìm một trọng tâm gần $\overline{Q_i}$, như vậy đồng thời giảm được khoảng cách đến $\overline{P_i^*}$ và chi phí. 
 % END PB
 
 

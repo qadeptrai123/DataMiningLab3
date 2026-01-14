@@ -4,10 +4,12 @@ Trong mục này, tác giả trình bày cách mở rộng các phương pháp d
 
 Để vượt qua thách thức này, mục tiêu của tác giả là sử dụng các chiến lược dựa trên lấy mẫu để xây dựng một tập $U_i$ các tâm nằm gần các tâm phân cụm tối ưu cho mỗi cụm dự đoán $P_i$. Sau đó, bằng cách rời rạc hóa lưới, tác giả có thể tạo ra các tâm ứng viên có khả năng xấp xỉ tốt các tâm phân cụm tối ưu. Cuối cùng, bằng cách liệt kê các tâm ứng viên đã xây dựng, tác giả chứng minh rằng chi phí phân cụm của mỗi cụm tối ưu có thể được xấp xỉ tốt bằng cách sử dụng tâm tốt nhất được chọn từ quá trình liệt kê.
 
+% TODO why Bảng 1 in caption
 \begin{table}[h!]
+\label{tab:3}
+\renewcommand{\arraystretch}{1.75}
 \centering
 \caption{Kết quả so sánh các thuật toán $k$-median có hỗ trợ học}
-\label{tab:kmedian_comparison}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccc}
 \hline
@@ -19,7 +21,7 @@ Sắp xếp \cite{Nguyen2022} & $1 + \frac{\alpha(7+10\alpha-10\alpha^2)}{(1-\al
 }
 \end{table}
 
-Bảng 3 cung cấp một so sánh chi tiết các kết quả cho bài toán $k$-median có hỗ trợ học. Tác giả cũng đưa ra một biểu đồ (Hình 2) về tỷ lệ xấp xỉ so với tỷ lệ lỗi $\alpha$. Có thể thấy từ bảng rằng kết quả tốt nhất hiện nay đạt được xấp xỉ $(1 + O(\alpha))$ với $\alpha \in [0, 1/2)$ \cite{Nguyen2022}. So với các kết quả tiên tiến nhất, thuật toán Fast-Sampling có thể đạt được các đảm bảo chất lượng phân cụm tốt hơn với thời gian chạy kém hơn một chút đối với số chiều $d$ cố định.
+Bảng~\ref{tab:3} cung cấp một so sánh chi tiết các kết quả cho bài toán $k$-median có hỗ trợ học. Tác giả cũng đưa ra một biểu đồ (Hình 2) về tỷ lệ xấp xỉ so với tỷ lệ lỗi $\alpha$. Có thể thấy từ bảng rằng kết quả tốt nhất hiện nay đạt được xấp xỉ $(1 + O(\alpha))$ với $\alpha \in [0, 1/2)$ \cite{Nguyen2022}. So với các kết quả tiên tiến nhất, thuật toán Fast-Sampling có thể đạt được các đảm bảo chất lượng phân cụm tốt hơn với thời gian chạy kém hơn một chút đối với số chiều $d$ cố định.
 
 Mô tả cụ thể cho thuật toán $k$-median có hỗ trợ học được trình bày trong Thuật toán 5. Ý tưởng chung đằng sau thuật toán là trước tiên tạo ra các tâm ứng viên có thể xấp xỉ chặt chẽ các tâm phân cụm tối ưu cho mỗi cụm dự đoán. Sau đó, bằng cách chọn tâm tốt nhất với chi phí $k$-median nhỏ nhất, tác giả chứng minh rằng thuật toán đề xuất có thể đưa ra các đảm bảo xấp xỉ tốt hơn cho bài toán $k$-median có hỗ trợ học. Dưới đây, tác giả đưa ra phân tích cụ thể cho thuật toán được đề xuất.
 
@@ -70,45 +72,7 @@ Trong đó:
 trong đó $\mathcal{N}_i(u_i)$ là tập hợp $(1-\alpha)m_i$ điểm gần nhất trong $P_i$ đến $u_i$, và $c^*_i$ là tâm phân cụm tối ưu cho cụm thứ $i$.
 \end{corollary}
 
-\begin{proof}
-Chứng minh dựa trên sự tồn tại của một ứng viên "tốt" trong lưới (grid) và tính chất tối ưu của quy trình lựa chọn tâm.
 
-\textbf{1. Sự tồn tại của ứng viên tốt trong lưới}
-Theo Bước 6 và 7 của Thuật toán 5, không gian xung quanh các mẫu được phân rã thành các lưới con. Với xác suất cao, tồn tại một điểm ứng viên $u' \in U'_i$ nằm rất gần tâm tối ưu $c^*_i$. Cụ thể, dựa trên kích thước lưới con $(1-\alpha)\alpha\epsilon_1 l_i / \sqrt{d}$, khoảng cách này được chặn bởi:
-\[ \delta(u', c^*_i) \leq \frac{\alpha \epsilon \delta(P^*_i, c^*_i)}{m_i} \]
-
-% (Lưu ý: Trong k-median, chúng ta sử dụng khoảng cách $\delta$ thay vì bình phương khoảng cách $\delta^2$).
-
-\textbf{2. Tính tối ưu của tâm được chọn ($u_i$)}
-Trong Bước 9 của thuật toán, $u_i$ được chọn để tối thiểu hóa chi phí k-median đối với $(1-\alpha)m_i$ điểm lân cận nhất của nó. Do đó, với mọi ứng viên khác $u' \in U'_i$, ta có:
-\[ \delta(\mathcal{N}_i(u_i), u_i) \leq \delta(\mathcal{N}_i(u'), u') \]
-
-\textbf{3. Áp dụng Bất đẳng thức Tam giác }
-Ta cần chặn trên vế phải $\delta(\mathcal{N}_i(u'), u')$.
-
-% Đầu tiên, theo định nghĩa, $\mathcal{N}_i(u')$ là tập hợp các điểm trong $P_i$ có tổng khoảng cách đến $u'$ là nhỏ nhất trong tất cả các tập con có kích thước $(1-\alpha)m_i$. Do đó, chi phí của $\mathcal{N}_i(u')$ đối với $u'$ sẽ nhỏ hơn hoặc bằng chi phí của bất kỳ tập con nào khác (cùng kích thước) đối với $u'$.
-
-Chọn tập so sánh là $\mathcal{N}_i(u_i)$ (tập lân cận của $u_i$), ta có:
-\[ \delta(\mathcal{N}_i(u'), u') \leq \delta(\mathcal{N}_i(u_i), u') \]
-% Tiếp theo, áp dụng bất đẳng thức tam giác cho từng điểm $x \in \mathcal{N}_i(u_i)$ đối với trung gian $c^*_i$:
-\[ \delta(x, u') \leq \delta(x, c^*_i) + \delta(c^*_i, u') \]
-Lấy tổng trên toàn bộ tập $\mathcal{N}_i(u_i)$:
-\begin{align*}
-    \delta(\mathcal{N}_i(u_i), u') &= \sum_{x \in \mathcal{N}_i(u_i)} \delta(x, u') \\
-    &\leq \sum_{x \in \mathcal{N}_i(u_i)} \delta(x, c^*_i) + \sum_{x \in \mathcal{N}_i(u_i)} \delta(c^*_i, u') \\
-    &= \delta(\mathcal{N}_i(u_i), c^*_i) + |\mathcal{N}_i(u_i)| \cdot \delta(u', c^*_i)
-\end{align*}
-
-\textbf{4. Tổng hợp}
-
-Kết hợp các bất đẳng thức từ Bước 2 và Bước 3:
-\[ \delta(\mathcal{N}_i(u_i), u_i) \leq \delta(\mathcal{N}_i(u_i), c^*_i) + |\mathcal{N}_i(u_i)| \cdot \delta(u', c^*_i) \]
-% Thay thế chặn khoảng cách $\delta(u', c^*_i)$ từ Bước 1 và sử dụng sự kiện $|\mathcal{N}_i(u_i)| = (1-\alpha)m_i \leq m_i$:
-\begin{align*}
-    \delta(\mathcal{N}_i(u_i), u_i) &\leq \delta(\mathcal{N}_i(u_i), c^*_i) + m_i \left( \frac{\alpha \epsilon \delta(P^*_i, c^*_i)}{m_i} \right) \\
-    &= \delta(\mathcal{N}_i(u_i), c^*_i) + \alpha \epsilon \delta(P^*_i, c^*_i)
-\end{align*}
-\end{proof}
 
 % L 15
 \begin{lemma}
@@ -117,49 +81,7 @@ Kết hợp các bất đẳng thức từ Bước 2 và Bước 3:
 \[ \delta(u_i, c^*_i) \leq \frac{(2 + \alpha\epsilon)\delta(P^*_i, c^*_i)}{(1 - 2\alpha)m_i} \]
 \end{lemma}
 
-\begin{proof}
 
-\begin{enumerate}
-\item \textbf{Kích thước tập giao}
-
-Thuật toán chọn tập $\mathcal{N}_i(u_i)$ gồm $(1-\alpha)m_i$ điểm gần $u_i$ nhất trong cụm dự đoán $P_i$.
-Theo giả thiết của mô hình, số lượng điểm trong $P_i$ không thuộc cụm tối ưu $P^*_i$ (dương tính giả) tối đa là $\alpha m_i$ (vì $|P_i \setminus P^*_i| \le \alpha m_i$).
-Do đó, số lượng điểm thuộc $P^*_i$ nằm trong tập $\mathcal{N}_i(u_i)$ bị chặn dưới bởi:
-\[ |\mathcal{N}_i(u_i) \cap P^*_i| \geq |\mathcal{N}_i(u_i)| - |P_i \setminus P^*_i| \]
-Thay thế các giá trị kích thước vào:
-\[ |\mathcal{N}_i(u_i) \cap P^*_i| \geq (1 - \alpha)m_i - \alpha m_i = (1 - 2\alpha)m_i \]
-Điều này đảm bảo rằng phần giao chứa một lượng điểm đáng kể .
-
-\item \textbf{Chặn trên cho chi phí}
-
-Dựa vào tính chất tối ưu trong Bước 9 của Thuật toán 5, $u_i$ là điểm tối thiểu hóa chi phí k-median đối với tập lân cận của nó. Theo Hệ quả 5 (Corollary 5) đã chứng minh trước đó, với xác suất cao, chi phí này bị chặn bởi:
-\[ \delta(\mathcal{N}_i(u_i), u_i) \leq (1 + \alpha\epsilon)\delta(P^*_i, c^*_i) \]
-% (Lưu ý: Bất đẳng thức này xuất phát từ việc so sánh $u_i$ với một ứng viên tốt $u'$ trong lưới, và sử dụng tính chất $\delta(u', c^*_i) \leq \alpha\epsilon\delta(P^*_i, c^*_i)/m_i$).
-
-\item \textbf{Bất đẳng thức tam giác}
-
-% Để chặn khoảng cách $\delta(u_i, c^*_i)$, ta xét tổng khoảng cách đi qua các điểm trung gian $p$ nằm trong phần giao $\mathcal{N}_i(u_i) \cap P^*_i$.
-Áp dụng bất đẳng thức tam giác cho mọi $p$:
-\[ \delta(u_i, c^*_i) \leq \delta(p, u_i) + \delta(p, c^*_i) \]
-Lấy tổng trên tất cả các điểm $p$ thuộc phần giao $\mathcal{N}_i(u_i) \cap P^*_i$ và chia cho kích thước của phần giao này:
-\[ \delta(u_i, c^*_i) \leq \frac{\sum_{p \in \mathcal{N}_i(u_i) \cap P^*_i} \delta(p, u_i) + \sum_{p \in \mathcal{N}_i(u_i) \cap P^*_i} \delta(p, c^*_i)}{|\mathcal{N}_i(u_i) \cap P^*_i|} \]
-
-Ta thực hiện chặn trên cho tử số:
-\begin{itemize}
-    \item Tổng thứ nhất $\sum \delta(p, u_i)$ nhỏ hơn hoặc bằng tổng chi phí của toàn bộ tập $\mathcal{N}_i(u_i)$ đối với $u_i$:
-    \[ \sum_{p \in \mathcal{N}_i(u_i) \cap P^*_i} \delta(p, u_i) \leq \delta(\mathcal{N}_i(u_i), u_i) \leq (1 + \alpha\epsilon)\delta(P^*_i, c^*_i) \]
-    \item Tổng thứ hai $\sum \delta(p, c^*_i)$ nhỏ hơn hoặc bằng tổng chi phí của toàn bộ cụm tối ưu $P^*_i$:
-    \[ \sum_{p \in \mathcal{N}_i(u_i) \cap P^*_i} \delta(p, c^*_i) \leq \delta(P^*_i, c^*_i) \]
-\end{itemize}
-
-Thay thế các chặn trên vào tử số và sử dụng chặn dưới của mẫu số từ Bước 1:
-\begin{align*}
-    \delta(u_i, c^*_i) &\leq \frac{(1 + \alpha\epsilon)\delta(P^*_i, c^*_i) + \delta(P^*_i, c^*_i)}{(1 - 2\alpha)m_i} \\
-    &= \frac{(2 + \alpha\epsilon)\delta(P^*_i, c^*_i)}{(1 - 2\alpha)m_i}
-\end{align*}
-
-\end{enumerate}
-\end{proof}
 
 % L 16
 
@@ -170,70 +92,7 @@ Thay thế các chặn trên vào tử số và sử dụng chặn dưới của
 trong đó $c^*_i$ là tâm tối ưu của cụm thứ $i$.
 \end{lemma}
 
-\begin{proof}
-Chứng minh được thực hiện bằng cách phân rã sự chênh lệch chi phí giữa tâm thuật toán $u_i$ và tâm tối ưu $c^*_i$ thành các thành phần dựa trên tập hợp con.
 
-\textbf{1. Phân rã tập hợp và chênh lệch chi phí}
-
-Ta có $Q_i = P_i \cap P^*_i$. Dựa trên tập lân cận $\mathcal{N}_i(u_i)$ được thuật toán chọn, ta định nghĩa các tập sai số:
-\begin{itemize}
-    \item $A_i = Q_i \cap \mathcal{Z}^\dagger(u_i)$: Tập các điểm thuộc $Q_i$ nhưng bị loại bỏ (âm tính giả).
-    \item $B_i = P_i \setminus (Q_i \cup \mathcal{Z}^\dagger(u_i))$: Tập các điểm không thuộc $Q_i$ nhưng được chọn (dương tính giả).
-\end{itemize}
-Khi đó $Q_i = (\mathcal{N}_i(u_i) \setminus B_i) \cup A_i$.
-Hiệu chi phí phân cụm được viết lại như sau:
-\begin{align*}
-    \delta(Q_i, u_i) - \delta(Q_i, c^*_i) &= [\delta(\mathcal{N}_i(u_i), u_i) - \delta(\mathcal{N}_i(u_i), c^*_i)] \\
-    &\quad + [\delta(B_i, c^*_i) - \delta(B_i, u_i)] \\
-    &\quad + [\delta(A_i, u_i) - \delta(A_i, c^*_i)]
-\end{align*}
-
-\textbf{2. Từng thành phần}
-
-Thành phần 1 (Tập được chọn):
-    Theo Hệ quả 5 (Corollary 5), với xác suất cao, chi phí của tập được chọn thỏa mãn:
-    \[ \delta(\mathcal{N}_i(u_i), u_i) - \delta(\mathcal{N}_i(u_i), c^*_i) \leq \alpha\epsilon\delta(P^*_i, c^*_i) \]
-
-Thành phần 2 (Dương tính giả $B_i$):
-    Sử dụng bất đẳng thức tam giác $\delta(b, c^*_i) \leq \delta(b, u_i) + \delta(u_i, c^*_i)$. Suy ra $\delta(b, c^*_i) - \delta(b, u_i) \leq \delta(u_i, c^*_i)$.
-    Lấy tổng trên $B_i$:
-    \[ \delta(B_i, c^*_i) - \delta(B_i, u_i) \leq |B_i|\delta(u_i, c^*_i) \]
-
-Thành phần 3 (Âm tính giả $A_i$):
-    Tương tự, với $a \in A_i$, ta có $\delta(a, u_i) \leq \delta(a, c^*_i) + \delta(c^*_i, u_i)$. Suy ra $\delta(a, u_i) - \delta(a, c^*_i) \leq \delta(u_i, c^*_i)$.
-    Lấy tổng trên $A_i$:
-    \[ \delta(A_i, u_i) - \delta(A_i, c^*_i) \leq |A_i|\delta(u_i, c^*_i) \]
-
-\textbf{3. Tập sai số}
-
-Theo phân tích kích thước trong bài báo :
-\[ |Q_i| = |\mathcal{N}_i(u_i)| + |A_i| - |B_i| = (1-\alpha)m_i + |A_i| - |B_i| \]
-Mặt khác $|Q_i| \ge (1-\alpha)m_i$ (do định nghĩa mô hình). Suy ra $|A_i| \ge |B_i|$.
-Đồng thời, $A_i \subseteq \mathcal{Z}^\dagger(u_i)$ (tập các điểm bị loại bỏ), nên $|A_i| \le \alpha m_i$.
-Do đó, tổng kích thước sai số bị chặn bởi:
-\[ |A_i| + |B_i| \leq 2|A_i| \leq 2\alpha m_i \]
-
-\textbf{4. Tổng hợp}
-
-Thay thế các chặn trên vào phương trình hiệu chi phí:
-\[ \delta(Q_i, u_i) - \delta(Q_i, c^*_i) \leq \alpha\epsilon\delta(P^*_i, c^*_i) + (|A_i| + |B_i|)\delta(u_i, c^*_i) \]
-Thay thế $|A_i| + |B_i| \leq 2\alpha m_i$ và khoảng cách tâm $\delta(u_i, c^*_i)$ từ Bổ đề 15:
-\[ \delta(u_i, c^*_i) \leq \frac{(2+\alpha\epsilon)\delta(P^*_i, c^*_i)}{(1-2\alpha)m_i} \]
-Ta có:
-\begin{align*}
-    \Delta_{cost} &\leq \alpha\epsilon\delta(P^*_i, c^*_i) + 2\alpha m_i \left( \frac{(2+\alpha\epsilon)\delta(P^*_i, c^*_i)}{(1-2\alpha)m_i} \right) \\
-    &= \delta(P^*_i, c^*_i) \left[ \alpha\epsilon + \frac{2\alpha(2+\alpha\epsilon)}{1-2\alpha} \right]
-\end{align*}
-Quy đồng mẫu số cho biểu thức trong ngoặc vuông:
-\begin{align*}
-    \alpha\epsilon + \frac{4\alpha + 2\alpha^2\epsilon}{1-2\alpha} &= \frac{\alpha\epsilon(1-2\alpha) + 4\alpha + 2\alpha^2\epsilon}{1-2\alpha} \\
-    &= \frac{\alpha\epsilon - 2\alpha^2\epsilon + 4\alpha + 2\alpha^2\epsilon}{1-2\alpha} \\
-    &= \frac{4\alpha + \alpha\epsilon}{1-2\alpha} \\
-    &= \frac{\alpha(4+\epsilon)}{1-2\alpha}
-\end{align*}
-Nhận thấy rằng $\frac{\alpha(4+\epsilon)}{1-2\alpha} < \frac{\alpha(4+3\epsilon)}{1-2\alpha}$ (với $\epsilon > 0$). Để đảm bảo tính tổng quát và khớp với chặn đã công bố trong Bổ đề, ta sử dụng chặn rộng hơn:
-\[ \delta(Q_i, u_i) \leq \delta(Q_i, c^*_i) + \frac{\alpha(4+3\epsilon)}{1-2\alpha} \delta(P^*_i, c^*_i) \]
-\end{proof}
 
 % L 17
 \begin{lemma}
@@ -242,57 +101,3 @@ Với mỗi cụm $i \in [k]$, với xác suất ít nhất $1 - 1/k$, chi phí 
 \[ \delta(P^*_i, u_i) \leq \left( 1 + \frac{6\alpha + 4\alpha\epsilon - 4\alpha^2 - 3\epsilon\alpha^2}{(1-\alpha)(1-2\alpha)} \right) \delta(P^*_i, c^*_i) \]
 trong đó $c^*_i$ là tâm tối ưu của cụm thứ $i$.
 \end{lemma}
-
-\begin{proof}
-Chúng ta phân tích tổng chi phí bằng cách chia cụm tối ưu $P^*_i$ thành hai phần rời nhau dựa trên kết quả dự đoán của mô hình: phần giao với cụm dự đoán ($P^*_i \cap P_i$) và phần bị dự đoán sai ($P^*_i \setminus P_i$).
-\[ \delta(P^*_i, u_i) = \delta(P^*_i \cap P_i, u_i) + \delta(P^*_i \setminus P_i, u_i) \]
-
-\begin{enumerate}
-\item \textbf{Giới hạn chi phí của phần giao (dương tính thật)}
-
-Xét tập hợp $Q_i = P^*_i \cap P_i$. Áp dụng trực tiếp kết quả từ Bổ đề 16, ta có chặn trên cho chi phí của tập này đối với tâm $u_i$:
-\[ \delta(P^*_i \cap P_i, u_i) \leq \delta(P^*_i \cap P_i, c^*_i) + \frac{\alpha(4 + 3\epsilon)}{1 - 2\alpha} \delta(P^*_i, c^*_i) \]
-
-\item \textbf{Giới hạn chi phí của phần sai lệch (âm tính giả)}
-
-Với các điểm $p \in P^*_i \setminus P_i$ (các điểm thuộc cụm tối ưu nhưng không nằm trong cụm dự đoán $P_i$), ta sử dụng bất đẳng thức tam giác qua tâm tối ưu $c^*_i$:
-\[ \delta(p, u_i) \leq \delta(p, c^*_i) + \delta(c^*_i, u_i) \]
-Lấy tổng trên toàn bộ tập $P^*_i \setminus P_i$:
-\[ \delta(P^*_i \setminus P_i, u_i) \leq \delta(P^*_i \setminus P_i, c^*_i) + |P^*_i \setminus P_i| \delta(c^*_i, u_i) \]
-
-\item \textbf{Khoảng cách tâm}
-
-Ta có 
-\begin{align*}
-    |P^*_i| \ge |P_i \cap P^*_i| \ge (1-\alpha)|P^*_i| \\ 
-    \Rightarrow |P^*_i| \le \frac{|P_i|}{1-\alpha}
-\end{align*}
-
-\[ |P^*_i \setminus P_i| \leq \alpha |P^*_i| \quad \text{hoặc theo } m_i: \quad |P^*_i \setminus P_i| \leq \frac{\alpha m_i}{1-\alpha} \]
-Sử dụng kết quả từ Bổ đề 15 cho khoảng cách giữa hai tâm $\delta(u_i, c^*_i) \leq \frac{(2 + \alpha\epsilon)\delta(P^*_i, c^*_i)}{(1 - 2\alpha)m_i}$.
-Thay thế vào biểu thức ở Bước 2:
-\begin{align*}
-    \text{Sai số dịch chuyển} &= |P^*_i \setminus P_i| \delta(c^*_i, u_i) \\
-    &\leq \left( \frac{\alpha m_i}{1 - \alpha} \right) \left( \frac{(2 + \alpha\epsilon)\delta(P^*_i, c^*_i)}{(1 - 2\alpha)m_i} \right) \\
-    &= \frac{\alpha(2 + \alpha\epsilon)}{(1 - \alpha)(1 - 2\alpha)} \delta(P^*_i, c^*_i)
-\end{align*}
-
-\item \textbf{Tổng hợp}
-
-Cộng gộp kết quả từ Bước 1 và Bước 3:
-\begin{align*}
-    \delta(P^*_i, u_i) &\leq \underbrace{\delta(P^*_i \cap P_i, c^*_i) + \delta(P^*_i \setminus P_i, c^*_i)}_{\delta(P^*_i, c^*_i)} \\
-    &+ \left[ \frac{\alpha(4 + 3\epsilon)}{1 - 2\alpha} + \frac{\alpha(2 + \alpha\epsilon)}{(1 - \alpha)(1 - 2\alpha)} \right] \delta(P^*_i, c^*_i)
-\end{align*}
-
-\begin{align*}
-    \text{Hệ số vế phải} &= \frac{\alpha(4 + 3\epsilon)(1 - \alpha) + \alpha(2 + \alpha\epsilon)}{(1 - \alpha)(1 - 2\alpha)} \\
-    &= \frac{(4\alpha + 3\alpha\epsilon - 4\alpha^2 - 3\alpha^2\epsilon) + (2\alpha + \alpha^2\epsilon)}{(1 - \alpha)(1 - 2\alpha)} \\
-    &= \frac{6\alpha - 4\alpha^2 + 3\alpha\epsilon - 2\alpha^2\epsilon}{(1 - \alpha)(1 - 2\alpha)}
-\end{align*}
-Ta nhận thấy rằng $3\alpha\epsilon - 2\alpha^2\epsilon = \alpha\epsilon(3-2\alpha)$. Biểu thức trong Bổ đề yêu cầu là $4\alpha\epsilon - 3\alpha^2\epsilon = \alpha\epsilon(4-3\alpha)$.
-Vì $\alpha < 1$, ta có $3\alpha\epsilon - 2\alpha^2\epsilon \leq 4\alpha\epsilon - 3\alpha^2\epsilon$ (do hiệu số là $\alpha\epsilon(1-\alpha) > 0$).
-Do đó, ta có thể nới lỏng chặn trên để khớp với công thức tổng quát của Bổ đề:
-\[ \delta(P^*_i, u_i) \leq \left( 1 + \frac{6\alpha + 4\alpha\epsilon - 4\alpha^2 - 3\epsilon\alpha^2}{(1-\alpha)(1-2\alpha)} \right) \delta(P^*_i, c^*_i) \]
-\end{enumerate}
-\end{proof}
