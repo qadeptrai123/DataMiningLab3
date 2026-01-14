@@ -1,9 +1,5 @@
 \section{Thuật toán Fast-Sampling}
 
-% BEGIN PB
-Tóm tắt: abc
-% END PB
-
 Ý tưởng tổng quát của thuật toán Fast-Sampling là xấp xỉ hiệu quả các tâm tối ưu trong từng chiều bằng cách xác định các tọa độ chất lượng cao mà không cần sử dụng các chiến lược dựa trên sắp xếp. Thách thức kỹ thuật chính nằm ở việc xử lý các âm tính giả mà không làm ảnh hưởng đáng kể đến các đảm bảo xấp xỉ. Mặc dù việc lấy mẫu trực tiếp một tập con nhỏ các tọa độ từ mỗi chiều của các cụm dự đoán có thể giúp xác định các điểm gần tâm tối ưu, các tọa độ được lấy mẫu theo phân phối đều có thể không xấp xỉ chính xác các tâm tối ưu, tiềm ẩn nguy cơ dẫn đến mất mát hằng số trong các đảm bảo xấp xỉ. Để giải quyết vấn đề này, thuật toán Fast-Sampling trước tiên xác định các tọa độ ứng viên gần với tọa độ của từng tâm tối ưu trong thời gian chạy tuyến tính đối với quy mô dữ liệu. Sau đó, các tọa độ ứng viên được xây dựng sẽ được sử dụng để xác định các khoảng phủ chính xác vị trí của các tâm tối ưu, cho phép xấp xỉ tốt hơn thông qua việc chia nhỏ các khoảng này kĩ (fine-grained).
 
 Thuật toán Fast-Sampling đề xuất chủ yếu bao gồm hai giai đoạn sau: (1) ước lượng khoảng (bước 3-6 của Thuật toán 1); (2) xây dựng tọa độ ứng viên (bước 7 của Thuật toán 1). Trong giai đoạn ước lượng khoảng, đối với mỗi chiều của các cụm dự đoán, độ dài khoảng được ước tính thông qua các chiến lược lấy mẫu ngẫu nhiên. Các mẫu sau đó được điều chỉnh đối xứng (qua tâm) dựa trên các ước tính độ dài khoảng để xây dựng các khoảng có thể bao quanh tọa độ của các tâm tối ưu. Trong giai đoạn thứ hai, các khoảng thu được được chia thành các phần nhỏ hơn, mỗi phần tương ứng với một tọa độ ứng viên mới, cho phép xấp xỉ mịn các tâm tối ưu. Dưới đây là phân tích chi tiết cho thuật toán được đề xuất.
@@ -35,8 +31,8 @@ Thuật toán Fast-Sampling đề xuất chủ yếu bao gồm hai giai đoạn 
 \end{algorithm}
 
 % BEGIN PB
-\textbf{Giải thích thuật toán:} 
-Trình tự của Fast-Sampling dựa trên việc khai thác cấu trúc của tập điểm trong từng chiều không gian. Việc lấy mẫu $O(\log(kd))$ điểm đảm bảo rằng với xác suất cao, ít nhất một điểm ứng viên $u$ sẽ rơi vào vùng mật độ cao của cụm tối ưu. Tại bước 6, giá trị $l_{ij}$ được tính toán dựa trên độ lệch chuẩn của tập lân cận gần nhất $\mathcal{N}_{ij}(u)$, đóng vai trò là thước đo khoảng cách đặc trưng để thiết lập lưới tìm kiếm. Kỹ thuật chia lưới trong bước 7 giúp chuyển đổi bài toán tìm kiếm liên tục thành rời rạc với sai số được kiểm soát bởi $\epsilon'$, từ đó tránh được việc phải sắp xếp toàn bộ dữ liệu, giúp duy trì độ phức tạp tuyến tính.
+\hl{\textbf{Giải thích thuật toán:} 
+Trình tự của Fast-Sampling dựa trên việc khai thác cấu trúc của tập điểm trong từng chiều không gian. Việc lấy mẫu $O(\log(kd))$ điểm đảm bảo rằng với xác suất cao, ít nhất một điểm ứng viên $u$ sẽ rơi vào vùng mật độ cao của cụm tối ưu. Tại bước 6, giá trị $l_{ij}$ được tính toán dựa trên độ lệch chuẩn của tập lân cận gần nhất $\mathcal{N}_{ij}(u)$, giúp chuyển đổi bài toán tìm kiếm trên tập $P$ thành tìm kiếm tọa độ (ứng viên) với sai số được kiểm soát bởi $\epsilon'$, giúp duy trì độ phức tạp tuyến tính.}
 % END PB
 
 Đầu tiên, tác giả xem xét một chiều đơn lẻ $j \in [d]$ của một cụm dự đoán bất kỳ $P_i$ với $i \in [k]$. Gọi $Q'_{ij} \subseteq Q_{ij}$ là tập hợp các tọa độ có kích thước $(1-\alpha)m_i$ và chi phí phân cụm nhỏ nhất. Bắt đầu từ bước 3 của Thuật toán 1, một tập $U_{ij}$ được xây dựng bằng cách lấy mẫu ngẫu nhiên và độc lập $O(\log(kd))$ mẫu từ $P_{ij}$. Mục tiêu ở đây là tìm các tọa độ gần với tọa độ của các tâm tối ưu. Tác giả sẽ chứng minh rằng, với xác suất nhất định, tồn tại ít nhất một tọa độ $u \in U_{ij}$ có thể xấp xỉ tốt trọng tâm của $Q'_{ij}$. Để phân tích xác suất thành công, tác giả định nghĩa $G^\mu_{ij}$ là tập hợp các tọa độ gần với $Q'_{ij}$. Bằng cách áp dụng chặn Union Bound cho xác suất thành công trên tất cả các chiều và các cụm dự đoán, tác giả có thể lập luận rằng với xác suất hằng số, tồn tại ít nhất một tọa độ $u \in U_{ij}$ sao cho $u \in G^2_{ij} \cap U_{ij}$.
@@ -110,7 +106,7 @@ Với mọi $Q_{ij} = P^*_{ij} \cap P_{ij}$, gọi $Q'_{ij}$ là tập con của
         \end{scope}
 
     \end{tikzpicture}
-    \caption{Bổ đề 4 trên không gian 1 chiều: Các điểm dữ liệu phân bố trên trục số, tập trung chủ yếu quanh trọng tâm trong một phạm vi ngưỡng xác định.}
+    \caption{\hl{Bổ đề 4 trên không gian 1 chiều: Các điểm dữ liệu phân bố trên trục số, tập trung chủ yếu quanh trọng tâm trong một phạm vi ngưỡng xác định.}}
 \end{figure}
 
 

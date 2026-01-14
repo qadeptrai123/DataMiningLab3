@@ -10,8 +10,8 @@ Trong bài báo này, tác giả tập trung chủ yếu vào bài toán phân c
 Dựa trên các phương pháp thống kê, Ergun và tác giả cộng sự \cite{Ergun2021} đề xuất thuật toán ngẫu nhiên đạt mức xấp xỉ $(1 + 20\alpha)$ trong thời gian $O(md \log m)$. Tuy nhiên, thuật toán này yêu cầu các điều kiện khắt khe về tỷ lệ lỗi $\alpha$ và kích thước cụm tối ưu. Để khắc phục, Nguyen và tác giả cộng sự \cite{Nguyen2022} đề xuất phương pháp tìm kiếm xác định đạt kết quả xấp xỉ $(1 + O(\alpha))$ tốt hơn trong thời gian $O(md \log m)$ với $\alpha \in [0, 1/2)$. Các thuật toán hiện tại chủ yếu dựa trên chiến lược sắp xếp để xấp xỉ tâm tối ưu. Vì sắp xếp yêu cầu thời gian logarit và có cận dưới là $O(m \log m)$, điều này hạn chế khả năng mở rộng khi xử lý dữ liệu quy mô cực lớn. Ngoài ra, thời gian chạyđ này không thể cải thiện thông qua các kỹ thuật giảm chiều như phương pháp JL vì bản thân việc chiếu cũng tốn ít nhất $O(md \log m)$. Thách thức trung tâm trong việc thiết kế các thuật toán nhanh hơn là xấp xỉ hiệu quả các tâm tối ưu trong từng chiều mà không cần sử dụng các chiến lược dựa trên sắp xếp.
 
 % BEGIN PB
-\textbf{Đằng sau các thuật toán:}
-Việc sử dụng  sắp xếp trong các nghiên cứu trước đây nhằm xác định vị trí các điểm lân cận để lọc, nhưng điều này dẫn đến chi phí nhân với $\log m$. Mục tiêu của tác giả trong bài báo này là thay thế việc sắp xếp bằng các kỹ thuật lấy mẫu (sampling) và ước lượng (estimation). Bằng cách này, tác giả có thể xác định các khoảng chứa tâm tối ưu và tinh chỉnh chúng trong thời gian tuyến tính $O(md)$. Điều này cho phép thuật toán phá vỡ rào cản tính toán của các phương pháp dựa trên sắp xếp truyền thống mà vẫn giữ được độ chính xác xấp xỉ trong phạm vi sai số dự đoán $\alpha$.
+\hl{\textbf{Đằng sau các thuật toán:}
+Việc sử dụng  sắp xếp trong các nghiên cứu trước đây cũng chung ý tưởng với tác giả bài báo này là tìm tâm gần $\overline{Q_ij}$, nhưng điều này dẫn đến chi phí nhân với $\log m$. Mục tiêu của tác giả trong bài báo này là \textbf{tối ưu thời gian}, thay thế việc sắp xếp bằng các kỹ thuật lấy mẫu (sampling) và ước lượng (estimation), trong thời gian tuyến tính $O(md)$. Ngoài thời gian, có Fast-Filtering \ref{alg:fast_filter} là cải thiện tỷ lệ xấp xỉ (chi phí phân cụm).}
 % END PB
 
 % TODO footcite O~, all
@@ -30,14 +30,14 @@ Sắp xếp \cite{Nguyen2022} & $1 + \frac{\alpha}{1-\alpha} + \frac{4\alpha}{(1
 \textbf{Fast-Sampling (Tác giả)} & $1 + \frac{\alpha}{1-\alpha} + \frac{4\alpha+\alpha\epsilon}{(1-2\alpha)(1-\alpha)}$ & $[0, 1/2)$ & $O(\epsilon^{-1}md \log(kd))$ \\
 \textbf{Fast-Estimation (Tác giả)} & $1 + \frac{\alpha}{1-\alpha} + \frac{13\alpha-15\alpha^2}{(1-3\alpha-\epsilon)(1-2\alpha-\epsilon)}$ & $(0, 1/3-\epsilon)$ & $O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$ \\ 
 % BEGIN PB
-\textbf{Fast-Filtering (Tác giả)} & $1 + 6\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} + \frac{9(\sqrt{\alpha}+\alpha)}{(1-\alpha)(1-(3+\epsilon)\alpha)}$ & $(0, 1/3-\epsilon)$ & $O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$ \\ \hline
+\hl{\textbf{Fast-Filtering (Tác giả)}} & \hl{$1 + 6\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} + \frac{9(\sqrt{\alpha}+\alpha)}{(1-\alpha)(1-(3+\epsilon)\alpha)}$} & \hl{$(0, 1/3-\epsilon)$} & \hl{$O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$} \\ \hline
 % END PB
 \end{tabular}
 }
 \end{table}
 
 % BEGIN PB
-Nếu so sánh tỷ lệ xấp xỉ theo lý thuyết, 2 thuật toán đầu của tác giả không tốt hơn so với các thuật toán sắp xếp, trừ Fast-Filtering. Tuy nhiên, cả 3 đều cải thiện độ phức tạp thời gian.
+\hl{Nếu so sánh tỷ lệ xấp xỉ theo lý thuyết, 2 thuật toán đầu của tác giả không tốt hơn so với các thuật toán sắp xếp, trừ Fast-Filtering. Tuy nhiên, cả 3 đều cải thiện độ phức tạp thời gian.}
 
 \begin{figure}[H]
     \centering
@@ -46,13 +46,13 @@ Nếu so sánh tỷ lệ xấp xỉ theo lý thuyết, 2 thuật toán đầu c�
     \label{fig:kmeans-theo-runtime}
 \end{figure}
 \begin{enumerate}
-    \item Đường màu xanh lá cây (Thuật toán Phân vùng và Sắp xếp)
-    \item Đường màu xanh lục bảo (Thuật toán Sắp xếp)
-    \item Đường màu xanh dương (Thuật toán Fast-Estimation)
-    \item Đường màu xám (Thuật toán Fast-Filtering)
+    \item \hl{Đường màu xanh lá cây (Thuật toán Phân vùng và Sắp xếp)}
+    \item \hl{Đường màu xanh lục bảo (Thuật toán Sắp xếp)}
+    \item \hl{Đường màu xanh dương (Thuật toán Fast-Estimation)}
+    \item \hl{Đường màu xám (Thuật toán Fast-Filtering)}
 \end{enumerate}
 
-Có thể thấy Fast-Filtering tỷ lệ xấp xỉ càng thấp thấp hơn khi càng gần $1/3$
+\hl{Có thể thấy Fast-Filtering tỷ lệ xấp xỉ càng thấp (càng tốt) khi càng gần $1/3$}
 
 % END PB
 

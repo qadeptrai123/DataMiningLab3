@@ -5,14 +5,14 @@
 \setcounter{lemma}{0}
 \setcounter{corollary}{0}
 
-\subsection{\textsc{Kiến thức cơ sở}}
+\subsection{Kiến thức cơ sở}
 
 % L 1
 \begin{lemma}
 Cho tập $X \subset \mathbb{R}^d$ có kích thước $m$ và một điểm dữ liệu bất kỳ $c \in \mathbb{R}^d$, ta luôn có:
-\begin{equation}
+\begin{equation*}
     \delta^2(X, c) = \delta^2(X, \overline{X}) + m \cdot \delta^2(c, \overline{X})
-\end{equation}
+\end{equation*}
 \cite{Arthur2007}
 \end{lemma}
 
@@ -93,7 +93,7 @@ $\text{}$
 Theo Bổ đề 4, tập các tọa độ "tốt" chiếm ít nhất một nửa số lượng các tọa độ trong tập tối ưu con . Do , ta có chặn dưới cho tỷ lệ điểm tốt trong :
 \begin{equation*}
 \frac{|G_2^{ij}|}{|P_{ij}|} = \frac{|G_2^{ij}|}{m_i} \geq \frac{1}{m_i} \cdot \frac{1}{2}|Q'_{ij}| = \frac{1-\alpha}{2}
-\end{equation}
+\end{equation*}
 
 
 \item \textbf{Tính xác suất thất bại trên tập mẫu $U_{ij}$:}
@@ -105,12 +105,12 @@ Với kích thước mẫu $|U_{ij}| = \frac{2}{1-\alpha} \ln(\frac{kd}{\eta})$,
 Áp dụng bất đẳng thức $\ln{(1-x)} \leq -x$ với $x \in (0, 1)$, ta có:
 \begin{equation*}
     \Pr(\text{Thất bại tại } i,j) \leq e^{-\frac{|G_2^{ij}|}{m_i} |U_{ij}|} \leq e^{-\frac{1-\alpha}{2} \cdot \frac{2}{1-\alpha}\ln(\frac{kd}{\eta})} = e^{-\ln(\frac{kd}{\eta})} = \frac{\eta}{kd}
-\end{equation}
+\end{equation*}
 
 \item \textbf{Áp dụng Chặn hợp (chặn hợp):}
 \begin{equation*}
     \Pr(\exists i,j : U_{ij} \cap G_2^{ij} = \emptyset) \leq \sum_{i=1}^k \sum_{j=1}^d \frac{\eta}{kd} = \eta
-\end{equation}
+\end{equation*}
 Do đó, xác suất thành công là ít nhất $1-\eta$.
 
 
@@ -124,7 +124,7 @@ Do đó, xác suất thành công là ít nhất $1-\eta$.
 Cho một tọa độ bất kỳ $u \in G^2_{ij} \cap U_{ij}$, bất đẳng thức sau luôn thỏa mãn:
 \begin{equation*} \label{eq:lemma_bound}
     \delta^2(Q'_{ij}, \overline{Q'_{ij}}) \leq \delta^2(\mathcal{N}_{ij}(u), \overline{\mathcal{N}_{ij}(u)}) \leq 3\delta^2(Q'_{ij}, \overline{Q'_{ij}})
-\end{equation}
+\end{equation*}
 trong đó $\overline{Q'_{ij}}$ và $\overline{\mathcal{N}_{ij}(u)}$ lần lượt là trọng tâm của tập $Q'_{ij}$ và $\mathcal{N}_{ij}(u)$.
 \end{lemma}
 
@@ -136,7 +136,7 @@ $\text{}$
     Theo định nghĩa, $Q'_{ij}$ là tập con của $P_{ij}$ có kích thước $(1 - \alpha)m_i$ tối thiểu hóa tổng bình phương khoảng cách đến tâm của nó. Vì $\mathcal{N}_{ij}(u)$ cũng là một tập con của $P_{ij}$ với cùng kích thước $(1 - \alpha)m_i$ (được xác định tại Bước 5 của Thuật toán 1), chi phí phân cụm của $\mathcal{N}_{ij}(u)$ không thể nhỏ hơn chi phí tối ưu của $Q'_{ij}$. Do đó:
     \begin{equation*}
         \delta^2(\mathcal{N}_{ij}(u), \overline{\mathcal{N}_{ij}(u)}) \geq \delta^2(Q'_{ij}, \overline{Q'_{ij}})
-    \end{equation}
+    \end{equation*}
 
     \item \textbf{Cận trên:} \\
     Ta áp dụng các tính chất của trọng tâm và định nghĩa về lân cận gần nhất để biến đổi biểu thức:
@@ -156,7 +156,7 @@ $\text{}$
     Thay thế chặn trên này vào phương trình \eqref{eq:step3}, ta thu được kết quả cuối cùng:
     \begin{equation*}
         \delta^2(\mathcal{N}_{ij}(u), \overline{\mathcal{N}_{ij}(u)}) \leq \delta^2(Q'_{ij}, \overline{Q'_{ij}}) + 2\delta^2(Q'_{ij}, \overline{Q'_{ij}}) = 3\delta^2(Q'_{ij}, \overline{Q'_{ij}})
-    \end{equation}
+    \end{equation*}
 \end{enumerate}
 Từ hai phần trên, bổ đề được chứng minh hoàn toàn.
 \end{proof}
@@ -170,7 +170,7 @@ Từ hai phần trên, bổ đề được chứng minh hoàn toàn.
 Với xác suất hằng số, đối với mỗi chiều $j \in [d]$ của mỗi cụm $i \in [k]$, tồn tại ít nhất một tọa độ $u' \in U'_{ij}$ sao cho:
 \begin{equation*}
     \delta(u', \overline{Q'_{ij}}) \leq \sqrt{\frac{\epsilon\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{2(1-\alpha)m_i}}
-\end{equation}
+\end{equation*}
 trong đó $\overline{Q'_{ij}}$ là trọng tâm của tập tối ưu $Q'_{ij}$.
 \end{corollary}
 
@@ -185,13 +185,13 @@ Chứng minh dựa trên sai số lượng tử hóa của lưới tọa độ �
     Khoảng này được chia thành các khoảng nhỏ $\epsilon' l_{ij}$. Do lưới bao phủ toàn bộ khoảng, luôn tồn tại một điểm lưới $u' \in U'_{ij}$ nằm đủ gần $\overline{Q'_{ij}}$. Khoảng cách này bị chặn bởi:
     \begin{equation*}
         \delta(u', \overline{Q'_{ij}}) \leq \epsilon' l_{ij}
-    \end{equation}
+    \end{equation*}
 
     \item
     Thay thế các giá trị tham số $\epsilon' = \sqrt{\frac{\epsilon}{48}}$ và chặn trên của $l_{ij} \leq 2\sqrt{\frac{6\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{(1-\alpha)m_i}}$ (từ Bổ đề 5), ta có:
     \begin{equation*}
         \delta(u', \overline{Q'_{ij}}) \leq \sqrt{\frac{\epsilon}{48}} \cdot 2 \sqrt{\frac{6\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{(1-\alpha)m_i}} = \sqrt{\frac{24\epsilon \delta^2(Q'_{ij}, \overline{Q'_{ij}})}{48(1-\alpha)m_i}} = \sqrt{\frac{\epsilon \delta^2(Q'_{ij}, \overline{Q'_{ij}})}{2(1-\alpha)m_i}}
-    \end{equation}
+    \end{equation*}
 \end{enumerate}
 \end{proof}
 
@@ -407,7 +407,7 @@ Thuật toán thành công nếu trên mỗi chiều $j$ của mỗi cụm $i$, 
     Do đó, thuật toán thành công với xác suất ít nhất $1 - \eta$ (xác suất hằng số).
 \end{enumerate}
 
-\textbf{3. Thời gian Chạy}
+\textbf{3. Thời gian chạy}
 
 Thời gian chạy được tính tổng trên $k$ cụm và $d$ chiều:
 \begin{itemize}
@@ -459,7 +459,7 @@ Ta thu được:
 \begin{equation*}
     \label{fe:eq-EX}
     \mathbb{E}[|\mathcal{B}_u^l \cap S_{ij}|] \geq \frac{c \log(m^3d \log^3(m\Delta_{\max}^2)/\epsilon_1^2)}{(1+\epsilon_1)\epsilon_1^2}
-\end{equation}
+\end{equation*}
 
 \item \textbf{Áp dụng bất đẳng thức Chernoff}
 
@@ -1026,13 +1026,13 @@ Dựa trên Hệ quả 4 (Corollary 4) trong bài báo , tâm $c_i$ được ch�
 Theo tính chất của trọng tâm, tổng bình phương khoảng cách từ các điểm trong một tập hợp đến trọng tâm của nó ($\overline{I_i}$) luôn nhỏ hơn hoặc bằng tổng bình phương khoảng cách đến bất kỳ điểm nào khác ($c_i$). Do đó:
 \[ \delta^2(I_i, \overline{I_i}) \leq \delta^2(I_i, c_i) \leq 4\delta^2(P^*_i, c^*_i) \]
 
-\textbf{3. Áp dụng Bất đẳng thức tam giác nới lỏng}
+\textbf{3. Áp dụng bất đẳng thức tam giác nới lỏng \ref{thm:relaxed_triangle}}
 
 Để chặn khoảng cách $\delta^2(\overline{I_i}, c^*_i)$, ta xét tổng khoảng cách trên các điểm trung gian $p$ thuộc giao tập $I_i \cap P^*_i$. Ta có đẳng thức trung bình:
 \[ \delta^2(\overline{I_i}, c^*_i) = \frac{1}{|I_i \cap P^*_i|} \sum_{p \in I_i \cap P^*_i} \delta^2(\overline{I_i}, c^*_i) \]
 
 % TODO prove relaxed
-Áp dụng bất đẳng thức tam giác nới lỏng (relaxed triangle inequality) dạng $(a+b)^2 \leq (1 + \frac{1}{\lambda})a^2 + (1 + \lambda)b^2$. Ở đây ta chọn $\lambda = 2$ để tối ưu hóa các hệ số theo bài báo:
+Áp dụng bất đẳng thức tam giác nới lỏng \ref{thm:relaxed_triangle} dạng $(a+b)^2 \leq (1 + \frac{1}{\lambda})a^2 + (1 + \lambda)b^2$. Ở đây ta chọn $\lambda = 2$ để tối ưu hóa các hệ số theo bài báo:
 \[ \delta^2(\overline{I_i}, c^*_i) \leq (1 + 0.5)\delta^2(\overline{I_i}, p) + (1 + 2)\delta^2(p, c^*_i) \]
 Thay thế vào công thức tổng:
 \[ \delta^2(\overline{I_i}, c^*_i) \leq \frac{1}{|I_i \cap P^*_i|} \sum_{p \in I_i \cap P^*_i} \left[ 1.5 \delta^2(\overline{I_i}, p) + 3 \delta^2(p, c^*_i) \right] \]
@@ -1076,7 +1076,7 @@ Ta có đẳng thức phân rã chi phí như sau:
 \]
 Vì $\overline{I_i}$ là trọng tâm của $I_i$, số hạng đầu tiên luôn $\leq 0$. Ta tập trung chặn hai số hạng còn lại.
 
-\textbf{2. Áp dụng bất đẳng thức tam giác nới lỏng}
+\textbf{2. Áp dụng bất đẳng thức tam giác nới lỏng \ref{thm:relaxed_triangle}}
 Sử dụng bất đẳng thức $\delta^2(x, y) \leq (1+\lambda)\delta^2(x, z) + (1+\frac{1}{\lambda})\delta^2(z, y)$ với $\lambda = \sqrt{\alpha}$.
 
 Đối với tập $A_i$ (tương tự cho $B_i$):
@@ -1131,7 +1131,7 @@ Ta có (theo định nghĩa):
 Sử dụng kết quả  từ Bổ đề 13:
 \[ \delta^2(Q_i, \overline{I_i}) \leq \delta^2(Q_i, c^*_i) + \left( 5\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} \right) \delta^2(P^*_i, c^*_i) \]
 \item \textbf{Chặn trên cho $R_i$ (âm tính giả của dự đoán)}
-Áp dụng bất đẳng thức tam giác nới lỏng với $\lambda = \sqrt{\alpha}$ cho mỗi $p \in R_i$:
+Áp dụng bất đẳng thức tam giác nới lỏng \ref{thm:relaxed_triangle} với $\lambda = \sqrt{\alpha}$ cho mỗi $p \in R_i$:
 \begin{align*}
     \delta^2(R_i, \overline{I_i}) &\leq (1+\sqrt{\alpha})\delta^2(R_i, c^*_i) + |R_i|\left(1+\frac{1}{\sqrt{\alpha}}\right)\delta^2(c^*_i, \overline{I_i}) \\
     &= \delta^2(R_i, c^*_i) + \sqrt{\alpha}\delta^2(R_i, c^*_i) + |R_i|\frac{\sqrt{\alpha}+1}{\sqrt{\alpha}}\delta^2(c^*_i, \overline{I_i})

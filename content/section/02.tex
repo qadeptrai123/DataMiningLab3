@@ -40,9 +40,9 @@ Trong bước 3, đối với mỗi chiều của cụm dự đoán, thuật to�
 Đối với mỗi $u \in U'_{ij}$, gọi $\mathcal{N}_{ij}(u)$ là tập hợp $(1-\alpha)m_i$ tọa độ gần nhất từ $P_{ij}$ đến $u$. Gọi $O(u) = P_{ij} \setminus \mathcal{N}_{ij}(u)$ là tập hợp $\alpha m_i$ tọa độ xa nhất từ $P_{ij}$ đến $u$. Trước khi xây dựng bộ ước lượng $\omega$ (bước 9-10), tác giả bắt đầu bằng cách chia $\mathcal{N}_{ij}(u)$ thành $\gamma = \frac{(1+\epsilon_1) \log(m\Delta_{max}^2)}{\epsilon_1}$ khối. Cụ thể, đối với mỗi $u \in U'_{ij}$, $\mathcal{N}_{ij}(u)$ được phân rã thành $\gamma$ khối (ký hiệu là $\mathcal{B}_u^1, \mathcal{B}_u^2, \dots, \mathcal{B}_u^\gamma$) dựa trên khoảng cách từ các tọa độ trong $\mathcal{N}_{ij}(u)$ đến $u$, trong đó $\mathcal{B}_u^l = \{ x \in \mathcal{N}_{ij}(u) : (1+\epsilon_1)^l \leq \delta^2(x, u) < (1+\epsilon_1)^{l+1} \}$. 
 
 % BEGIN PB
-Các "khối" này có thể hình dung là các phần tiếp nối giữa khối cầu có bán kính $(1+\epsilon_1)^l$ và $(1+\epsilon_1)^{l+1}$ trong $\mathbb{R}^d$
+\hl{Các ``khối'' này có thể hình dung là các phần tiếp nối giữa khối cầu có bán kính $(1+\epsilon_1)^l$ và $(1+\epsilon_1)^{l+1}$ trong $\mathbb{R}^d$}
 
-% TODO vẽ hình cầu
+
 % END PB
 
 Sau đó, các khối này được chia tiếp thành hai nhóm dựa trên kích thước: $\mathcal{L}(u) = \{ \mathcal{B}_u^l : |\mathcal{B}_u^l| \geq \frac{\epsilon_1^2 \alpha m_i}{(1+\epsilon_1) \log(m_i\Delta_{max}^2)}, l \in [\gamma] \}$ là nhóm các khối lớn và $\mathcal{S}(u) = \{ \mathcal{B}_u^1, \dots, \mathcal{B}_u^\gamma \} \setminus \mathcal{L}(u)$ là nhóm các khối nhỏ. 

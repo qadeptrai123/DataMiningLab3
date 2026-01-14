@@ -2,8 +2,8 @@
 
 Gọi $P \subset \mathbb{R}^d$ và $k$ lần lượt là tập dữ liệu và số lượng cụm. Gọi $m$ là kích thước của tập dữ liệu. Đối với hai điểm $p, q \in \mathbb{R}^d$ bất kỳ, ký hiệu $\delta(p, q)$ và $\delta^2(p, q)$ lần lượt là khoảng cách và bình phương khoảng cách giữa chúng. Cho một điểm $p \in \mathbb{R}^d$ và một tập các tâm $C = \{c_1, c_2, \dots, c_k\}$, gọi $\delta(p, C) = \min_{c \in C} \delta(p, c)$ là khoảng cách từ $p$ đến tâm gần nhất trong $C$. 
 
+% BEGIN PB
 \hl{Để ý có thể có nhiều cách phân cụm tối ưu nhưng ở đây tác giả chọn 1 cách cố định để phân tích.}
-
 % END PB
 
 Gọi $C^* = \{c^*_1, \dots, c^*_k\}$ và $P(C^*) = \{P^*_1, \dots, P^*_k\}$ là tập các tâm tối ưu và phân hoạch phân cụm tối ưu tương ứng. Mỗi tâm tối ưu $c^*_i \in C^*$ được biểu diễn bởi $d$ tọa độ, tức là $c^*_i = (c^*_{i1}, c^*_{i2}, \dots, c^*_{id})$. Chi phí phân cụm của tập $P$ đối với tập tâm $C$ được định nghĩa là:
@@ -12,7 +12,7 @@ Gọi $C^* = \{c^*_1, \dots, c^*_k\}$ và $P(C^*) = \{P^*_1, \dots, P^*_k\}$ là
 \end{equation}
 
 % BEGIN PB
-Nếu $P$ là 1 điểm (thay vì 1 tập hợp) thì công thức trên được dùng. Lưu ý ta quan tâm thứ tự trong toán tử $\delta^2$, viết cụm trước và tâm sau.
+\hl{Nếu $P$ là 1 điểm (thay vì 1 tập hợp) thì công thức trên được dùng. Lưu ý ta quan tâm thứ tự trong toán tử $\delta^2$, viết cụm trước và tâm sau.}
 % END PB
 
 Cho một tập hợp $L(P) = \{P_1, P_2, \dots, P_k\}$ đóng vai trò là bộ dự đoán, gọi $Q_i = P_i \cap P^*_i$ là tập các điểm dữ liệu trong cụm dự đoán $P_i$ thuộc cụm tối ưu $P^*_i$. Gọi tọa độ chiếu của các điểm dữ liệu trong $P_i$ và $Q_i$ lên chiều thứ $j$ lần lượt là $P_{ij}$ và $Q_{ij}$. Gọi $P^*_{ij}$ là tọa độ chiếu của các điểm trong $P^*_i$ lên chiều thứ $j$. Gọi $m_i$ và $m$ lần lượt là kích thước của $P_i$ và $P$. Với một tập điểm dữ liệu $V \subset \mathbb{R}^d$, gọi $\overline{V}$ là tâm hình học của tập $V$. Gọi $P(j)$ là tọa độ chiếu của toàn bộ các điểm trong $P$ lên chiều thứ $j$. Gọi $\Delta_{max}$ là tỷ lệ chiều tối đa của các điểm dữ liệu được chiếu, được xác định bởi:
@@ -31,7 +31,7 @@ Với một số nguyên dương $t$, gọi $[t]$ là tập hợp các số nguy
 \textbf{Bài toán $k$-means hỗ trợ học:} Cho tập dữ liệu $P \subset \mathbb{R}^d$ gồm $m$ điểm, gọi $C^*$ và $P(C^*) = \{P^*_1, P^*_2, \dots, P^*_k\}$ lần lượt là một lời giải tối ưu và phân hoạch tương ứng. Trong thiết lập có hỗ trợ học, giả định rằng có quyền truy cập vào một bộ dự đoán dưới dạng phân hoạch nhãn $L(P) = \{P_1, P_2, \dots, P_k\}$ được tham số hóa bởi tỷ lệ lỗi nhãn $\alpha \in [0, 1)$, thỏa mãn điều kiện $|P_i \cap P^*_i| \geq (1-\alpha) \max\{|P_i|, |P^*_i|\}$. Mục tiêu của bài toán là tìm tập $C \subset \mathbb{R}^d$ các tâm sao cho $\delta^2(P, C)$ đạt giá trị nhỏ nhất.
 
 % BEGIN PB
-Các hệ quả toán học trong phần này dựa trên tính chất cơ bản của không gian Euclid, trọng tâm $\overline{V}$ là điểm duy nhất tối thiểu hóa tổng bình phương khoảng cách (SSE) tới mọi điểm trong tập $V$. Logic của các bổ đề dưới đây cho phép phân rã chi phí phân cụm thành hai thành phần: chi phí trong cụm (độ liên kết - cohesion) và chi phí do khoảng cách từ tâm dự đoán đến tâm tối ưu.
+\hl{Các hệ quả toán học trong phần này dựa trên tính chất cơ bản của không gian Euclid, trọng tâm $\overline{V}$ là điểm duy nhất tối thiểu hóa tổng bình phương khoảng cách (SSE) tới mọi điểm trong tập $V$. Logic của các bổ đề dưới đây cho phép phân rã chi phí phân cụm thành hai thành phần: chi phí trong cụm (độ liên kết - cohesion) và chi phí do khoảng cách từ tâm dự đoán đến tâm tối ưu.}
 % END PB
 
 Các bổ đề dưới đây là "dân gian truyền miệng" (folklore) rất phổ biến liên quan bài toán $k$-means clustering
@@ -46,7 +46,7 @@ Cho tập $X \subset \mathbb{R}^d$ có kích thước $m$ và một điểm dữ
 \end{lemma}
 
 % BEGIN PB
-Bổ đề \ref{lemma:1} xuất phát từ quan sát trọng tâm $\overline{P_i}$ của các cụm dự đoán không đủ là nghiệm của bài toán. Vì dự đoán không đúng, có thể tồn tại 1 số điểm trong $P_i$ nằm ngoài $P_i^*$. Nếu các điểm trong $P_i \setminus P_i^*$ nằm \textbf{rất xa} $\overline{P_i^*}$, trọng tâm cụm dự đoán sẽ bị lệch tuỳ ý dẫn đến chi phí tăng cụm tăng lên tuỳ ý. 
+\hl{Bổ đề \ref{lemma:1} xuất phát từ quan sát trọng tâm $\overline{P_i}$ của các cụm dự đoán không đủ là nghiệm của bài toán. Vì dự đoán không đúng, có thể tồn tại 1 số điểm trong $P_i$ nằm ngoài $P_i^*$. Nếu các điểm trong $P_i \setminus P_i^*$ nằm \textbf{rất xa} $\overline{P_i^*}$, trọng tâm cụm dự đoán sẽ bị lệch tuỳ ý dẫn đến chi phí tăng cụm tăng lên tuỳ ý.} 
 
 \begin{figure}[htbp]
     \centering
@@ -82,7 +82,7 @@ Bổ đề \ref{lemma:1} xuất phát từ quan sát trọng tâm $\overline{P_i
         \draw[line width=1.5pt, anypointorange, <->] (Xbar) -- (C) 
             node[midway, above=2pt, black, font=\small] {$\delta(c, \overline{X})$};
 
-        % 7. Minh họa một đường từ điểm xanh đến c (để thấy delta(X, c))
+        % 7.  một đường từ điểm xanh đến c (để thấy delta(X, c))
         \draw[dotted, thick, pointblue!80] (-0.4,0.8) -- (C);
 
     \end{tikzpicture}
@@ -102,7 +102,7 @@ Cho tập $J \subset \mathbb{R}$, gọi $J_1 \subseteq J$ với $|J_1| \geq (1-\
 \end{lemma}
 
 % BEGIN PB
-Bổ đề \ref{lemma:2} cũng đúng với $J \subset \mathbb{R}^d$, mặc dù tác giả chỉ ghi trên $\mathbb{R}$, xem chứng minh trong bài báo của Nguyen và tác giả cộng sự (\cite{Nguyen2022}, phần chứng minh Bổ đề 3 trong mục Appendix 5.1).
+\hl{Bổ đề \ref{lemma:2} cũng đúng với $J \subset \mathbb{R}^d$, mặc dù tác giả chỉ ghi trên $\mathbb{R}$, xem chứng minh trong bài báo của Nguyen và tác giả cộng sự} (\cite{Nguyen2022}, \hl{phần chứng minh Bổ đề 3 trong mục Appendix 5.1).}
 
 \definecolor{wewdxt}{rgb}{0.43, 0.43, 0.45} % Grey for lines
 \definecolor{rvwvcq}{rgb}{0.08, 0.40, 0.75} % Blue for points
@@ -128,36 +128,31 @@ Bổ đề \ref{lemma:2} cũng đúng với $J \subset \mathbb{R}^d$, mặc dù 
     \begin{scriptsize}
         % Point J
         \fill [color=rvwvcq] (-2.61, 2.96) circle (2.5pt) node[below left, color=rvwvcq] {$\overline{J}$};
-        
-        % Point B
-        \fill [color=rvwvcq] (0.07, 3.52) circle (2.5pt) node[right, color=rvwvcq] {$B$};
-        
+
         % Point J1
         \fill [color=rvwvcq] (-1.83, 3.44) circle (2.5pt) node[above right, color=rvwvcq] {$\overline{J_1}$};
         
-        % Point D
-        \fill [color=rvwvcq] (-2.85, 4.38) circle (2.5pt) node[above left, color=rvwvcq] {$D$};
     \end{scriptsize}
 \end{tikzpicture}
-\caption{Minh họa Bổ đề \ref{lemma:2} trong không gian $\mathbb{R}^d$: Khoảng cách giữa tâm tập tổng thể $\overline{J}$ và tâm tập con $\overline{J_1}$ được chặn bởi hàm chi phí của $J$.}
+\caption{\hl{Bổ đề \ref{lemma:2} trong không gian $\mathbb{R}^d$: Khoảng cách giữa tâm tập tổng thể $\overline{J}$ và tâm tập con $\overline{J_1}$ được chặn bởi hàm chi phí của $J$.}}
 \end{figure}
 
-Bổ đề \ref{lemma:2} xuất phát từ quan sát liên hệ chi phí và kích thước tập con của cụm tối ưu. Ta muốn tìm $Q_i = P_i \cap P_i^*$ và lấy $\overline{Q_i}$ làm đáp án cho cụm $i$, điều này tự nhiên xuất phát từ dữ kiện $Q_i$ của bài toán có hỗ trợ học. 
+\hl{Bổ đề \ref{lemma:2} xuất phát từ quan sát liên hệ chi phí và kích thước tập con của cụm tối ưu. Ta muốn tìm $Q_i = P_i \cap P_i^*$ và lấy $\overline{Q_i}$ làm đáp án cho cụm $i$, điều này tự nhiên xuất phát từ dữ kiện $Q_i$ của bài toán có hỗ trợ học.} 
 \begin{align*}
 |Q_i| &\geq (1-\alpha) \max\{|P_i|, |P^*_i|\} \geq (1 - \alpha) |P_i^*| \\
 \Rightarrow |P_i^* \setminus Q_i| &\leq \alpha m_i^*
 \end{align*}
 
-Dùng bổ đề trên, ta có chặn trên chi phí phân cụm: 
+\hl{Dùng bổ đề trên, ta có chặn trên chi phí phân cụm:} 
 \begin{align*}
-\delta^2(P_i^*, \overline{Q_i}) &=\delta^2(P_i^*, \overline{P_i^*}) +  m_i^* \delta^2(\overline{P_i^*}, \overline{Q_i}) \text{   (Bổ đề \ref{lemma:1})} \\
- &\leq \delta^2(P_i^*, \overline{P_i^*}) + m_i^* \frac{\alpha}{1 - \alpha}  \frac{\delta^2(P_i^*, \overline{P_i^*})}{m_i^*} \text{    (Bổ đề \ref{lemma:2})}\\
+\delta^2(P_i^*, \overline{Q_i}) &=\delta^2(P_i^*, \overline{P_i^*}) +  m_i^* \delta^2(\overline{P_i^*}, \overline{Q_i}) \quad &\text{   (Bổ đề \ref{lemma:1})} \\
+ &\leq \delta^2(P_i^*, \overline{P_i^*}) + m_i^* \frac{\alpha}{1 - \alpha}  \frac{\delta^2(P_i^*, \overline{P_i^*})}{m_i^*} \quad &\text{    (Bổ đề \ref{lemma:2})}\\
  &= \left(1 + \frac{\alpha}{1 - \alpha} \right) \delta^2(P_i^*, \overline{P_i^*})
 \end{align*}
 
-Như vậy ta có xấp xỉ $\left(1 + \frac{\alpha}{1 - \alpha} \right)$ cho 1 cụm và cũng như cho bài toán. Cũng chính là chặn dưới và lí do xuất hiện của nó trong tỷ lệ xấp xỉ trong Bảng \ref{tab:theoretical_comparison}.
+\hl{Như vậy ta có xấp xỉ $\left(1 + \frac{\alpha}{1 - \alpha} \right)$ cho 1 cụm và cũng như cho bài toán. Cũng chính là chặn dưới và lí do xuất hiện của nó trong tỷ lệ xấp xỉ trong Bảng \ref{tab:theoretical_comparison}.}
 
-Khó khăn là $Q_i$ chưa biết, vì vậy các thuật toán chính dưới đây tập trung vào việc loại bỏ các điểm outlier trong $P_i$, tìm một trọng tâm gần $\overline{Q_i}$, như vậy đồng thời giảm được khoảng cách đến $\overline{P_i^*}$ và chi phí. 
+\hl{Khó khăn là $Q_i$ chưa biết, vì vậy các thuật toán chính dưới đây tập trung vào việc loại bỏ các điểm outlier trong $P_i$, tìm một trọng tâm gần $\overline{Q_i}$, như vậy đồng thời giảm được khoảng cách đến $\overline{P_i^*}$ và chi phí.} 
 % END PB
 
 
@@ -176,7 +171,7 @@ Kết quả của Bổ đề \ref{lemma:3} được chứng minh bằng phương
 \subsection{Các công cụ (toán)}
 
 % Relaxed triangle ineq
-\begin{theorem2}[Bất đẳng thức tam giác nới lỏng]
+\begin{theorem2}[Bất đẳng thức tam giác nới lỏng - relaxed triangle inequality]
 \label{thm:relaxed_triangle}
 Với mọi số thực $a, b \in \mathbb{R}$ và một tham số dương $\lambda > 0$, bất đẳng thức sau luôn thỏa mãn:
 \[ (a + b)^2 \leq \left(1 + \frac{1}{\lambda}\right)a^2 + (1 + \lambda)b^2 \]
@@ -185,16 +180,16 @@ Trong không gian vector $\mathbb{R}^d$ với chuẩn Euclid $\| \cdot \|$, bấ
 \end{theorem2}
 
 \begin{proof}
-Ở đây nhóm em chứng minh cho 1 chiều, còn lại cũng tương tự. Ta bắt đầu bằng việc khai triển vế trái của bất đẳng thức:
+\hl{Ở đây nhóm em chứng minh cho 1 chiều, còn lại cũng tương tự. Ta bắt đầu bằng việc khai triển vế trái của bất đẳng thức:}
 \[ (a + b)^2 = a^2 + 2ab + b^2 \]
 
-Ta áp dụng bất đẳng thức AM-GM. Với hai số thực dương $x, y$, ta luôn có $x^2 + y^2 \geq 2xy$.
-Chọn $x = \frac{a}{\sqrt{\lambda}}$ và $y = b\sqrt{\lambda}$. Khi đó:
+\hl{Ta áp dụng bất đẳng thức AM-GM. Với hai số thực dương $x, y$, ta luôn có $x^2 + y^2 \geq 2xy$.}
+\hl{Chọn $x = \frac{a}{\sqrt{\lambda}}$ và $y = b\sqrt{\lambda}$. Khi đó:}
 \[ \left( \frac{a}{\sqrt{\lambda}} \right)^2 + (b\sqrt{\lambda})^2 \geq 2 \left( \frac{a}{\sqrt{\lambda}} \right) (b\sqrt{\lambda}) \]
 
 \[ \frac{a^2}{\lambda} + \lambda b^2 \geq 2ab \]
 
-Thay thế chặn trên của $2ab$ vào khai triển ban đầu của $(a + b)^2$:
+\hl{Thay thế chặn trên của $2ab$ vào khai triển ban đầu của $(a + b)^2$:}
 \begin{align*}
     (a + b)^2 &= a^2 + 2ab + b^2 \\
     &\leq a^2 + \left( \frac{a^2}{\lambda} + \lambda b^2 \right) + b^2 \\
@@ -213,7 +208,7 @@ Nếu $A_1, A_2, \dots, A_n$  là các sự kiện thì xác suất để ít nh
 \end{theorem2}
 
 % BEGIN PB
-Định lý \ref{thm:union_bound} khá tự nhiên và dễ thấy. Xét ví dụ với hai sự kiện $A$ và $B$. Xác suất để ít nhất một trong hai sự kiện xảy ra là xác suất của hợp $A \cup B$. Ta có thể biểu diễn mối quan hệ này trên biểu đồ Venn như Hình \ref{fig:union_bound}.
+\hl{Định lý \ref{thm:union_bound} khá tự nhiên và dễ thấy. Xét ví dụ với hai sự kiện $A$ và $B$. Xác suất để ít nhất một trong hai sự kiện xảy ra là xác suất của hợp $A \cup B$. Ta có thể biểu diễn mối quan hệ này trên biểu đồ Venn như Hình \ref{fig:union_bound}.}
 
 \begin{figure}[htbp]
     \centering
@@ -234,17 +229,17 @@ Nếu $A_1, A_2, \dots, A_n$  là các sự kiện thì xác suất để ít nh
         \node [color=rvwvcq] at (1.8, 0) {\Large $B$};
         \node [color=rvwvcq] at (0, 0) {\footnotesize $A \cap B$};
     \end{tikzpicture}
-    \caption{Minh họa chặn hợp với hai sự kiện $A$ và $B$. Phần giao $A \cap B$ (được tô màu) được tính hai lần trong tổng $\Pr(A) + \Pr(B)$.}
+    \caption{\hl{Minh họa chặn hợp với hai sự kiện $A$ và $B$. Phần giao $A \cap B$ (được tô màu) được tính hai lần trong tổng $\Pr(A) + \Pr(B)$.}}
     \label{fig:union_bound}
 \end{figure}
 
-Từ hình \ref{fig:union_bound}, ta thấy diện tích của phần hợp $A \cup B$ bằng tổng diện tích của $A$ và $B$ trừ đi diện tích phần giao nhau $A \cap B$ (vì phần này được tính hai lần trong tổng). Chuyển sang công thức xác suất:
+\hl{Từ hình \ref{fig:union_bound}, ta thấy diện tích của phần hợp $A \cup B$ bằng tổng diện tích của $A$ và $B$ trừ đi diện tích phần giao nhau $A \cap B$ (vì phần này được tính hai lần trong tổng). Chuyển sang công thức xác suất:}
 \[ \Pr(A \cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B) \]
-Vì xác suất của phần giao luôn không âm ($\Pr(A \cap B) \geq 0$), ta suy ra bất đẳng thức:
+\hl{Vì xác suất của phần giao luôn không âm ($\Pr(A \cap B) \geq 0$), ta suy ra bất đẳng thức:}
 \[ \Pr(A \cup B) \leq \Pr(A) + \Pr(B) \]
-Mở rộng tương tự cho $n$ sự kiện, ta có định lý chặn hợp (union bound).
+\hl{Mở rộng tương tự cho $n$ sự kiện, ta có định lý chặn hợp (union bound).}
 
-Trong bài báo, tác giả dùng định lý \ref{thm:union_bound} để gộp xác suất thất bại trên từng chiều dữ liệu ($d$) và trên từng cụm ($k$), đảm bảo rằng thuật toán Fast-Sampling vẫn đúng trên toàn bộ không gian dữ liệu.
+\hl{Trong bài báo, tác giả dùng định lý \ref{thm:union_bound} để gộp xác suất thất bại trên từng chiều dữ liệu ($d$) và trên từng cụm ($k$), đảm bảo rằng thuật toán Fast-Sampling vẫn đúng trên toàn bộ không gian dữ liệu.}
 % END PB
 
 % Chernoff bound
@@ -260,9 +255,9 @@ Cho $X_1, X_2, \dots, X_n$ là các biến ngẫu nhiên độc lập nhận gi�
 \end{theorem2}
 
 % BEGIN PB
-Trong bối cảnh của bài báo này (và các thuật toán ngẫu nhiên nói chung), chặn Chernoff cực kỳ quan trọng để chứng minh tính hiệu quả của phương pháp lấy mẫu (sampling). 
-Cụ thể, các thuật toán được đề xuất (như Fast-Sampling) không duyệt qua toàn bộ dữ liệu mà chỉ lấy một tập mẫu ngẫu nhiên $S$. Chúng ta cần đảm bảo rằng các đặc tính của mẫu $S$ (ví dụ: tỷ lệ các điểm thuộc cụm tối ưu) xấp xỉ tốt các đặc tính của tập dữ liệu gốc $P$.
-Chặn Chernoff cho ta biết xác suất để giá trị thực nghiệm lệch khỏi giá trị kỳ vọng sẽ giảm theo hàm mũ. Điều này đảm bảo rằng chỉ cần kích thước mẫu $O(\log m)$, ta có thể đạt được độ chính xác mong muốn với xác suất rất cao (high probability).
+\hl{Trong bối cảnh của bài báo này (và các thuật toán ngẫu nhiên nói chung), chặn Chernoff cực kỳ quan trọng để chứng minh tính hiệu quả của phương pháp lấy mẫu (sampling).} 
+\hl{Cụ thể, các thuật toán được đề xuất (như Fast-Sampling) không duyệt qua toàn bộ dữ liệu mà chỉ lấy một tập mẫu ngẫu nhiên $S$. Chúng ta cần đảm bảo rằng các đặc tính của mẫu $S$ (ví dụ: tỷ lệ các điểm thuộc cụm tối ưu) xấp xỉ tốt các đặc tính của tập dữ liệu gốc $P$.}
+\hl{Chặn Chernoff cho ta biết xác suất để giá trị thực nghiệm lệch khỏi giá trị kỳ vọng sẽ giảm theo hàm mũ. Điều này đảm bảo rằng chỉ cần kích thước mẫu $O(\log m)$, ta có thể đạt được độ chính xác mong muốn với xác suất rất cao (\textit{high probability}).}
 % END PB
 
 % Cauchy Schwarz
@@ -276,8 +271,8 @@ Dấu đẳng thức xảy ra khi và chỉ khi $u$ và $v$ phụ thuộc tuyế
 \end{theorem2}
 
 % BEGIN PB
-Bất đẳng thức này thường xuyên được sử dụng trong các chứng minh liên quan đến $k$-means để tách và đánh giá các thành phần của hàm chi phí.
-Ví dụ, khi khai triển $\delta^2(x, c) = \|x - c\|^2 = \|(x - c^*) + (c^* - c)\|^2$, ta sẽ gặp số hạng chéo $2\langle x - c^*, c^* - c \rangle$. Cauchy-Schwarz giúp chặn trên giá trị tuyệt đối của số hạng này, từ đó giúp thiết lập các mối quan hệ giữa chi phí của lời giải xấp xỉ và lời giải tối ưu.
+\hl{Bất đẳng thức này thường xuyên được sử dụng trong các chứng minh liên quan đến $k$-means để tách và đánh giá các thành phần của hàm chi phí.}
+\hl{Ví dụ, khi khai triển $\delta^2(x, c) = \|x - c\|^2 = \|(x - c^*) + (c^* - c)\|^2$, ta sẽ gặp số hạng chéo $2\langle x - c^*, c^* - c \rangle$. Cauchy-Schwarz giúp chặn trên giá trị tuyệt đối của số hạng này, từ đó giúp thiết lập các mối quan hệ giữa chi phí của lời giải xấp xỉ và lời giải tối ưu.}
 % END PB
 
 \subsection{Các thuật toán con}
@@ -315,17 +310,17 @@ Nếu sử dụng thuật toán sắp xếp (Sorting) thông thường (như Qui
 
 
 % BEGIN PB
-\textbf{Giải thích một chút về độ phức tạp:}
-Trong bài báo gốc của Blum và tác giả cộng sự \cite{Blum1973}, tác giả chứng minh rằng thuật toán Median of Medians chạy trong thời gian $O(n)$ trong trường hợp xấu nhất.
-Thuật toán khắc phục vấn đề chọn chốt (pivot) ngẫu nhiên của QuickSelect bằng cách tốn một chút chi phí để chọn ra một chốt $m$ "đủ tốt" ~(nằm gần giữa dãy số).
+\hl{\textbf{Giải thích một chút về độ phức tạp:}}
+\hl{Trong bài báo gốc của Blum và tác giả cộng sự} \cite{Blum1973}\hl{, tác giả chứng minh rằng thuật toán Median of Medians chạy trong thời gian $O(n)$ trong trường hợp xấu nhất.}
+\hl{Thuật toán khắc phục vấn đề chọn chốt (pivot) ngẫu nhiên của QuickSelect bằng cách tốn một chút chi phí để chọn ra một chốt $m$ ``đủ tốt'' ~(nằm gần giữa dãy số).}
 \begin{itemize}
-    \item Vì $m$ là trung vị của các trung vị, nó lớn hơn trung vị của một nửa số nhóm.
-    \item Trong mỗi nhóm đó, trung vị lại lớn hơn 2 phần tử khác.
-    \item Suy ra: $m$ chắc chắn lớn hơn khoảng $30\%$ số phần tử của $S$. Tương tự, $m$ chắc chắn nhỏ hơn khoảng $30\%$ số phần tử.
-    \item Do đó, ở bước phân hoạch, ta luôn loại bỏ được ít nhất $30\%$ dữ liệu. Kích thước bài toán giảm xuống rất nhanh theo cấp số nhân, đảm bảo tổng thời gian là tuyến tính.
+    \item \hl{Vì $m$ là trung vị của các trung vị, nó lớn hơn trung vị của một nửa số nhóm.}
+    \item \hl{Trong mỗi nhóm đó, trung vị lại lớn hơn 2 phần tử khác.}
+    \item \hl{Suy ra: $m$ chắc chắn lớn hơn khoảng $30\%$ số phần tử của $S$. Tương tự, $m$ chắc chắn nhỏ hơn khoảng $30\%$ số phần tử.}
+    \item \hl{Do đó, ở bước phân hoạch, ta luôn loại bỏ được ít nhất $30\%$ dữ liệu. Kích thước bài toán giảm xuống rất nhanh theo cấp số nhân, đảm bảo tổng thời gian là tuyến tính.}
 \end{itemize}
 
 
-\textbf{Ý nghĩa:}
-Trong các thuật toán đề xuất (Fast-Sampling, Fast-Estimation), tác giả cần liên tục tìm tập hợp "nearest neighbors" ~(ví dụ: tìm $(1-\alpha)m_i$ điểm gần nhất). Việc sử dụng thuật toán này cho phép tìm ngưỡng khoảng cách trong $O(m)$ thay vì phải sắp xếp toàn bộ dữ liệu tốn $O(m \log m)$. Đây là chìa khóa để đạt được tốc độ xử lý nhanh trên dữ liệu lớn.
+\hl{\textbf{Ý nghĩa:}}
+\hl{Trong các thuật toán đề xuất (Fast-Sampling, Fast-Estimation), tác giả cần liên tục tìm tập hợp ``nearest neighbors'' ~(ví dụ: tìm $(1-\alpha)m_i$ điểm gần nhất). Việc sử dụng thuật toán này cho phép tìm ngưỡng khoảng cách trong $O(m)$ thay vì phải sắp xếp toàn bộ dữ liệu tốn $O(m \log m)$. Đây là chìa khóa để đạt được tốc độ xử lý nhanh trên dữ liệu lớn.}
 % END PB
