@@ -1,63 +1,490 @@
-\section{THỰC NGHIỆM}
+\section{Thực nghiệm}
 
-Trong phần này, tác giả đưa ra các đánh giá thực nghiệm về hiệu suất của các thuật toán đề xuất. Tất cả các thuật toán được cài đặt và thực thi bằng ngôn ngữ Python \cite{Matsui2017}. Các thực nghiệm được thực hiện trên máy tính có bộ vi xử lý i7-12700KF và RAM 256GB. Kế thừa các nghiên cứu trước đó \cite{Ergun2021, Nguyen2022}, tác giả thực hiện mỗi thuật toán 10 lần và báo cáo kết quả trung bình cùng với độ lệch chuẩn.
+\subsection{Thực nghiệm của tác giả} \label{sec:expauthor}
 
-\textbf{Tập dữ liệu.} Đánh giá theo các nghiên cứu của \cite{Ergun2021} và \cite{Nguyen2022}, tác giả kiểm tra các thuật toán trên các tập dữ liệu CIFAR10 ($m = 10,000, d = 3,072$), PHY ($m = 10,000, d = 50$) và MNIST ($m = 1,797, d = 64$) với tỷ lệ lỗi $\alpha$ và số lượng cụm $k$ thay đổi . Tác giả cũng đánh giá hiệu suất trên các tập dữ liệu lớn khác từ Kho lưu trữ Học máy UCI, bao gồm SUSY ($m = 5,000,000, d = 18$) và HIGGS ($m = 11,000,000, d = 27$), cùng một tập dữ liệu quy mô cực lớn SIFT ($m = 100,000,000, d = 128$) từ nghiên cứu của \cite{Matsui2017}.
+Trong phần này, tác giả đưa ra các đánh giá thực nghiệm về hiệu suất của các thuật toán đề xuất. Tất cả các thuật toán được cài đặt và thực thi bằng ngôn ngữ Python. Các thực nghiệm được thực hiện trên máy tính có bộ vi xử lý i7-12700KF và RAM 256GB. Dựa trên các nghiên cứu trước đó của \cite{Ergun2021, Nguyen2022}, tác giả thực hiện mỗi thuật toán 10 lần và báo cáo kết quả trung bình cùng với độ lệch chuẩn. (\hl{Các nghiên cứu trước đó đề cập đều chạy thực nghiệm như thế này nên tác giả cũng sẽ thực hiện theo nhằm đảm bảo công bằng})
 
-\textbf{Thuật toán.} Trong các thực nghiệm, tác giả chủ yếu so sánh các thuật toán Fast-Sampling, Fast-Estimation và Fast-Filtering (phiên bản có đảm bảo lý thuyết) với các thuật toán có hỗ trợ học khác, bao gồm thuật toán của Ergun \cite{Ergun2021} (ký hiệu là Ergun) và thuật toán của Nguyen \cite{Nguyen2022} (ký hiệu là Det) \cite{Nguyen2022, Ergun2021}. Đối với thuật toán Fast-Sampling, kích thước mẫu được thiết lập là 4 và cố định $\epsilon = 1$ \cite{Matsui2017}. Đối với Fast-Filtering và Fast-Estimation, tác giả cố định $R_1 = 10, R_2 = m/20$ và $\epsilon = 0.3$, trong đó $m$ là kích thước của bài toán phân cụm \cite{Matsui2017}. Để chứng minh ưu thế của mô hình phân cụm có hỗ trợ học, tác giả cũng thực hiện so sánh với phương pháp $k$-means++ \cite{Arthur2007} không sử dụng thông tin dự đoán.
+% BEGIN PB
 
-\textbf{Mô tả bộ dự đoán.} Kế thừa phương pháp của \cite{Nguyen2022}, bộ dự đoán được tạo ra như sau: với mỗi tập dữ liệu, đầu tiên tác giả chạy phương pháp $k$-means++ \cite{Arthur2007} để khởi tạo, sau đó chạy thuật toán Lloyd \cite{Lloyd1982} cho đến khi hội tụ; các nhãn thu được được coi là phân hoạch nhãn tối ưu (ký hiệu là $\{P_1, \dots, P_k\}$) \cite{Arthur2007, Lloyd1982}. Để kiểm tra hiệu suất dưới các tỷ lệ lỗi khác nhau, tác giả thay đổi ngẫu nhiên nhãn của $\alpha m_i$ điểm gần $c_i$ nhất trong mỗi cụm $P_i$ để tạo ra các phân hoạch nhãn bị nhiễu $\{P'_1, \dots, P'_k\}$ làm bộ dự đoán, với $\alpha$ chạy từ $0.1$ đến $0.5$ \cite{Nguyen2022}.
+% END PB
 
-\textbf{Chi tiết cài đặt thuật toán.} Như đã được chỉ ra trong \cite{Nguyen2022}, trong hầu hết các tình huống thực tế, chúng ta không có quyền truy cập vào tỷ lệ lỗi $\alpha$ thực sự và phải thử các giá trị đoán khác nhau để chọn ra kết quả có chi phí tốt nhất \cite{Nguyen2022}. Do đó, đối với mỗi thuật toán, tác giả thực hiện lặp qua 15 giá trị tiềm năng của $\alpha$ phân bố đều trong khoảng $[0.01, 0.5]$ làm đầu vào . Giá trị $\alpha$ cho chi phí phân cụm thấp nhất sẽ được chọn làm kết quả cuối cùng . Thời gian chạy bao gồm tổng thời gian của 15 lần thử nghiệm này. Ngoài ra, tác giả cũng so sánh các giá trị ARI và NMI để đánh giá chất lượng phân cụm so với nhãn thực tế.
+\textbf{Tập dữ liệu.} Dựa vào các nghiên cứu của \cite{Ergun2021} và \cite{Nguyen2022}, tác giả cũng kiểm tra các thuật toán trên các tập dữ liệu CIFAR10 ($m = 10,000$, $d = 3,072$), PHY ($m = 10,000$, $d = 50$) và MNIST ($m = 1,797$, $d = 64$) với các tỷ lệ lỗi $\alpha$ và số lượng cụm $k$ khác nhau. Ngoài ra, tác giả cũng đánh giá hiệu suất trên các tập dữ liệu lớn khác từ Kho lưu trữ Học máy UCI\footnote{https://archive.ics.uci.edu/}, bao gồm SUSY ($m = 5,000,000$, $d = 18$) và HIGGS ($m = 11,000,000$, $d = 27$), cùng một tập dữ liệu quy mô cực lớn SIFT ($m = 100,000,000$, $d = 128$) từ nghiên cứu của \cite{Matsui2017}.
+
+\textbf{Thuật toán.} Trong các thực nghiệm, tác giả chủ yếu so sánh các thuật toán Fast-Sampling, Fast-Estimation và Fast-Filtering (phiên bản có đảm bảo lý thuyết) với các thuật toán có hỗ trợ học khác, bao gồm thuật toán trong \cite{Ergun2021} (ký hiệu là Ergun) và thuật toán trong \cite{Nguyen2022} (ký hiệu là Det). Đối với thuật toán Fast-Sampling, kích thước mẫu được thiết lập là 4 và cố định $\epsilon = 1$. Đối với Fast-Filtering và Fast-Estimation, tác giả cố định $R_1 = 10$, $R_2 = m/20$ và $\epsilon = 0.3$, trong đó $m$ là kích thước của bài toán phân cụm cụ thể (\hl{số lượng điểm dữ liệu}). Để chứng minh ưu thế của mô hình phân cụm có hỗ trợ học, tác giả cũng thực hiện so sánh với phương pháp $k$-means++ \cite{Arthur2007} không sử dụng thông tin dự đoán.
+
+\textbf{Mô tả bộ dự đoán.} Kế thừa phương pháp của \cite{Nguyen2022}, bộ dự đoán được tạo ra như sau: với mỗi tập dữ liệu, đầu tiên tác giả chạy phương pháp $k$-means++ \cite{Arthur2007} để khởi tạo, sau đó chạy thuật toán Lloyd \cite{Lloyd1982} cho đến khi hội tụ; các nhãn thu được được coi là phân hoạch nhãn tối ưu (ký hiệu là $\{P_1, \dots, P_k\}$). Để kiểm tra hiệu suất dưới các tỷ lệ lỗi khác nhau, tác giả thay đổi ngẫu nhiên nhãn của $\alpha m_i$ điểm gần $c_i$ nhất trong mỗi cụm $P_i$ để tạo ra các phân hoạch nhãn bị nhiễu $\{P'_1, \dots, P'_k\}$ làm bộ dự đoán, với $\alpha$ chạy từ $0.1$ đến $0.5$. Cách này là tương tự với cách triển khai trong \cite{Nguyen2022}.
+
+\textbf{Chi tiết cài đặt thuật toán.} Như đã được chỉ ra trong \cite{Nguyen2022}, trong hầu hết các tình huống thực tế, chúng ta không thể biết được tỷ lệ lỗi $\alpha$ thực sự và phải thử các giá trị đoán khác nhau để chọn ra kết quả có chi phí tốt nhất. Do đó, đối với mỗi thuật toán, tác giả thực hiện lặp qua 15 giá trị tiềm năng của $\alpha$ phân bố đều trong khoảng $[0.01, 0.5]$ làm đầu vào. Giá trị $\alpha$ cho chi phí phân cụm thấp nhất sẽ được chọn làm kết quả cuối cùng. Thời gian chạy của mỗi thuật toán sẽ bao gồm tổng thời gian của 15 lần thử nghiệm này. Ngoài ra, tác giả cũng so sánh các giá trị ARI và NMI để đánh giá chất lượng phân cụm so với nhãn thực tế.
 
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
 \centering
-\caption{So sánh các thuật toán trên tập dữ liệu SIFT với $k = 20$ và $\alpha$ thay đổi}
+\caption{So sánh các thuật toán trên tập dữ liệu SIFT với $k = 20$ và các $\alpha$ khác nhau}
 \label{tab:sift_results}
 \footnotesize
-\resizebox{\textwidth}{!}{
+\resizebox{0.85\textwidth}{!}{
 \begin{tabular}{lcccccc}
 \hline
-Phương pháp & Tham chiếu $\alpha$ & Chi phí & NMI & ARI & Thời gian (s) \\ \hline
-\textit{Lloyd (Ref)} & 0.1 & 1.0542E+13 (844.18s) & - & - & - \\
-$k$-means++ \cite{Arthur2007} & 0.1 & 1.6884E+13 $\pm$ 1.45E+11 & 0.3285 $\pm$ 0.0138 & 0.1530 $\pm$ 0.0137 & 1000.89 $\pm$ 10.84 \\
-Ergun \cite{Ergun2021} & 0.1 & 9.9799E+12 $\pm$ 1.03E+05 & 0.9243 $\pm$ 0.0000 & 0.9181 $\pm$ 0.0001 & 16748.88 $\pm$ 5776.25 \\
-Det \cite{Nguyen2022} & 0.1 & 9.7791E+12 $\pm$ 0.00E+00 & 0.9490 $\pm$ 0.0000 & 0.9491 $\pm$ 0.0000 & 13152.95 $\pm$ 2160.94 \\
-\textbf{Fast-Sampling} & 0.1 & 9.7666E+12 $\pm$ 0.00E+00 & 0.9519 $\pm$ 0.0000 & 0.9531 $\pm$ 0.0000 & 13057.36 $\pm$ 1717.68 \\
-\textbf{Fast-Filtering} & 0.1 & 9.7150E+12 $\pm$ 2.90E+08 & 0.9316 $\pm$ 0.0090 & 0.9333 $\pm$ 0.0107 & 1006.31 $\pm$ 43.79 \\
-\textbf{Fast-Estimation} & 0.1 & 9.8007E+12 $\pm$ 3.74E+08 & 0.9465 $\pm$ 0.0003 & 0.9466 $\pm$ 0.0002 & 8874.66 $\pm$ 2871.26 \\ \hline
-\textit{Lloyd (Ref)} & 0.2 & 9.7055E+12 (1011.24s) & - & - & - \\
-$k$-means++ \cite{Arthur2007} & 0.2 & 1.6585E+13 $\pm$ 7.91E+10 & 0.3634 $\pm$ 0.0182 & 0.1940 $\pm$ 0.0221 & 1077.12 $\pm$ 71.57 \\
-Ergun \cite{Ergun2021} & 0.2 & 1.0210E+13 $\pm$ 2.89E+08 & 0.9043 $\pm$ 0.0000 & 0.8901 $\pm$ 0.0000 & 17410.75 $\pm$ 6132.76 \\
-Det \cite{Nguyen2022} & 0.2 & 9.9919E+12 $\pm$ 0.00E+00 & 0.9019 $\pm$ 0.0000 & 0.8867 $\pm$ 0.0000 & 13681.80 $\pm$ 2073.36 \\
-\textbf{Fast-Sampling} & 0.2 & 9.9576E+12 $\pm$ 0.00E+00 & 0.9037 $\pm$ 0.0000 & 0.8895 $\pm$ 0.0000 & 13270.53 $\pm$ 1989.65 \\
-\textbf{Fast-Filtering} & 0.2 & 9.7914E+12 $\pm$ 9.59E+08 & 0.8690 $\pm$ 0.0116 & 0.8515 $\pm$ 0.0146 & 1088.53 $\pm$ 92.09 \\
-\textbf{Fast-Estimation} & 0.2 & 1.0004E+13 $\pm$ 6.51E+08 & 0.9093 $\pm$ 0.0002 & 0.8979 $\pm$ 0.0002 & 9567.52 $\pm$ 2691.74 \\ \hline
-\textit{Lloyd (Ref)} & 0.3 & 9.2478E+12 (1330.99s) & - & - & - \\
-$k$-means++ \cite{Arthur2007} & 0.3 & 1.6561E+13 $\pm$ 9.48E+10 & 0.3531 $\pm$ 0.0278 & 0.1814 $\pm$ 0.0206 & 927.07 $\pm$ 31.75 \\
-Ergun \cite{Ergun2021} & 0.3 & 1.0526E+13 $\pm$ 4.08E+07 & 0.8663 $\pm$ 0.0000 & 0.8361 $\pm$ 0.0000 & 17586.20 $\pm$ 6488.30 \\
-Det \cite{Nguyen2022} & 0.3 & 1.0291E+13 $\pm$ 0.00E+00 & 0.8625 $\pm$ 0.0000 & 0.8299 $\pm$ 0.0000 & 13214.91 $\pm$ 1914.86 \\
-\textbf{Fast-Sampling} & 0.3 & 1.0238E+13 $\pm$ 0.00E+00 & 0.8743 $\pm$ 0.0000 & 0.8496 $\pm$ 0.0000 & 13032.26 $\pm$ 1657.72 \\
-\textbf{Fast-Filtering} & 0.3 & 9.9098E+12 $\pm$ 7.74E+09 & 0.8180 $\pm$ 0.0048 & 0.7833 $\pm$ 0.0064 & 1095.48 $\pm$ 66.17 \\
-\textbf{Fast-Estimation} & 0.3 & 1.0300E+13 $\pm$ 3.31E+08 & 0.8663 $\pm$ 0.0002 & 0.8371 $\pm$ 0.0002 & 8618.38 $\pm$ 2378.02 \\ \hline
-\textit{Lloyd (Ref)} & 0.4 & 8.9739E+12 (1342.73s) & - & - & - \\
-$k$-means++ \cite{Arthur2007} & 0.4 & 1.6814E+13 $\pm$ 4.91E+11 & 0.3582 $\pm$ 0.0111 & 0.1752 $\pm$ 0.0126 & 991.80 $\pm$ 148.57 \\
-Ergun \cite{Ergun2021} & 0.4 & 1.0924E+13 $\pm$ 4.27E+08 & 0.8273 $\pm$ 0.0000 & 0.7801 $\pm$ 0.0001 & 16291.70 $\pm$ 5926.28 \\
-Det \cite{Nguyen2022} & 0.4 & 1.0683E+13 $\pm$ 0.00E+00 & 0.8248 $\pm$ 0.0000 & 0.7749 $\pm$ 0.0000 & 12999.81 $\pm$ 2144.98 \\
-\textbf{Fast-Sampling} & 0.4 & 1.0613E+13 $\pm$ 0.00E+00 & 0.8353 $\pm$ 0.0000 & 0.7930 $\pm$ 0.0000 & 13658.40 $\pm$ 1766.14 \\
-\textbf{Fast-Filtering} & 0.4 & 1.0125E+13 $\pm$ 3.14E+09 & 0.7879 $\pm$ 0.0048 & 0.7393 $\pm$ 0.0032 & 1091.53 $\pm$ 94.64 \\
-\textbf{Fast-Estimation} & 0.4 & 1.0687E+13 $\pm$ 8.25E+08 & 0.8260 $\pm$ 0.0001 & 0.7781 $\pm$ 0.0003 & 8725.94 $\pm$ 2691.41 \\ \hline
-\textit{Lloyd (Ref)} & 0.5 & 8.7576E+12 (1412.61s) & - & - & - \\
-$k$-means++ \cite{Arthur2007} & 0.5 & 1.7542E+13 $\pm$ 2.81E+11 & 0.3313 $\pm$ 0.0073 & 0.1580 $\pm$ 0.0065 & 972.59 $\pm$ 60.40 \\
-Ergun \cite{Ergun2021} & 0.5 & 1.1414E+13 $\pm$ 4.92E+08 & 0.7885 $\pm$ 0.0000 & 0.7140 $\pm$ 0.0000 & 17256.11 $\pm$ 6160.91 \\
-Det \cite{Nguyen2022} & 0.5 & 1.1156E+13 $\pm$ 0.00E+00 & 0.7863 $\pm$ 0.0000 & 0.7105 $\pm$ 0.0000 & 13121.68 $\pm$ 1901.27 \\
-\textbf{Fast-Sampling} & 0.5 & 1.1089E+13 $\pm$ 0.00E+00 & 0.7963 $\pm$ 0.0000 & 0.7290 $\pm$ 0.0000 & 13042.91 $\pm$ 1762.42 \\
-\textbf{Fast-Filtering} & 0.5 & 1.0504E+13 $\pm$ 5.81E+09 & 0.7086 $\pm$ 0.0103 & 0.6133 $\pm$ 0.0097 & 1051.20 $\pm$ 34.37 \\
-\textbf{Fast-Estimation} & 0.5 & 1.1169E+13 $\pm$ 1.68E+09 & 0.7886 $\pm$ 0.0005 & 0.7153 $\pm$ 0.0012 & 8532.96 $\pm$ 2152.19 \\ \hline
+Phương pháp & Lloyd & $\alpha$ & Chi phí & NMI & ARI & Thời gian (s) \\ \hline
+$k$-means++ & \multirow{6}{*}{1.0542E+13(844.18s)} & \multirow{6}{*}{0.1} & 1.6884E+13 $\pm$ 1.45E+11 & 0.3285 $\pm$ 0.0138 & 0.1530 $\pm$ 0.0137 & \textbf{1000.89 $\pm$ 10.84} \\
+Ergun & & & 9.9799E+12 $\pm$ 1.03E+05 & 0.9243 $\pm$ 0.0000 & 0.9181 $\pm$ 0.0001 & 16748.88 $\pm$ 5776.25 \\
+Det & & & 9.7791E+12 $\pm$ 0.00E+00 & 0.9490 $\pm$ 0.0000 & 0.9491 $\pm$ 0.0000 & 13152.95 $\pm$ 2160.94 \\
+\textbf{Fast-Sampling} & & & 9.7666E+12 $\pm$ 0.00E+00 & \textbf{0.9519 $\pm$ 0.0000} & \textbf{0.9531 $\pm$ 0.0000} & 13057.36 $\pm$ 1717.68 \\
+\textbf{Fast-Filtering} & & & \textbf{9.7150E+12 $\pm$ 2.90E+08} & 0.9316 $\pm$ 0.0090 & 0.9333 $\pm$ 0.0107 & \textbf{1006.31 $\pm$ 43.79} \\
+\textbf{Fast-Estimation} & & & 9.8007E+12 $\pm$ 3.74E+08 & 0.9465 $\pm$ 0.0003 & 0.9466 $\pm$ 0.0002 & 8874.66 $\pm$ 2871.26 \\ \hline
+$k$-means++ & \multirow{6}{*}{9.7055E+12(1011.24s)} & \multirow{6}{*}{0.2} & 1.6585E+13 $\pm$ 7.91E+10 & 0.3634 $\pm$ 0.0182 & 0.1940 $\pm$ 0.0221 & \textbf{1077.12 $\pm$ 71.57} \\
+Ergun  & & & 1.0210E+13 $\pm$ 2.89E+08 & 0.9043 $\pm$ 0.0000 & 0.8901 $\pm$ 0.0000 & 17410.75 $\pm$ 6132.76 \\
+Det  & & & 9.9919E+12 $\pm$ 0.00E+00 & 0.9019 $\pm$ 0.0000 & 0.8867 $\pm$ 0.0000 & 13681.80 $\pm$ 2073.36 \\
+\textbf{Fast-Sampling} & & & 9.9576E+12 $\pm$ 0.00E+00 & 0.9037 $\pm$ 0.0000 & 0.8895 $\pm$ 0.0000 & 13270.53 $\pm$ 1989.65 \\
+\textbf{Fast-Filtering} & & & \textbf{9.7914E+12 $\pm$ 9.59E+08} & 0.8690 $\pm$ 0.0116 & 0.8515 $\pm$ 0.0146 & \textbf{1088.53 $\pm$ 92.09} \\
+\textbf{Fast-Estimation} & & & 1.0004E+13 $\pm$ 6.51E+08 & \textbf{0.9093 $\pm$ 0.0002} & \textbf{0.8979 $\pm$ 0.0002} & 9567.52 $\pm$ 2691.74 \\ \hline
+
+$k$-means++ & \multirow{6}{*}{9.2478E+12(1330.99s)} & \multirow{6}{*}{0.3} & 1.6561E+13 $\pm$ 9.48E+10 & 0.3531 $\pm$ 0.0278 & 0.1814 $\pm$ 0.0206 & \textbf{927.07 $\pm$ 31.75} \\
+Ergun & & & 1.0526E+13 $\pm$ 4.08E+07 & 0.8663 $\pm$ 0.0000 & 0.8361 $\pm$ 0.0000 & 17586.20 $\pm$ 6488.30 \\
+Det & & & 1.0291E+13 $\pm$ 0.00E+00 & 0.8625 $\pm$ 0.0000 & 0.8299 $\pm$ 0.0000 & 13214.91 $\pm$ 1914.86 \\
+\textbf{Fast-Sampling} & & & 1.0238E+13 $\pm$ 0.00E+00 & \textbf{0.8743 $\pm$ 0.0000} & \textbf{0.8496 $\pm$ 0.0000} & 13032.26 $\pm$ 1657.72 \\
+\textbf{Fast-Filtering} & & & \textbf{9.9098E+12 $\pm$ 7.74E+09} & 0.8180 $\pm$ 0.0048 & 0.7833 $\pm$ 0.0064 & \textbf{1095.48 $\pm$ 66.17} \\
+\textbf{Fast-Estimation} & & & 1.0300E+13 $\pm$ 3.31E+08 & 0.8663 $\pm$ 0.0002 & 0.8371 $\pm$ 0.0002 & 8618.38 $\pm$ 2378.02 \\ \hline
+$k$-means++ & \multirow{6}{*}{8.9739E+12(1342.73s)} & \multirow{6}{*}{0.4} & 1.6814E+13 $\pm$ 4.91E+11 & 0.3582 $\pm$ 0.0111 & 0.1752 $\pm$ 0.0126 & \textbf{991.80 $\pm$ 148.57} \\
+Ergun & & & 1.0924E+13 $\pm$ 4.27E+08 & 0.8273 $\pm$ 0.0000 & 0.7801 $\pm$ 0.0001 & 16291.70 $\pm$ 5926.28 \\
+Det & & & 1.0683E+13 $\pm$ 0.00E+00 & 0.8248 $\pm$ 0.0000 & 0.7749 $\pm$ 0.0000 & 12999.81 $\pm$ 2144.98 \\
+\textbf{Fast-Sampling} & & & 1.0613E+13 $\pm$ 0.00E+00 & \textbf{0.8353 $\pm$ 0.0000} & \textbf{0.7930 $\pm$ 0.0000} & 13658.40 $\pm$ 1766.14 \\
+\textbf{Fast-Filtering} & & & \textbf{1.0125E+13 $\pm$ 3.14E+09} & 0.7879 $\pm$ 0.0048 & 0.7393 $\pm$ 0.0032 & \textbf{1091.53 $\pm$ 94.64} \\
+\textbf{Fast-Estimation} & & & 1.0687E+13 $\pm$ 8.25E+08 & 0.8260 $\pm$ 0.0001 & 0.7781 $\pm$ 0.0003 & 8725.94 $\pm$ 2691.41 \\ \hline
+$k$-means++ & \multirow{6}{*}{8.7576E+12(1412.61s)} & \multirow{6}{*}{0.5} & 1.7542E+13 $\pm$ 2.81E+11 & 0.3313 $\pm$ 0.0073 & 0.1580 $\pm$ 0.0065 & \textbf{972.59 $\pm$ 60.40} \\
+Ergun & & & 1.1414E+13 $\pm$ 4.92E+08 & 0.7885 $\pm$ 0.0000 & 0.7140 $\pm$ 0.0000 & 17256.11 $\pm$ 6160.91 \\
+Det & & & 1.1156E+13 $\pm$ 0.00E+00 & 0.7863 $\pm$ 0.0000 & 0.7105 $\pm$ 0.0000 & 13121.68 $\pm$ 1901.27 \\
+\textbf{Fast-Sampling} & & & 1.1089E+13 $\pm$ 0.00E+00 & \textbf{0.7963 $\pm$ 0.0000} & \textbf{0.7290 $\pm$ 0.0000} & 13042.91 $\pm$ 1762.42 \\
+\textbf{Fast-Filtering} & & & \textbf{1.0504E+13 $\pm$ 5.81E+09} & 0.7086 $\pm$ 0.0103 & 0.6133 $\pm$ 0.0097 & \textbf{1051.20 $\pm$ 34.37} \\
+\textbf{Fast-Estimation} & & & 1.1169E+13 $\pm$ 1.68E+09 & 0.7886 $\pm$ 0.0005 & 0.7153 $\pm$ 0.0012 & 8532.96 $\pm$ 2152.19 \\ \hline
 \end{tabular}
 }
 \end{table}
 
 
-\textbf{Kết quả.} Bảng 2 so sánh các thuật toán đề xuất với các phương pháp có hỗ trợ học khác trên tập dữ liệu SIFT. Kết quả cho thấy Fast-Sampling đạt chi phí tương đương với các phương pháp hiện đại nhất, trong khi Fast-Filtering liên tục vượt trội hơn với việc giảm trung bình $1.5\%$ chi phí phân cụm trên tất cả các tập dữ liệu . Về thời gian chạy, Fast-Filtering nhanh hơn đáng kể, đặc biệt trên các tập dữ liệu lớn và số chiều cao, đạt tốc độ nhanh hơn ít nhất 3 lần so với các phương pháp hiện hành . Trên tập dữ liệu SIFT, đây là phương pháp duy nhất nhanh hơn thuật toán Lloyd, với tốc độ nhanh hơn ít nhất 10 lần so với các phương pháp khác . Về giá trị NMI và ARI, các thuật toán của tác giả duy trì ổn định trên mức $0.80$ ở hầu hết các tập dữ liệu . Thuật toán Det  hoạt động tốt hơn trên các tập dữ liệu số chiều cao (SUSY, HIGGS), trong khi thuật toán của Ergun có ưu thế trên CIFAR10.
+\textbf{Kết quả.} Bảng \ref{tab:sift_results} so sánh các thuật toán đề xuất với các phương pháp có hỗ trợ học khác trên tập dữ liệu SIFT trên số cụm cố định và nhiều tỷ lệ lỗi khác nhau. Ngoài ra, còn nhiều kết quả trên các tập dữ liệu khác được trình bày ở phụ lục A.6 trong \cite{huang2025new}. 
+
+Kết quả cho thấy Fast-Sampling đạt chi phí tương đương với các phương pháp hiện đại nhất, trong khi Fast-Filtering liên tục vượt trội hơn với việc giảm trung bình $1.5\%$ chi phí phân cụm trên tất cả các tập dữ liệu. Về thời gian chạy, Fast-Filtering nhanh hơn đáng kể, đặc biệt trên các tập dữ liệu lớn và số chiều cao, đạt tốc độ nhanh hơn ít nhất là gấp 3 lần so với các phương pháp hiện hành. Trên tập dữ liệu SIFT, đây là phương pháp duy nhất nhanh hơn thuật toán Lloyd, với tốc độ nhanh hơn ít nhất là gấp 10 lần so với các phương pháp khác. Về giá trị NMI và ARI, các thuật toán của tác giả duy trì ổn định trên mức $0.80$ ở hầu hết các tập dữ liệu, đặc biệt tốt hơn trên MNIST và SIFT do sự chặt chẽ về mặt không gian của chúng. Trong khi đó, thuật toán Det hoạt động tốt hơn trên các tập dữ liệu có số chiều cao (SUSY, HIGGS và PHY), còn thuật toán của Ergun lại vượt trội trên CIFAR10 do tập dữ liệu có các đặc trưng hình ảnh phức tạp.
+
+\begin{tcolorbox}[colback=white,colframe=blue!65!black,title=Nhận xét, fonttitle=\bfseries, breakable]
+
+Phần thực nghiệm này cho thấy tác giả đang cố gắng công bằng hết mức có thể đối với các thuật toán hỗ trợ học hiện tại, đồng thời cũng kế thừa tư duy thực nghiệm từ các nghiên cứu trước đó. Kết quả cho ra thông qua bảng \ref{tab:sift_results} cho thấy các thuật toán tác giả đề xuất tốt hơn. Ngoài ra, tác giả cũng đưa ra các nguyên nhân như \textbf{sự chặt chẽ về không gian}, \textbf{đặc trưng hình ảnh phức tạp} để giải thích cho sự vượt trội của một số thuật toán ở các tập dữ liệu cụ thể. Có thể thấy các tập dữ liệu này có kích thước khá lớn và thời gian chạy được thống kê khá lớn. Do đó, có thể thấy được tác giả cũng đã rất kiên trì trong việc thực nghiệm và thống kê các số liệu.
+
+Tuy nhiên để hiểu rõ hơn phần thực nghiệm này thì chúng em sẽ bổ sung thêm một số thông tin:
+\begin{enumerate}
+    \item Tác giả có đề cập rằng chúng ta trong thực tế không thể biết được tỷ lệ lỗi $\alpha$. Điều này có thể hiểu trong thực tế là nguồn tin cung cấp để giúp chúng ta thực hiện một bài toán nào đó thường sẽ chỉ đúng một phần. Tuy là nó cũng đúng hoàn toàn nhưng sẽ giúp ít một phần nhỏ trong việc gợi ý hướng giải quyết. Do đó, việc thực nghiệm giả lập việc nguồn tin cung cấp có thể sai số bằng việc thử nhiều tỷ lệ lỗi $\alpha$ khác nhau. Ngoài ra với nhiều mức nhiễu mà các thuật toán của tác giả vẫn cho ra kết quả ổn định thì chứng minh được sức mạnh của chúng.
+    
+    \item Trong bảng \ref{tab:sift_results}, cột \textbf{Lloyd} đại diện cho chi phí và thời gian để sử dụng thuật toán Lloyd để tìm nhãn tối ưu cho bộ dữ liệu. Nó chỉ được chạy 1 lần duy nhất. Ngoài ra trong bài báo gốc thì tác giả để cột này là ``Ref'' đại diện cho chi phí và thời gian của thuật toán Lloyd nên chúng em đã sửa lại để tường minh hơn.
+    
+    \item Tuy thấy được các thuật toán tác giả đề xuất có phần cải thiện nhưng cuối cùng $k$-means++ vẫn là thuật toán có tốc độ chạy nhanh nhất bởi sự đơn giản dù chi phí cao hơn các thuật toán khác.
+
+\end{enumerate}
+
+
+
+\end{tcolorbox}
+
+\subsection{Thực nghiệm của nhóm}
+
+\subsubsection{Định hướng}
+
+Ở phần này, chúng em sẽ đi tiến hành đi kiểm chứng lại thực nghiệm của tác giả bằng cách chạy lại các thuật toán qua một số tập dữ liệu. Nhóm chúng em sẽ chọn tập dữ liệu MNIST và PHY để kiểm chứng. Lí do vì các tập dữ liệu này được tác giả sử dụng và có quy mô vừa đủ cho máy tính cá nhân của chúng em chạy được.
+
+Ngoài ra, chúng em sẽ chạy các thuật toán cho một tập dữ liệu mới mà tác giả chưa chạy qua đó là USPS với kích thước $m = 9298$ và $d = 256$. Đây là tập dữ liệu chữ số viết tay từ bao thư bưu điện Mỹ gồm các ảnh trắng đen có kích thước $16 \times 16$.
+
+Về phần tập dữ liệu, đường dẫn đến nơi tải về các tập dữ liệu đã được xử lý này
+ở phần phụ lục \ref{apx:drive_dataset}.
+\subsubsection{Triển khai}
+
+Về phần triển khai, rất may mắn là tác giả có cung cấp mã nguồn mà tác giả đã chạy ra được các bảng kết quả như bảng \ref{tab:sift_results}. Tuy nhiên thì mã nguồn ở đây giống như bản nháp hơn, do đó chúng em đã tinh chỉnh và bổ sung một số chỗ để phần triển khai của chúng em diễn ra như mong muốn. Sau đây thì chúng em sẽ trình bày một số hàm quan trọng của mã nguồn này:
+
+\begin{itemize}
+    \item \textbf{Hàm \texttt{algo1}}: Thuật toán của \cite{Ergun2021}
+    \begin{lstlisting}[language=Python, numbers=none, frame=single, basicstyle=\ttfamily\small, breaklines=true]
+def algo1(points, oracle_labels, k, eps):
+    """
+    points: Tập dữ liệu đầu vào (n mẫu, d chiều).
+    oracle_labels: Nhãn dự đoán (có thể bị nhiễu).
+    k: Số lượng cụm.
+    eps: Tham số epsilon (ngưỡng sai số).
+    """
+    # Code của tác giả
+    return centers
+    \end{lstlisting}
+
+    \item \textbf{Hàm \texttt{detAlg}}: Thuật toán Det của \cite{Nguyen2022}
+    \begin{lstlisting}[language=Python, numbers=none, frame=single, basicstyle=\ttfamily\small, breaklines=true]
+def detAlg(points, oracle_labels, k, eps):
+    """
+    Sử dụng hàm con smallCluster để tối ưu hóa
+    trên từng chiều dữ liệu.
+    """
+    # Code của tác giả
+    return centers
+    \end{lstlisting}
+
+    \item \textbf{Hàm \texttt{Ours}}: Thuật toán Fast-Sampling của tác giả.
+    \begin{lstlisting}[language=Python, numbers=none, frame=single, basicstyle=\ttfamily\small, breaklines=true]
+def Ours(points, oracle_labels, k, p_ours):
+    """
+    points: Dữ liệu; p_ours: Tỷ lệ lỗi alpha ước lượng.
+    Sử dụng find_minimum hoặc find_center trên mẫu ngẫu nhiên.
+    """
+    # Code của tác giả
+    return centers
+    \end{lstlisting}
+
+    \item \textbf{Hàm \texttt{Ours1}}: Thuật toán Fast-Filtering của tác giả.
+    \begin{lstlisting}[language=Python, numbers=none, frame=single, basicstyle=\ttfamily\small, breaklines=true]
+def Ours1(points, oracle_labels, k, p_ours):
+    """
+    Sử dụng find_minimum1 với tập ứng viên omega_j.
+    """
+    # Code của tác giả
+    return centers
+    \end{lstlisting}
+
+    \item \textbf{Hàm \texttt{Ours2}}: Thuật toán Fast-Estimation của tác giả.
+    \begin{lstlisting}[language=Python, numbers=none, frame=single, basicstyle=\ttfamily\small, breaklines=true]
+def Ours2(points, oracle_labels, k, p_ours):
+    """
+    Sử dụng generate_center_candidates để tạo tập ứng viên,
+    sau đó dùng find_minimum2 để chọn tâm tốt nhất.
+    """
+    # Code của tác giả
+    return centers
+    \end{lstlisting}
+
+    \item \textbf{Hàm \texttt{kpp}}: Thuật toán $k$-means++ chuẩn của thư viện Scikit-Learn
+    \begin{lstlisting}[language=Python, numbers=none, frame=single, basicstyle=\ttfamily\small, breaklines=true]
+from sklearn.cluster import kmeans_plusplus as kpp
+    \end{lstlisting}
+\end{itemize}
+
+Ngoài ra tác giả có tăng tốc độ xử lý của chương trình bằng dòng lệnh:
+
+\begin{lstlisting}[language=Python, numbers=none, frame=single, basicstyle=\ttfamily\small, breaklines=true]
+@jit(nopython=True)
+\end{lstlisting}
+
+Về phần chạy mã nguồn thì tác giả đã thiết kế sẵn luồng xử lý như đã đề cập ở \ref{sec:expauthor}. Tuy nhiên thì chúng em điều chỉnh lại chỉ chạy các thuật toán qua ba tập dữ liệu là MNIST, PHY và USPS. Tập dữ liệu USPS thì chúng em dùng hàm \texttt{fetch\_openml} của thư viện Scikit-Learn để lấy dữ liệu từ tập dữ liệu USPS. 
+
+\textit{Xem phụ lục \ref{sec:dataset-link} để biết nơi tải các tập dữ liệu này}
+
+Về quy trình thì chúng em sẽ chạy 2 lần:
+
+\begin{itemize}
+    \item Lần đầu tiên chạy với $k=20$ cố định và các giá trị $alpha \in \{0.1, 0.2, 0.3, 0.4, 0.5\}$
+    \item Lần thứ hai chạy với $alpha=0.2$ cố định và các giá trị $k \in \{10, 20, 30, 40, 50\}$
+\end{itemize}
+
+
+\begin{table}[htbp]
+\centering
+\caption{So sánh các thuật toán trên tập dữ liệu MNIST với $k$ = 20 và các $\alpha$ khác nhau}
+\label{tab:mnist_k_20}
+\footnotesize
+\resizebox{0.75\textwidth}{!}{
+\begin{tabular}{lccccc}
+\hline
+Phương pháp & $\alpha$ & Chi phí & NMI & ARI & Thời gian (s) \\ \hline
+$k$-means++ &  \multirow{6}{*}{0.1} & 1.5669E+6 $\pm$ 0.05E+6 & 0.6936 $\pm$ 0.0137 & 0.4696 $\pm$ 0.0296 & \textbf{0.01 $\pm$ 0.00} \\
+Ergun &  & 1.0007E+6 $\pm$ 0.00E+6 & 0.9626 $\pm$ 0.0042 & 0.9557 $\pm$ 0.0053 & 0.37 $\pm$ 0.88 \\
+Det &  & 9.8546E+5 $\pm$ 0.00E+5 & 0.9750 $\pm$ 0.0000 & 0.9726 $\pm$ 0.0000 & 0.13 $\pm$ 0.23 \\
+\textbf{Fast-Sampling} &  & 9.8542E+5 $\pm$ 0.00E+5 & 0.9747 $\pm$ 0.0027 & 0.9727 $\pm$ 0.0033 & \textbf{0.09 $\pm$ 0.10} \\
+\textbf{Fast-Filtering} &  & \textbf{9.7759E+5 $\pm$ 0.00E+5} & \textbf{0.9789 $\pm$ 0.0055} & \textbf{0.9739 $\pm$ 0.0077} & 0.92 $\pm$ 2.70 \\
+\textbf{Fast-Estimation} &  & 9.8559E+5 $\pm$ 0.00E+5 & 0.9758 $\pm$ 0.0026 & 0.9735 $\pm$ 0.0028 & 1.54 $\pm$ 0.50 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{0.2} & 1.5546E+6 $\pm$ 0.03E+6 & 0.6902 $\pm$ 0.0187 & 0.4789 $\pm$ 0.0312 & \textbf{0.01 $\pm$ 0.00} \\
+Ergun &  & 1.0026E+6 $\pm$ 0.00E+6 & 0.9504 $\pm$ 0.0045 & 0.9319 $\pm$ 0.0068 & 0.08 $\pm$ 0.00 \\
+Det &  & 9.8569E+5 $\pm$ 0.00E+5 & 0.9644 $\pm$ 0.0000 & 0.9476 $\pm$ 0.0000 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 9.8983E+5 $\pm$ 0.02E+5 & 0.9590 $\pm$ 0.0039 & 0.9420 $\pm$ 0.0066 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & \textbf{9.6316E+5 $\pm$ 0.01E+5} & \textbf{0.9681 $\pm$ 0.0082} & \textbf{0.9588 $\pm$ 0.0115} & \textbf{0.02 $\pm$ 0.00} \\
+\textbf{Fast-Estimation} &  & 9.8988E+5 $\pm$ 0.01E+5 & 0.9566 $\pm$ 0.0029 & 0.9403 $\pm$ 0.0053 & 1.42 $\pm$ 0.02 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{0.3} & 1.5309E+6 $\pm$ 0.04E+6 & 0.7022 $\pm$ 0.0258 & 0.5314 $\pm$ 0.0510 & \textbf{0.01 $\pm$ 0.00} \\
+Ergun &  & 1.0633E+6 $\pm$ 0.00E+6 & 0.9302 $\pm$ 0.0050 & 0.9160 $\pm$ 0.0073 & 0.08 $\pm$ 0.00 \\
+Det &  & 1.0356E+6 $\pm$ 0.00E+6 & 0.9413 $\pm$ 0.0000 & 0.9293 $\pm$ 0.0000 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 1.0460E+6 $\pm$ 0.00E+6 & 0.9307 $\pm$ 0.0057 & 0.9145 $\pm$ 0.0094 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & \textbf{9.8494E+5 $\pm$ 0.04E+5} & \textbf{0.9501 $\pm$ 0.0072} & \textbf{0.9418 $\pm$ 0.0088} & \textbf{0.02 $\pm$ 0.00} \\
+\textbf{Fast-Estimation} &  & 1.0550E+6 $\pm$ 0.00E+6 & 0.9331 $\pm$ 0.0041 & 0.9192 $\pm$ 0.0055 & 1.43 $\pm$ 0.02 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{0.4} & 1.5537E+6 $\pm$ 0.03E+6 & 0.6881 $\pm$ 0.0223 & 0.4902 $\pm$ 0.0349 & \textbf{0.01 $\pm$ 0.00} \\
+Ergun &  & 1.1871E+6 $\pm$ 0.00E+6 & 0.8747 $\pm$ 0.0065 & 0.8358 $\pm$ 0.0108 & 0.08 $\pm$ 0.00 \\
+Det &  & 1.1360E+6 $\pm$ 0.00E+6 & 0.8853 $\pm$ 0.0000 & 0.8549 $\pm$ 0.0000 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 1.1573E+6 $\pm$ 0.01E+6 & 0.8681 $\pm$ 0.0092 & 0.8278 $\pm$ 0.0136 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & \textbf{1.0807E+6 $\pm$ 0.01E+6} & \textbf{0.8920 $\pm$ 0.0107} & \textbf{0.8593 $\pm$ 0.0178} & 0.02 $\pm$ 0.00 \\
+\textbf{Fast-Estimation} &  & 1.1713E+6 $\pm$ 0.00E+6 & 0.8773 $\pm$ 0.0075 & 0.8422 $\pm$ 0.0093 & 1.45 $\pm$ 0.01 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{0.5} & 1.5460E+6 $\pm$ 0.05E+6 & 0.7087 $\pm$ 0.0243 & 0.5384 $\pm$ 0.0391 & \textbf{0.01 $\pm$ 0.00} \\
+Ergun &  & 1.2815E+6 $\pm$ 0.01E+6 & \textbf{0.8817 $\pm$ 0.0027} & \textbf{0.8458 $\pm$ 0.0060} & 0.08 $\pm$ 0.00 \\
+Det &  & 1.2188E+6 $\pm$ 0.00E+6 & 0.8766 $\pm$ 0.0000 & 0.8398 $\pm$ 0.0000 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 1.2408E+6 $\pm$ 0.01E+6 & 0.8612 $\pm$ 0.0134 & 0.8161 $\pm$ 0.0207 & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & \textbf{1.1258E+6 $\pm$ 0.01E+6} & 0.8779 $\pm$ 0.0114 & 0.8317 $\pm$ 0.0215 & \textbf{0.02 $\pm$ 0.00} \\
+\textbf{Fast-Estimation} &  & 1.2599E+6 $\pm$ 0.01E+6 & 0.8736 $\pm$ 0.0092 & 0.8314 $\pm$ 0.0138 & 1.46 $\pm$ 0.01 \\
+\hline
+\end{tabular}
+}
+\vspace{1em}
+\caption{So sánh các thuật toán trên tập dữ liệu PHY với $k$ = 20 và các $\alpha$ khác nhau}
+\label{tab:phy_k_20}
+\footnotesize
+\resizebox{0.75\textwidth}{!}{
+\begin{tabular}{lccccc}
+\hline
+Phương pháp & $\alpha$ & Chi phí & NMI & ARI & Thời gian (s) \\ \hline
+$k$-means++ &  \multirow{6}{*}{0.1} & 4.2706E+11 $\pm$ 0.22E+11 & 0.8498 $\pm$ 0.0164 & 0.6740 $\pm$ 0.0440 & \textbf{0.10 $\pm$ 0.01} \\
+Ergun &  & 3.0476E+11 $\pm$ 0.00E+11 & 0.9916 $\pm$ 0.0011 & 0.9913 $\pm$ 0.0013 & 1.97 $\pm$ 0.02 \\
+Det &  & 3.0413E+11 $\pm$ 0.00E+11 & \textbf{0.9955 $\pm$ 0.0000} & \textbf{0.9957 $\pm$ 0.0000} & 1.86 $\pm$ 0.03 \\
+\textbf{Fast-Sampling} &  & 3.0841E+11 $\pm$ 0.02E+11 & 0.9658 $\pm$ 0.0055 & 0.9516 $\pm$ 0.0097 & 1.86 $\pm$ 0.02 \\
+\textbf{Fast-Filtering} &  & \textbf{3.0226E+11 $\pm$ 0.00E+11} & 0.9905 $\pm$ 0.0019 & 0.9894 $\pm$ 0.0027 & \textbf{0.63 $\pm$ 0.02} \\
+\textbf{Fast-Estimation} &  & 3.0482E+11 $\pm$ 0.00E+11 & 0.9858 $\pm$ 0.0020 & 0.9830 $\pm$ 0.0026 & 4.85 $\pm$ 0.06 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{0.2} & 4.3996E+11 $\pm$ 0.26E+11 & 0.8409 $\pm$ 0.0158 & 0.6499 $\pm$ 0.0406 & \textbf{0.10 $\pm$ 0.00} \\
+Ergun &  & 3.0243E+11 $\pm$ 0.00E+11 & 0.9825 $\pm$ 0.0023 & 0.9777 $\pm$ 0.0039 & 2.01 $\pm$ 0.02 \\
+Det &  & 2.9970E+11 $\pm$ 0.00E+11 & \textbf{0.9847 $\pm$ 0.0000} & \textbf{0.9819 $\pm$ 0.0000} & 1.88 $\pm$ 0.02 \\
+\textbf{Fast-Sampling} &  & 3.1242E+11 $\pm$ 0.04E+11 & 0.9437 $\pm$ 0.0162 & 0.9070 $\pm$ 0.0353 & 1.88 $\pm$ 0.02 \\
+\textbf{Fast-Filtering} &  & \textbf{2.9327E+11 $\pm$ 0.00E+11} & 0.9791 $\pm$ 0.0058 & 0.9715 $\pm$ 0.0103 & \textbf{0.62 $\pm$ 0.01} \\
+\textbf{Fast-Estimation} &  & 2.9884E+11 $\pm$ 0.00E+11 & 0.9759 $\pm$ 0.0043 & 0.9684 $\pm$ 0.0064 & 4.80 $\pm$ 0.04 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{0.3} & 4.4495E+11 $\pm$ 0.28E+11 & 0.8514 $\pm$ 0.0181 & 0.6803 $\pm$ 0.0504 & \textbf{0.10 $\pm$ 0.00} \\
+Ergun &  & 3.0865E+11 $\pm$ 0.00E+11 & 0.9822 $\pm$ 0.0034 & 0.9795 $\pm$ 0.0055 & 1.97 $\pm$ 0.03 \\
+Det &  & 3.0638E+11 $\pm$ 0.00E+11 & \textbf{0.9904 $\pm$ 0.0000} & \textbf{0.9901 $\pm$ 0.0000} & 1.90 $\pm$ 0.03 \\
+\textbf{Fast-Sampling} &  & 3.6131E+11 $\pm$ 0.19E+11 & 0.9217 $\pm$ 0.0122 & 0.8585 $\pm$ 0.0298 & 1.89 $\pm$ 0.03 \\
+\textbf{Fast-Filtering} &  & \textbf{2.9510E+11 $\pm$ 0.00E+11} & 0.9776 $\pm$ 0.0031 & 0.9700 $\pm$ 0.0049 & \textbf{0.62 $\pm$ 0.02} \\
+\textbf{Fast-Estimation} &  & 3.0643E+11 $\pm$ 0.01E+11 & 0.9646 $\pm$ 0.0067 & 0.9498 $\pm$ 0.0112 & 4.89 $\pm$ 0.07 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{0.4} & 4.3429E+11 $\pm$ 0.20E+11 & 0.8438 $\pm$ 0.0106 & 0.6570 $\pm$ 0.0266 & \textbf{0.09 $\pm$ 0.01} \\
+Ergun &  & 3.2982E+11 $\pm$ 0.00E+11 & 0.9790 $\pm$ 0.0025 & 0.9729 $\pm$ 0.0036 & 1.82 $\pm$ 0.06 \\
+Det &  & \textbf{3.2517E+11 $\pm$ 0.00E+11} & \textbf{0.9833 $\pm$ 0.0000} & \textbf{0.9799 $\pm$ 0.0000} & 1.74 $\pm$ 0.05 \\
+\textbf{Fast-Sampling} &  & 4.4896E+11 $\pm$ 0.52E+11 & 0.8902 $\pm$ 0.0183 & 0.7773 $\pm$ 0.0474 & 1.74 $\pm$ 0.04 \\
+\textbf{Fast-Filtering} &  & 3.3861E+11 $\pm$ 0.04E+11 & 0.9440 $\pm$ 0.0058 & 0.9106 $\pm$ 0.0104 & \textbf{0.52 $\pm$ 0.02} \\
+\textbf{Fast-Estimation} &  & 3.2754E+11 $\pm$ 0.03E+11 & 0.9531 $\pm$ 0.0069 & 0.9267 $\pm$ 0.0123 & 4.49 $\pm$ 0.16 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{0.5} & 4.4461E+11 $\pm$ 0.29E+11 & 0.8472 $\pm$ 0.0187 & 0.6679 $\pm$ 0.0517 & \textbf{0.10 $\pm$ 0.01} \\
+Ergun &  & 3.4484E+11 $\pm$ 0.01E+11 & \textbf{0.9672 $\pm$ 0.0037} & \textbf{0.9574 $\pm$ 0.0062} & 1.99 $\pm$ 0.07 \\
+Det &  & \textbf{3.4259E+11 $\pm$ 0.00E+11} & 0.9640 $\pm$ 0.0000 & 0.9460 $\pm$ 0.0000 & 1.91 $\pm$ 0.06 \\
+\textbf{Fast-Sampling} &  & 6.6790E+11 $\pm$ 0.66E+11 & 0.8730 $\pm$ 0.0138 & 0.7459 $\pm$ 0.0378 & 1.90 $\pm$ 0.06 \\
+\textbf{Fast-Filtering} &  & 5.3871E+11 $\pm$ 0.07E+11 & 0.9152 $\pm$ 0.0075 & 0.8537 $\pm$ 0.0128 & \textbf{0.62 $\pm$ 0.03} \\
+\textbf{Fast-Estimation} &  & 3.6809E+11 $\pm$ 0.07E+11 & 0.9167 $\pm$ 0.0087 & 0.8504 $\pm$ 0.0221 & 4.97 $\pm$ 0.20 \\
+\hline
+\end{tabular}
+}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{So sánh các thuật toán trên tập dữ liệu USPS với $k$ = 20 và các $\alpha$ khác nhau}
+\label{tab:usps_k_20}
+\footnotesize
+\resizebox{0.75\textwidth}{!}{
+\begin{tabular}{lccccc}
+\hline
+Phương pháp & $\alpha$ & Chi phí & NMI & ARI & Thời gian (s) \\ \hline
+$k$-means++ &  \multirow{6}{*}{0.1} & 4.3698E+5 $\pm$ 0.10E+5 & 0.5902 $\pm$ 0.0166 & 0.4172 $\pm$ 0.0358 & \textbf{0.05 $\pm$ 0.00} \\
+Ergun &  & 2.9351E+5 $\pm$ 0.00E+5 & 0.9122 $\pm$ 0.0014 & 0.9019 $\pm$ 0.0024 & 1.57 $\pm$ 0.02 \\
+Det &  & 2.9024E+5 $\pm$ 0.00E+5 & 0.9362 $\pm$ 0.0000 & 0.9330 $\pm$ 0.0000 & 1.75 $\pm$ 0.01 \\
+\textbf{Fast-Sampling} &  & 2.9045E+5 $\pm$ 0.00E+5 & 0.9316 $\pm$ 0.0051 & 0.9284 $\pm$ 0.0073 & 1.75 $\pm$ 0.01 \\
+\textbf{Fast-Filtering} &  & \textbf{2.8835E+5 $\pm$ 0.00E+5} & \textbf{0.9499 $\pm$ 0.0067} & 0.9441 $\pm$ 0.0096 & \textbf{0.48 $\pm$ 0.01} \\
+\textbf{Fast-Estimation} &  & 2.9025E+5 $\pm$ 0.00E+5 & 0.9448 $\pm$ 0.0008 & \textbf{0.9454 $\pm$ 0.0010} & 11.14 $\pm$ 0.09 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{0.2} & 4.3995E+5 $\pm$ 0.10E+5 & 0.5858 $\pm$ 0.0289 & 0.4319 $\pm$ 0.0585 & \textbf{0.05 $\pm$ 0.00} \\
+Ergun &  & 3.0753E+5 $\pm$ 0.00E+5 & 0.8712 $\pm$ 0.0005 & 0.8502 $\pm$ 0.0011 & 1.56 $\pm$ 0.02 \\
+Det &  & 2.9987E+5 $\pm$ 0.00E+5 & 0.8847 $\pm$ 0.0000 & 0.8728 $\pm$ 0.0000 & 1.75 $\pm$ 0.02 \\
+\textbf{Fast-Sampling} &  & 3.0054E+5 $\pm$ 0.01E+5 & 0.8733 $\pm$ 0.0074 & 0.8610 $\pm$ 0.0099 & 1.76 $\pm$ 0.02 \\
+\textbf{Fast-Filtering} &  & \textbf{2.9203E+5 $\pm$ 0.01E+5} & \textbf{0.9078 $\pm$ 0.0067} & \textbf{0.9046 $\pm$ 0.0087} & \textbf{0.46 $\pm$ 0.01} \\
+\textbf{Fast-Estimation} &  & 2.9967E+5 $\pm$ 0.00E+5 & 0.8931 $\pm$ 0.0013 & 0.8853 $\pm$ 0.0018 & 11.46 $\pm$ 0.17 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{0.3} & 4.3711E+5 $\pm$ 0.06E+5 & 0.5828 $\pm$ 0.0138 & 0.4463 $\pm$ 0.0484 & \textbf{0.05 $\pm$ 0.00} \\
+Ergun &  & 3.2889E+5 $\pm$ 0.00E+5 & 0.8395 $\pm$ 0.0019 & 0.8159 $\pm$ 0.0020 & 1.58 $\pm$ 0.03 \\
+Det &  & 3.1710E+5 $\pm$ 0.00E+5 & 0.8477 $\pm$ 0.0000 & 0.8323 $\pm$ 0.0000 & 1.77 $\pm$ 0.04 \\
+\textbf{Fast-Sampling} &  & 3.1709E+5 $\pm$ 0.01E+5 & 0.8276 $\pm$ 0.0178 & 0.8094 $\pm$ 0.0216 & 1.77 $\pm$ 0.03 \\
+\textbf{Fast-Filtering} &  & \textbf{3.0416E+5 $\pm$ 0.01E+5} & 0.8598 $\pm$ 0.0075 & \textbf{0.8574 $\pm$ 0.0086} & \textbf{0.47 $\pm$ 0.01} \\
+\textbf{Fast-Estimation} &  & 3.1749E+5 $\pm$ 0.00E+5 & \textbf{0.8622 $\pm$ 0.0017} & 0.8505 $\pm$ 0.0022 & 11.88 $\pm$ 0.45 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{0.4} & 4.4033E+5 $\pm$ 0.07E+5 & 0.5888 $\pm$ 0.0189 & 0.4547 $\pm$ 0.0661 & \textbf{0.05 $\pm$ 0.00} \\
+Ergun &  & 3.5682E+5 $\pm$ 0.00E+5 & 0.8233 $\pm$ 0.0013 & 0.7967 $\pm$ 0.0017 & 1.58 $\pm$ 0.02 \\
+Det &  & 3.4399E+5 $\pm$ 0.00E+5 & 0.8251 $\pm$ 0.0000 & 0.8010 $\pm$ 0.0000 & 1.78 $\pm$ 0.02 \\
+\textbf{Fast-Sampling} &  & 3.3824E+5 $\pm$ 0.03E+5 & 0.7841 $\pm$ 0.0206 & 0.7537 $\pm$ 0.0287 & 1.76 $\pm$ 0.02 \\
+\textbf{Fast-Filtering} &  & \textbf{3.2096E+5 $\pm$ 0.03E+5} & 0.8176 $\pm$ 0.0143 & 0.8080 $\pm$ 0.0228 & \textbf{0.48 $\pm$ 0.01} \\
+\textbf{Fast-Estimation} &  & 3.4234E+5 $\pm$ 0.01E+5 & \textbf{0.8338 $\pm$ 0.0057} & \textbf{0.8149 $\pm$ 0.0066} & 11.80 $\pm$ 0.17 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{0.5} & 4.4058E+5 $\pm$ 0.06E+5 & 0.5882 $\pm$ 0.0210 & 0.4522 $\pm$ 0.0548 & \textbf{0.05 $\pm$ 0.00} \\
+Ergun &  & 3.9300E+5 $\pm$ 0.01E+5 & 0.7852 $\pm$ 0.0010 & 0.7355 $\pm$ 0.0020 & 1.58 $\pm$ 0.02 \\
+Det &  & 3.8272E+5 $\pm$ 0.00E+5 & 0.7910 $\pm$ 0.0000 & 0.7465 $\pm$ 0.0000 & 1.76 $\pm$ 0.01 \\
+\textbf{Fast-Sampling} &  & 3.7367E+5 $\pm$ 0.04E+5 & 0.7071 $\pm$ 0.0245 & 0.6449 $\pm$ 0.0356 & 1.77 $\pm$ 0.02 \\
+\textbf{Fast-Filtering} &  & \textbf{3.5936E+5 $\pm$ 0.02E+5} & 0.7524 $\pm$ 0.0159 & 0.7180 $\pm$ 0.0161 & \textbf{0.45 $\pm$ 0.01} \\
+\textbf{Fast-Estimation} &  & 3.7803E+5 $\pm$ 0.00E+5 & \textbf{0.7955 $\pm$ 0.0015} & \textbf{0.7533 $\pm$ 0.0019} & 11.82 $\pm$ 0.14 \\
+\hline
+\end{tabular}
+}
+\vspace{1em}
+\caption{So sánh các thuật toán trên tập dữ liệu MNIST với $\alpha$ = 0.2 và các $k$ khác nhau}
+\label{tab:mnist_alpha_0.2}
+\footnotesize
+\resizebox{0.75\textwidth}{!}{
+\begin{tabular}{lccccc}
+\hline
+Phương pháp & $k$ & Chi phí & NMI & ARI & Thời gian (s) \\ \hline
+$k$-means++ &  \multirow{6}{*}{10} & 2.0212E+6 $\pm$ 0.08E+6 & 0.6144 $\pm$ 0.0449 & 0.4931 $\pm$ 0.0529 & \textbf{0.01 $\pm$ 0.00} \\
+Ergun &  & 1.2227E+6 $\pm$ 0.00E+6 & 0.9413 $\pm$ 0.0063 & 0.9395 $\pm$ 0.0068 & 0.37 $\pm$ 0.87 \\
+Det &  & 1.2099E+6 $\pm$ 0.00E+6 & 0.9430 $\pm$ 0.0000 & 0.9405 $\pm$ 0.0000 & 0.16 $\pm$ 0.32 \\
+\textbf{Fast-Sampling} &  & 1.2155E+6 $\pm$ 0.00E+6 & \textbf{0.9459 $\pm$ 0.0091} & \textbf{0.9435 $\pm$ 0.0109} & \textbf{0.10 $\pm$ 0.13} \\
+\textbf{Fast-Filtering} &  & \textbf{1.1812E+6 $\pm$ 0.00E+6} & 0.9435 $\pm$ 0.0094 & 0.9416 $\pm$ 0.0121 & 1.08 $\pm$ 3.18 \\
+\textbf{Fast-Estimation} &  & 1.2126E+6 $\pm$ 0.00E+6 & 0.9440 $\pm$ 0.0031 & 0.9413 $\pm$ 0.0035 & 1.13 $\pm$ 0.58 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{20} & 1.5656E+6 $\pm$ 0.04E+6 & 0.6983 $\pm$ 0.0222 & 0.5214 $\pm$ 0.0452 & \textbf{0.01 $\pm$ 0.00} \\
+Ergun &  & 1.0160E+6 $\pm$ 0.00E+6 & 0.9473 $\pm$ 0.0051 & 0.9417 $\pm$ 0.0063 & 0.10 $\pm$ 0.00 \\
+Det &  & 9.9998E+5 $\pm$ 0.00E+5 & \textbf{0.9590 $\pm$ 0.0000} & \textbf{0.9564 $\pm$ 0.0000} & 0.06 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 1.0032E+6 $\pm$ 0.00E+6 & 0.9533 $\pm$ 0.0041 & 0.9494 $\pm$ 0.0050 & 0.07 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & \textbf{9.7239E+5 $\pm$ 0.01E+5} & 0.9518 $\pm$ 0.0048 & 0.9462 $\pm$ 0.0057 & \textbf{0.02 $\pm$ 0.00} \\
+\textbf{Fast-Estimation} &  & 1.0053E+6 $\pm$ 0.00E+6 & 0.9521 $\pm$ 0.0022 & 0.9490 $\pm$ 0.0027 & 1.69 $\pm$ 0.03 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{30} & 1.3291E+6 $\pm$ 0.02E+6 & 0.7227 $\pm$ 0.0154 & 0.4762 $\pm$ 0.0259 & \textbf{0.01 $\pm$ 0.00} \\
+Ergun &  & 9.0843E+5 $\pm$ 0.02E+5 & 0.9552 $\pm$ 0.0059 & 0.9374 $\pm$ 0.0085 & 0.12 $\pm$ 0.00 \\
+Det &  & 8.8720E+5 $\pm$ 0.00E+5 & 0.9580 $\pm$ 0.0000 & 0.9410 $\pm$ 0.0000 & 0.08 $\pm$ 0.00 \\
+\textbf{Fast-Sampling} &  & 8.9110E+5 $\pm$ 0.02E+5 & 0.9607 $\pm$ 0.0055 & 0.9445 $\pm$ 0.0096 & 0.08 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & \textbf{8.6222E+5 $\pm$ 0.02E+5} & \textbf{0.9630 $\pm$ 0.0108} & \textbf{0.9471 $\pm$ 0.0180} & \textbf{0.03 $\pm$ 0.00} \\
+\textbf{Fast-Estimation} &  & 8.9397E+5 $\pm$ 0.01E+5 & 0.9616 $\pm$ 0.0049 & 0.9471 $\pm$ 0.0071 & 2.41 $\pm$ 0.06 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{40} & 1.2056E+6 $\pm$ 0.02E+6 & 0.7269 $\pm$ 0.0083 & 0.4355 $\pm$ 0.0228 & \textbf{0.02 $\pm$ 0.00} \\
+Ergun &  & 8.4165E+5 $\pm$ 0.02E+5 & 0.9526 $\pm$ 0.0034 & 0.9212 $\pm$ 0.0066 & 0.15 $\pm$ 0.01 \\
+Det &  & 8.1441E+5 $\pm$ 0.00E+5 & \textbf{0.9686 $\pm$ 0.0000} & \textbf{0.9480 $\pm$ 0.0000} & 0.09 $\pm$ 0.01 \\
+\textbf{Fast-Sampling} &  & 8.2021E+5 $\pm$ 0.01E+5 & 0.9645 $\pm$ 0.0026 & 0.9432 $\pm$ 0.0043 & 0.10 $\pm$ 0.01 \\
+\textbf{Fast-Filtering} &  & \textbf{7.8947E+5 $\pm$ 0.02E+5} & 0.9588 $\pm$ 0.0079 & 0.9282 $\pm$ 0.0162 & \textbf{0.03 $\pm$ 0.00} \\
+\textbf{Fast-Estimation} &  & 8.2268E+5 $\pm$ 0.01E+5 & 0.9619 $\pm$ 0.0036 & 0.9391 $\pm$ 0.0068 & 3.18 $\pm$ 0.23 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{50} & 1.1208E+6 $\pm$ 0.01E+6 & 0.7411 $\pm$ 0.0104 & 0.4398 $\pm$ 0.0202 & \textbf{0.02 $\pm$ 0.00} \\
+Ergun &  & 8.0009E+5 $\pm$ 0.03E+5 & 0.9431 $\pm$ 0.0041 & 0.9009 $\pm$ 0.0074 & 0.17 $\pm$ 0.01 \\
+Det &  & 7.6656E+5 $\pm$ 0.00E+5 & 0.9545 $\pm$ 0.0000 & 0.9236 $\pm$ 0.0000 & 0.10 $\pm$ 0.01 \\
+\textbf{Fast-Sampling} &  & 7.7268E+5 $\pm$ 0.01E+5 & \textbf{0.9586 $\pm$ 0.0046} & \textbf{0.9292 $\pm$ 0.0087} & 0.11 $\pm$ 0.00 \\
+\textbf{Fast-Filtering} &  & \textbf{7.4156E+5 $\pm$ 0.02E+5} & 0.9521 $\pm$ 0.0065 & 0.9096 $\pm$ 0.0143 & \textbf{0.04 $\pm$ 0.00} \\
+\textbf{Fast-Estimation} &  & 7.7500E+5 $\pm$ 0.01E+5 & 0.9577 $\pm$ 0.0023 & 0.9282 $\pm$ 0.0047 & 3.78 $\pm$ 0.10 \\
+\hline
+\end{tabular}
+}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{So sánh các thuật toán trên tập dữ liệu PHY với $\alpha$ = 0.2 và các $k$ khác nhau}
+\label{tab:phy_alpha_0.2}
+\footnotesize
+\resizebox{0.75\textwidth}{!}{
+\begin{tabular}{lccccc}
+\hline
+Phương pháp & $k$ & Chi phí & NMI & ARI & Thời gian (s) \\ \hline
+$k$-means++ &  \multirow{6}{*}{10} & 1.4087E+12 $\pm$ 0.10E+12 & 0.7990 $\pm$ 0.0339 & 0.6595 $\pm$ 0.0619 & \textbf{0.07 $\pm$ 0.01} \\
+Ergun &  & 1.0539E+12 $\pm$ 0.00E+12 & 0.9734 $\pm$ 0.0063 & 0.9690 $\pm$ 0.0117 & 1.94 $\pm$ 0.04 \\
+Det &  & \textbf{1.0403E+12 $\pm$ 0.00E+12} & \textbf{0.9799 $\pm$ 0.0000} & \textbf{0.9804 $\pm$ 0.0000} & 1.98 $\pm$ 0.04 \\
+\textbf{Fast-Sampling} &  & 1.0789E+12 $\pm$ 0.01E+12 & 0.9432 $\pm$ 0.0075 & 0.9272 $\pm$ 0.0088 & 1.97 $\pm$ 0.04 \\
+\textbf{Fast-Filtering} &  & 1.0408E+12 $\pm$ 0.00E+12 & 0.9748 $\pm$ 0.0106 & 0.9726 $\pm$ 0.0158 & \textbf{0.59 $\pm$ 0.02} \\
+\textbf{Fast-Estimation} &  & 1.0514E+12 $\pm$ 0.01E+12 & 0.9634 $\pm$ 0.0090 & 0.9585 $\pm$ 0.0121 & 3.11 $\pm$ 0.09 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{20} & 4.2512E+11 $\pm$ 0.13E+11 & 0.8497 $\pm$ 0.0182 & 0.6706 $\pm$ 0.0475 & \textbf{0.10 $\pm$ 0.00} \\
+Ergun &  & 3.1060E+11 $\pm$ 0.00E+11 & 0.9820 $\pm$ 0.0029 & 0.9766 $\pm$ 0.0045 & 1.96 $\pm$ 0.03 \\
+Det &  & 3.0749E+11 $\pm$ 0.00E+11 & \textbf{0.9869 $\pm$ 0.0000} & \textbf{0.9855 $\pm$ 0.0000} & 1.86 $\pm$ 0.03 \\
+\textbf{Fast-Sampling} &  & 3.2244E+11 $\pm$ 0.07E+11 & 0.9491 $\pm$ 0.0113 & 0.9193 $\pm$ 0.0225 & 1.86 $\pm$ 0.02 \\
+\textbf{Fast-Filtering} &  & \textbf{3.0117E+11 $\pm$ 0.00E+11} & 0.9779 $\pm$ 0.0029 & 0.9697 $\pm$ 0.0048 & \textbf{0.59 $\pm$ 0.01} \\
+\textbf{Fast-Estimation} &  & 3.0655E+11 $\pm$ 0.00E+11 & 0.9756 $\pm$ 0.0046 & 0.9681 $\pm$ 0.0081 & 4.68 $\pm$ 0.05 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{30} & 2.4229E+11 $\pm$ 0.11E+11 & 0.8522 $\pm$ 0.0141 & 0.6502 $\pm$ 0.0415 & \textbf{0.15 $\pm$ 0.01} \\
+Ergun &  & 1.8732E+11 $\pm$ 0.00E+11 & 0.9798 $\pm$ 0.0023 & 0.9697 $\pm$ 0.0030 & 2.00 $\pm$ 0.03 \\
+Det &  & 1.8261E+11 $\pm$ 0.00E+11 & \textbf{0.9818 $\pm$ 0.0000} & 0.9746 $\pm$ 0.0000 & 1.80 $\pm$ 0.04 \\
+\textbf{Fast-Sampling} &  & 1.9178E+11 $\pm$ 0.04E+11 & 0.9364 $\pm$ 0.0068 & 0.8813 $\pm$ 0.0173 & 1.79 $\pm$ 0.03 \\
+\textbf{Fast-Filtering} &  & \textbf{1.7722E+11 $\pm$ 0.00E+11} & 0.9815 $\pm$ 0.0038 & \textbf{0.9748 $\pm$ 0.0065} & \textbf{0.57 $\pm$ 0.03} \\
+\textbf{Fast-Estimation} &  & 1.8170E+11 $\pm$ 0.00E+11 & 0.9772 $\pm$ 0.0031 & 0.9670 $\pm$ 0.0049 & 6.09 $\pm$ 0.09 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{40} & 1.7786E+11 $\pm$ 0.07E+11 & 0.8563 $\pm$ 0.0106 & 0.6366 $\pm$ 0.0357 & \textbf{0.20 $\pm$ 0.01} \\
+Ergun &  & 1.3065E+11 $\pm$ 0.00E+11 & \textbf{0.9826 $\pm$ 0.0020} & \textbf{0.9736 $\pm$ 0.0038} & 1.96 $\pm$ 0.03 \\
+Det &  & 1.2732E+11 $\pm$ 0.00E+11 & 0.9815 $\pm$ 0.0000 & 0.9702 $\pm$ 0.0000 & 1.71 $\pm$ 0.03 \\
+\textbf{Fast-Sampling} &  & 1.4000E+11 $\pm$ 0.03E+11 & 0.9353 $\pm$ 0.0089 & 0.8650 $\pm$ 0.0251 & 1.70 $\pm$ 0.02 \\
+\textbf{Fast-Filtering} &  & \textbf{1.2100E+11 $\pm$ 0.00E+11} & 0.9806 $\pm$ 0.0043 & 0.9667 $\pm$ 0.0091 & \textbf{0.32 $\pm$ 0.01} \\
+\textbf{Fast-Estimation} &  & 1.2631E+11 $\pm$ 0.00E+11 & 0.9808 $\pm$ 0.0040 & 0.9712 $\pm$ 0.0078 & 7.15 $\pm$ 0.17 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{50} & 1.4562E+11 $\pm$ 0.04E+11 & 0.8507 $\pm$ 0.0080 & 0.6185 $\pm$ 0.0245 & \textbf{0.24 $\pm$ 0.01} \\
+Ergun &  & 1.1308E+11 $\pm$ 0.00E+11 & 0.9781 $\pm$ 0.0025 & \textbf{0.9653 $\pm$ 0.0053} & 2.06 $\pm$ 0.05 \\
+Det &  & 1.1061E+11 $\pm$ 0.00E+11 & 0.9754 $\pm$ 0.0000 & 0.9579 $\pm$ 0.0000 & 1.70 $\pm$ 0.03 \\
+\textbf{Fast-Sampling} &  & 1.2001E+11 $\pm$ 0.04E+11 & 0.9312 $\pm$ 0.0073 & 0.8495 $\pm$ 0.0213 & 1.70 $\pm$ 0.03 \\
+\textbf{Fast-Filtering} &  & \textbf{1.0376E+11 $\pm$ 0.00E+11} & \textbf{0.9783 $\pm$ 0.0029} & 0.9615 $\pm$ 0.0061 & \textbf{0.33 $\pm$ 0.01} \\
+\textbf{Fast-Estimation} &  & 1.0889E+11 $\pm$ 0.00E+11 & 0.9774 $\pm$ 0.0011 & 0.9646 $\pm$ 0.0024 & 8.24 $\pm$ 0.18 \\
+\hline
+\end{tabular}
+}
+\vspace{1em}
+\caption{So sánh các thuật toán trên tập dữ liệu USPS với $\alpha$ = 0.2 và các $k$ khác nhau}
+\label{tab:usps_alpha_0.2}
+\footnotesize
+\resizebox{0.75\textwidth}{!}{
+\begin{tabular}{lccccc}
+\hline
+Phương pháp & $k$ & Chi phí & NMI & ARI & Thời gian (s) \\ \hline
+$k$-means++ &  \multirow{6}{*}{10} & 5.3185E+5 $\pm$ 0.14E+5 & 0.5027 $\pm$ 0.0375 & 0.3823 $\pm$ 0.0577 & \textbf{0.03 $\pm$ 0.01} \\
+Ergun &  & 3.5996E+5 $\pm$ 0.00E+5 & 0.8820 $\pm$ 0.0009 & 0.8812 $\pm$ 0.0012 & 1.55 $\pm$ 0.05 \\
+Det &  & 3.5246E+5 $\pm$ 0.00E+5 & 0.8908 $\pm$ 0.0000 & 0.8937 $\pm$ 0.0000 & 1.84 $\pm$ 0.04 \\
+\textbf{Fast-Sampling} &  & 3.5163E+5 $\pm$ 0.01E+5 & 0.8767 $\pm$ 0.0102 & 0.8808 $\pm$ 0.0116 & 1.82 $\pm$ 0.03 \\
+\textbf{Fast-Filtering} &  & \textbf{3.4595E+5 $\pm$ 0.01E+5} & 0.8894 $\pm$ 0.0205 & 0.8957 $\pm$ 0.0237 & \textbf{0.55 $\pm$ 0.02} \\
+\textbf{Fast-Estimation} &  & 3.5178E+5 $\pm$ 0.00E+5 & \textbf{0.8943 $\pm$ 0.0021} & \textbf{0.8971 $\pm$ 0.0026} & 7.12 $\pm$ 0.32 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{20} & 4.4016E+5 $\pm$ 0.11E+5 & 0.5860 $\pm$ 0.0199 & 0.4624 $\pm$ 0.0555 & \textbf{0.05 $\pm$ 0.02} \\
+Ergun &  & 3.0632E+5 $\pm$ 0.00E+5 & 0.8722 $\pm$ 0.0013 & 0.8561 $\pm$ 0.0013 & 1.53 $\pm$ 0.06 \\
+Det &  & 2.9857E+5 $\pm$ 0.00E+5 & 0.8834 $\pm$ 0.0000 & 0.8730 $\pm$ 0.0000 & 1.72 $\pm$ 0.06 \\
+\textbf{Fast-Sampling} &  & 2.9945E+5 $\pm$ 0.01E+5 & 0.8788 $\pm$ 0.0078 & 0.8709 $\pm$ 0.0102 & 1.72 $\pm$ 0.05 \\
+\textbf{Fast-Filtering} &  & \textbf{2.9159E+5 $\pm$ 0.00E+5} & \textbf{0.9084 $\pm$ 0.0128} & \textbf{0.9076 $\pm$ 0.0166} & \textbf{0.44 $\pm$ 0.03} \\
+\textbf{Fast-Estimation} &  & 2.9859E+5 $\pm$ 0.00E+5 & 0.8957 $\pm$ 0.0011 & 0.8909 $\pm$ 0.0013 & 11.28 $\pm$ 0.48 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{30} & 3.8653E+5 $\pm$ 0.07E+5 & 0.6173 $\pm$ 0.0172 & 0.4570 $\pm$ 0.0550 & \textbf{0.07 $\pm$ 0.01} \\
+Ergun &  & 2.8307E+5 $\pm$ 0.00E+5 & 0.8864 $\pm$ 0.0015 & 0.8738 $\pm$ 0.0017 & 1.52 $\pm$ 0.06 \\
+Det &  & 2.7520E+5 $\pm$ 0.00E+5 & 0.9078 $\pm$ 0.0000 & 0.9051 $\pm$ 0.0000 & 1.65 $\pm$ 0.06 \\
+\textbf{Fast-Sampling} &  & 2.7580E+5 $\pm$ 0.00E+5 & 0.8960 $\pm$ 0.0067 & 0.8904 $\pm$ 0.0083 & 1.65 $\pm$ 0.05 \\
+\textbf{Fast-Filtering} &  & \textbf{2.6844E+5 $\pm$ 0.00E+5} & \textbf{0.9226 $\pm$ 0.0105} & \textbf{0.9250 $\pm$ 0.0120} & \textbf{0.37 $\pm$ 0.02} \\
+\textbf{Fast-Estimation} &  & 2.7547E+5 $\pm$ 0.00E+5 & 0.9152 $\pm$ 0.0011 & 0.9122 $\pm$ 0.0013 & 14.95 $\pm$ 0.61 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{40} & 3.5717E+5 $\pm$ 0.03E+5 & 0.6466 $\pm$ 0.0108 & 0.4499 $\pm$ 0.0504 & \textbf{0.08 $\pm$ 0.01} \\
+Ergun &  & 2.6158E+5 $\pm$ 0.00E+5 & 0.8792 $\pm$ 0.0012 & 0.8372 $\pm$ 0.0023 & 1.51 $\pm$ 0.02 \\
+Det &  & 2.5376E+5 $\pm$ 0.00E+5 & 0.9007 $\pm$ 0.0000 & 0.8743 $\pm$ 0.0000 & 1.59 $\pm$ 0.02 \\
+\textbf{Fast-Sampling} &  & 2.5444E+5 $\pm$ 0.00E+5 & 0.8832 $\pm$ 0.0085 & 0.8456 $\pm$ 0.0189 & 1.59 $\pm$ 0.02 \\
+\textbf{Fast-Filtering} &  & \textbf{2.4527E+5 $\pm$ 0.00E+5} & \textbf{0.9371 $\pm$ 0.0093} & \textbf{0.9194 $\pm$ 0.0180} & 0.33 $\pm$ 0.01 \\
+\textbf{Fast-Estimation} &  & 2.5447E+5 $\pm$ 0.00E+5 & 0.9070 $\pm$ 0.0013 & 0.8824 $\pm$ 0.0022 & 16.95 $\pm$ 0.16 \\
+\hline
+$k$-means++ &  \multirow{6}{*}{50} & 3.3968E+5 $\pm$ 0.03E+5 & 0.6425 $\pm$ 0.0069 & 0.3851 $\pm$ 0.0237 & \textbf{0.09 $\pm$ 0.01} \\
+Ergun &  & 2.4837E+5 $\pm$ 0.00E+5 & 0.8847 $\pm$ 0.0018 & 0.8233 $\pm$ 0.0032 & 1.51 $\pm$ 0.03 \\
+Det &  & 2.3998E+5 $\pm$ 0.00E+5 & 0.9070 $\pm$ 0.0000 & 0.8643 $\pm$ 0.0000 & 1.56 $\pm$ 0.02 \\
+\textbf{Fast-Sampling} &  & 2.4151E+5 $\pm$ 0.01E+5 & 0.8896 $\pm$ 0.0066 & 0.8292 $\pm$ 0.0145 & 1.55 $\pm$ 0.02 \\
+\textbf{Fast-Filtering} &  & \textbf{2.3296E+5 $\pm$ 0.00E+5} & \textbf{0.9361 $\pm$ 0.0080} & \textbf{0.9075 $\pm$ 0.0126} & \textbf{0.31 $\pm$ 0.01} \\
+\textbf{Fast-Estimation} &  & 2.4137E+5 $\pm$ 0.00E+5 & 0.9109 $\pm$ 0.0008 & 0.8716 $\pm$ 0.0014 & 20.31 $\pm$ 0.25 \\
+\hline
+\end{tabular}
+}
+\end{table}
+
+\textbf{Kết quả.} Đối chiếu bảng \ref{tab:mnist_k_20}, \ref{tab:phy_k_20}, \ref{tab:mnist_alpha_0.2}, và \ref{tab:phy_alpha_0.2} với các bảng thực nghiệm của tác giả trong phụ lục A.6 \cite{huang2025new} thì thấy kết quả tương đồng cho thấy số liệu của tác giả là chuẩn trong hai tập dữ liệu MNIST và PHY. Tuy có một số sự khác biệt nhưng có thể hiểu được vì có sự tác động của sự ngẫu nhiên trong lúc thực nghiệm. Nhưng nhìn chung thì các số liệu gần như tương đương nhau và các thuật toán của tác giả cho ra kết quả tốt. Đa số là cho ra chi phí thấp nhất và chạy nhanh nhất, đặc biệt là thuật toán Fast-Filtering.
+
+Đối với tập dữ liệu USPS chúng em thêm vào, thuật toán Fast-Filtering cho thấy sự vượt trội trong tối ưu chi phí và tốc độ chạy. Tuy NMI và ARI trong một vài trường hợp thua các thuật toán khác nhưng thua không quá nghiêm trọng. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{img/plot_fixed_k.png}
+\caption{Biểu đồ tổng hợp chi phí và tốc độ của các thuật toán trên $k$ cố định}
+\label{fig:plot_fixed_k}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{img/plot_fixed_alpha.png}
+\caption{Biểu đồ tổng hợp chi phí và tốc độ của các thuật toán trên $\alpha$ cố định}
+\label{fig:plot_fixed_alpha}
+\end{figure}
+
+\begin{tcolorbox}[colback=white,colframe=blue!65!black,title=Nhận xét, fonttitle=\bfseries, breakable]
+Qua phần thực nghiệm của nhóm, chúng em thấy các thuật toán của tác giả hoạt động khá tốt, cho thấy các Heuristic của tác giả hoạt động tốt trong việc giảm thiểu chi phí và thời gian của thuật toán. Tuy nhiên trong triển khai code thực nghiệm của tác giả thì chúng em nghĩ có thể cải tiến thêm bằng chạy song song để giảm thời gian chờ đợi.
+
+Ngoài ra, dựa vào hai biểu đồ \ref{fig:plot_fixed_k} và \ref{fig:plot_fixed_alpha} thì thấy được đầu ra chi phí và tốc độ có bị ảnh hưởng bởi hai tham số là $k$ và $\alpha$. Cụ thể thì ta quan sát thấy:
+
+\begin{enumerate}
+\item Khi cố định $k$ thì tốc độ gần như không thấy thay đổi khi tăng $\alpha$. Còn chi phí của các thuật toán thì có xu hướng tăng lên.
+\item Khi cố định $\alpha$ thì tốc độ của các thuật toán vẫn ổn định khi thay đổi $k$ ngoại trừ thuật toán Fast-Estimation. Còn chi phí thì có xu hướng giảm khi $k$ giảm.
+\end{enumerate}
+
+\end{tcolorbox}

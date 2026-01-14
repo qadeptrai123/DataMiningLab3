@@ -1,10 +1,14 @@
 \documentclass[12pt]{article}
 
 \usepackage{hcmus-report-template}
-\usepackage{csquotes}
+\vietnameselst
 % Disable indentation on new paragraphs
 \setlength{\parindent}{0pt}
 
+\usepackage[authoryear]{natbib}
+\soulregister\ref7
+\colorlet{lightyellow}{yellow!30}
+\sethlcolor{lightyellow}
 % Line spacing 1.5
 \renewcommand{\baselinestretch}{1.2}
 
@@ -12,7 +16,7 @@
 % \graphicspath{PATH_TO_GRAPHIC_FOLDER}
 
 % To use Times font family, uncomment this row
-% \usepackage{mathptmx}
+\usepackage{mathptmx}
 
 % To use roman section / subsection, uncomment these rows
 % \renewcommand{\thesection}{\Roman{section}}
@@ -42,7 +46,6 @@ University of Science - VNU HCMC\\
 \newtheorem{theorem2}{Background Theorem}
 \newtheorem{lemma}{Lemma}
 \newtheorem{corollary}{Corollary}[theorem]
-
 % ============ DOCUMENT ============
 \begin{document}
 
@@ -74,5 +77,5 @@ University of Science - VNU HCMC\\
 % Appendix
 % \appendix
 % Add \cleardoublepage to move appendices to next page.
-% \input{appendix/appendix.tex}
+\input{appendix/appendix.tex}
 \end{document}
