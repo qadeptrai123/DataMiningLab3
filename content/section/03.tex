@@ -95,7 +95,6 @@ Cho kích thước mẫu $R_1 = \Theta\left( \frac{\log k}{1 - 2\alpha} \right)$
 \end{corollary}
 
 \begin{proof}
-Mục tiêu là đánh giá xác suất lấy mẫu thành công một điểm từ tập $G_2(P^*_i)$ nằm trong cụm dự đoán $P_i$. 
 
 % \textbf{Bước 1: Xác định kích thước của tập điểm "tốt"}
 
@@ -112,27 +111,43 @@ Mục tiêu là đánh giá xác suất lấy mẫu thành công một điểm t
 
 % \textbf{Bước 3: Xác suất lấy mẫu thành công}
 
+Hệ quả này tương tự Corollary 1, chứng minh tương tự.
+
 Gọi $\zeta_i$ là xác suất chọn được một điểm thuộc $G_2(P^*_i)$ khi lấy mẫu ngẫu nhiên đều từ $P_i$:
-\[ \zeta_i = \frac{|P_i \cap G_2(P^*_i)|}{|P_i|} \]
-Thay thế kết quả từ Bước 2 vào tử số:
-\[ \zeta_i \geq \frac{(\frac{1}{2} - \alpha)|P^*_i|}{|P_i|} \]
-Ta cần chặn trên cho $|P_i|$. Từ giả thiết $|Q_i| \ge (1-\alpha)|P_i|$ và $Q_i \subseteq P^*_i$, ta suy ra $|P_i| \le \frac{|P^*_i|}{1-\alpha}$. Thay thế vào biểu thức trên:
-\[ \zeta_i \geq \left( \frac{1}{2} - \alpha \right) \frac{|P^*_i|}{\frac{|P^*_i|}{1-\alpha}} = \left( \frac{1}{2} - \alpha \right)(1-\alpha) = \frac{(1-2\alpha)(1-\alpha)}{2} \]
-Lưu ý rằng với $\alpha < 1/2$, giá trị $\zeta_i$ luôn dương.
+\begin{align*}
+ \zeta_i &= \frac{|P_i \cap G_2(P^*_i)|}{|P_i|} \\
+&\geq \frac{(\frac{1}{2} - \alpha)|P^*_i|}{|P_i|}     
+\end{align*}
+
+Ta cần chặn trên cho $|P_i|$. Từ giả thiết $|Q_i| \ge (1-\alpha)|P_i|$ và $Q_i \subseteq P^*_i$, ta suy ra $|P_i| \le \frac{|P^*_i|}{1-\alpha}$.
+
+\begin{align*}
+\zeta_i &\geq \left( \frac{1}{2} - \alpha \right) \frac{|P^*_i|}{\frac{|P^*_i|}{1-\alpha}} \\
+&= \left( \frac{1}{2} - \alpha \right)(1-\alpha) \\
+&= \frac{(1-2\alpha)(1-\alpha)}{2}     
+\end{align*}
+
+
+Với $\alpha < 1/2$, giá trị $\zeta_i$ luôn dương.
 
 % \textbf{Bước 4: Xác suất thất bại trên một cụm}
 
-Giả sử ta lấy $R_1$ mẫu độc lập. Xác suất để \textit{tất cả} các mẫu đều không thuộc tập điểm tốt là:
+Giả sử ta lấy mẫu độc lập. Xác suất để \textit{tất cả} các mẫu đều không thuộc tập điểm tốt là:
 \[ \Pr(\text{Thất bại tại cụm } i) = (1 - \zeta_i)^{R_1} \leq e^{-\zeta_i R_1} \]
-Để xác suất này nhỏ hơn một ngưỡng $\frac{\eta}{k}$, ta cần chọn $R_1$ sao cho:
+Để xác suất này nhỏ hơn $\frac{\eta}{k}$:
 \[ e^{-\zeta_i R_1} \leq \frac{\eta}{k} \iff -\zeta_i R_1 \leq \ln\left(\frac{\eta}{k}\right) \iff R_1 \geq \frac{1}{\zeta_i} \ln\left(\frac{k}{\eta}\right) \]
+
 Thay thế chặn dưới của $\zeta_i$:
-\[ R_1 \geq \frac{2}{(1-2\alpha)(1-\alpha)} \ln\left(\frac{k}{\eta}\right) \]
-Điều này phù hợp với định nghĩa $R_1 = \Theta\left( \frac{\log k}{1 - 2\alpha} \right)$.
+\begin{align*}
+    R_1 &\geq \frac{2}{(1-2\alpha)(1-\alpha)} \ln\left(\frac{k}{\eta}\right)\\
+    &= \left(\frac{4}{1-2\alpha} - \frac{2}{1-\alpha} \right) \ln\left(\frac{k}{\eta}\right)
+\end{align*}
+
+Ta chỉ cần lấy mẫu vừa đủ, như vậy phù hợp với $R_1 = \Theta\left( \frac{\log k}{1 - 2\alpha} \right)$.
 
 % \textbf{Bước 5: Áp dụng Chặn Union cho toàn bộ các cụm}
 
-Để đảm bảo thành công trên tất cả $k$ cụm đồng thời:
+Để đảm bảo thành công trên tất cả $k$ cụm:
 \[ \Pr(\exists i \in [k] : U_i \cap G_2(P^*_i) = \emptyset) \leq \sum_{i=1}^k \frac{\eta}{k} = \eta \]
 Như vậy, với xác suất ít nhất $1-\eta$ (xác suất hằng số), thuật toán tìm được ít nhất một ứng viên tốt cho mọi cụm $i \in [k]$ .
 \end{proof}
@@ -141,7 +156,7 @@ Như vậy, với xác suất ít nhất $1-\eta$ (xác suất hằng số), thu
 
 \begin{corollary}
 \label{cor:estimator_bounds}
-Giả sử kích thước mẫu $R_2$ được định nghĩa là:
+Cho 
 \[ R_2 = O\left( \frac{\log(m^3d \log^3(m\Delta^2)/\epsilon_1^2) \log(m\Delta^2)}{\alpha\epsilon_1^4} \right) \]
 Với một điểm dữ liệu bất kỳ $u \in U_i$, với xác suất cao, bộ ước lượng $\omega(u)$ thỏa mãn:
 \[ \frac{\delta^2(P_i \setminus \mathcal{Z}^\dagger(u), u)}{1 + 7\epsilon_1} \leq \omega(u) \leq (1 + \epsilon_1)^2 \delta^2(H_i(u), u) \]
@@ -149,7 +164,6 @@ trong đó $H_i(u)$ là tập hợp $(1-\alpha)m_i$ điểm gần $u$ nhất tro
 \end{corollary}
 
 \begin{proof}
-Chứng minh dựa trên sự tập trung của các mẫu ngẫu nhiên $S_i$ trong các khối hình học quanh $u$.
 
 % \textbf{1. Sự tập trung của các Khối lớn (Áp dụng Bất đẳng thức Chernoff)}
 
@@ -164,6 +178,7 @@ Chứng minh dựa trên sự tập trung của các mẫu ngẫu nhiên $S_i$ t
 % \end{itemize}
 
 % \textbf{2. Thiết lập Chặn trên}
+Hệ quả  này tương tự Lemma 10, chứng minh tương tự.
 
 Gọi $\mathcal{F}'(u)$ là tập hợp các điểm thuộc mẫu $S_i$ nằm trong các khối nhỏ hoặc là điểm ngoại lai. Ta đã biết $|\mathcal{F}'(u)| \leq (1 + 3\epsilon_1)\alpha|S_i|$. Khi tính $\omega(u)$, thuật toán loại bỏ một lượng điểm tương ứng, do đó chi phí chỉ còn phụ thuộc vào các khối lớn.
 Xét tổng chi phí trên mẫu:
@@ -201,9 +216,8 @@ Khoảng cách giữa trọng tâm của tập hợp đã lọc $\overline{I_i}$
 \end{lemma}
 
 \begin{proof}
-Chứng minh được chia thành ba bước chính: xác định kích thước các tập hợp liên quan, đánh giá phương sai trong cụm, và áp dụng bất đẳng thức tam giác để tìm chặn trên.
 
-\textbf{1. Xác định kích thước các tập hợp điểm}
+\textbf{1. Kích thước các tập hợp điểm}
 
 Theo định nghĩa của quy trình lọc trong thuật toán \ref{alg:fast_filter}, tập $I_i$ được tạo thành bằng cách loại bỏ tập $\mathcal{Z}^\dagger(c_i)$ gồm các điểm xa nhất từ tâm ứng viên $c_i$. Kích thước của phần bị loại bỏ là $|\mathcal{Z}^\dagger(c_i)| = (2 + 20\epsilon_1)\alpha m_i$.
 Do đó, kích thước của tập hợp giữ lại là:
@@ -216,7 +230,7 @@ Trong trường hợp xấu nhất, toàn bộ các điểm nhiễu này vẫn n
 Thay thế kích thước của $|I_i|$ vào:
 \[ |I_i \cap P^*_i| \geq (1 - (2 + 20\epsilon_1)\alpha)m_i - \alpha m_i = (1 - (3 + 20\epsilon_1)\alpha)m_i \]
 
-\textbf{2. Đánh giá phương sai của tập đã lọc}
+\textbf{2. Kẹp tập đã lọc}
 
 Dựa trên Hệ quả 4 (Corollary 4) trong bài báo , tâm $c_i$ được chọn bởi bộ ước lượng thỏa mãn điều kiện về chi phí với xác suất cao:
 \[ \delta^2(I_i, c_i) \leq 4\delta^2(P^*_i, c^*_i) \]
@@ -267,8 +281,8 @@ Chi phí phân cụm của tập $Q_i$ đối với tâm của tập hợp đã 
 Chúng ta phân tích sự chênh lệch chi phí bằng cách phân rã tập hợp dựa trên sai số của bộ lọc (Filter).
 
 \textbf{1. Phân rã tập hợp và chi phí}
-Gọi $A_i = Q_i \setminus I_i$ là tập các điểm thuộc $Q_i$ bị loại bỏ (False Negatives của bộ lọc).
-Gọi $B_i = I_i \setminus Q_i$ là tập các điểm nhiễu được giữ lại (False Positives của bộ lọc).
+Gọi $A_i = Q_i \setminus I_i$ là tập các điểm thuộc $Q_i$ bị loại bỏ (âm tính giả của bộ lọc).
+Gọi $B_i = I_i \setminus Q_i$ là tập các điểm nhiễu được giữ lại (dương tính giả của bộ lọc).
 
 Ta có đẳng thức phân rã chi phí như sau:
 \[ 
@@ -294,7 +308,8 @@ Tổng hợp lại:
     \delta^2(Q_i, \overline{I_i}) - \delta^2(Q_i, c^*_i) &\leq \sqrt{\alpha}[\delta^2(A_i, c^*_i) + \delta^2(B_i, \overline{I_i})] \\+& \left(1+\frac{1}{\sqrt{\alpha}}\right)(|A_i| + |B_i|)\delta^2(\overline{I_i}, c^*_i)
 \end{align}
 
-\textbf{3.}
+\textbf{3. Tổng hợp}
+
 Theo giả thiết bài toán và Bổ đề 12:
 \begin{itemize}
     \item Tổng kích thước sai số: $|A_i| + |B_i| \leq 3\alpha m_i + \alpha m_i = 4\alpha m_i$.
@@ -304,7 +319,7 @@ Theo giả thiết bài toán và Bổ đề 12:
     \item Chi phí trong cụm: $\delta^2(A_i, c^*_i) \leq \delta^2(P^*_i, c^*_i)$ và $\delta^2(B_i, \overline{I_i}) \leq 4\delta^2(P^*_i, c^*_i)$.
 \end{itemize}
 
-Thay thế các giá trị này vào phương trình \ref{eq:l_13}:
+Thay thế các giá trị này vào phương trình Lemma 13:
 \begin{align*}
     \delta^2(Q_i, \overline{I_i}) - \delta^2(Q_i, c^*_i)  &\leq \sqrt{\alpha}[\delta^2(P^*_i, c^*_i) + 4\delta^2(P^*_i, c^*_i)] + 4\sqrt{\alpha}(1+\sqrt{\alpha}) m_i \cdot \frac{9\delta^2(P^*_i, c^*_i)}{(1 - (3+\epsilon)\alpha)m_i} \\
     &= 5\sqrt{\alpha}\delta^2(P^*_i, c^*_i) + \frac{36(\sqrt{\alpha} + \alpha)}{1 - (3+\epsilon)\alpha}\delta^2(P^*_i, c^*_i)
@@ -315,7 +330,7 @@ Kết luận:
 \end{proof}
 
 
-% Lemma 14 Improved
+% L 14
 
 \begin{lemma}
 \label{lemma:total_optimal_cost_explicit}
@@ -327,11 +342,12 @@ Tổng chi phí phân cụm của cụm tối ưu $P^*_i$ đối với trọng t
 
 \[ \delta^2(P^*_i, \overline{I_i}) = \delta^2(Q_i, \overline{I_i}) + \delta^2(R_i, \overline{I_i}) \]
 
-\textbf{Bước 1: Chặn trên cho $Q_i$}
+\begin{enumerate}
+\item \textbf{Chặn trên cho $Q_i$}
 Sử dụng kết quả  từ Bổ đề 13:
 \[ \delta^2(Q_i, \overline{I_i}) \leq \delta^2(Q_i, c^*_i) + \left( 5\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} \right) \delta^2(P^*_i, c^*_i) \]
 
-\textbf{Bước 2: Chặn trên cho $R_i$ (False Negatives của dự đoán)}
+\item \textbf{Chặn trên cho $R_i$ (âm tính giả của dự đoán)}
 Áp dụng bất đẳng thức tam giác nới lỏng với $\lambda = \sqrt{\alpha}$ cho mỗi $p \in R_i$:
 \begin{align*}
     \delta^2(R_i, \overline{I_i}) &\leq (1+\sqrt{\alpha})\delta^2(R_i, c^*_i) + |R_i|\left(1+\frac{1}{\sqrt{\alpha}}\right)\delta^2(c^*_i, \overline{I_i}) \\
@@ -350,7 +366,7 @@ Thay thế vào biểu thức của $R_i$:
     &\leq (1+\sqrt{\alpha})\delta^2(R_i, c^*_i) + \frac{9(\sqrt{\alpha}+\alpha)}{(1-\alpha)(1-(3+\epsilon)\alpha)}\delta^2(P^*_i, c^*_i)
 \end{align*}
 
-\textbf{Bước 3: Tổng hợp}
+\item \textbf{Tổng hợp}
 Cộng bước 1 + 2, và $\delta^2(Q_i, c^*_i) + \delta^2(R_i, c^*_i) = \delta^2(P^*_i, c^*_i)$.
 
 \begin{align*}
@@ -368,4 +384,6 @@ hay:
 \[ \delta^2(P^*_i, \overline{I_i}) \leq \left( 1 + \frac{O(\sqrt{\alpha})}{(1-\alpha)(1-(3+\epsilon)\alpha)} \right) \delta^2(P^*_i, c^*_i) \] 
 
 với $\alpha \in [0, 1)$
+
+\end{enumerate}
 \end{proof}

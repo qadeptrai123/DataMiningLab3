@@ -16,7 +16,7 @@
 *.bcf
 *.nav
 *.snm
-
+main.pdf
 # PDF output (keep commented if you want to track PDFs, uncomment to ignore)
 # *.pdf
 
