@@ -1,4 +1,4 @@
-\section{Thuật toán Fast-Sampling}
+\section{Thuật toán \textsc{Fast-Sampling}}
 
 Ý tưởng tổng quát của thuật toán Fast-Sampling là xấp xỉ hiệu quả các tâm tối ưu trong từng chiều bằng cách xác định các tọa độ chất lượng cao mà không cần sử dụng các chiến lược dựa trên sắp xếp. Thách thức kỹ thuật chính nằm ở việc xử lý các âm tính giả mà không làm ảnh hưởng đáng kể đến các đảm bảo xấp xỉ. Mặc dù việc lấy mẫu trực tiếp một tập con nhỏ các tọa độ từ mỗi chiều của các cụm dự đoán có thể giúp xác định các điểm gần tâm tối ưu, các tọa độ được lấy mẫu theo phân phối đều có thể không xấp xỉ chính xác các tâm tối ưu, tiềm ẩn nguy cơ dẫn đến mất mát hằng số trong các đảm bảo xấp xỉ. Để giải quyết vấn đề này, thuật toán Fast-Sampling trước tiên xác định các tọa độ ứng viên gần với tọa độ của từng tâm tối ưu trong thời gian chạy tuyến tính đối với quy mô dữ liệu. Sau đó, các tọa độ ứng viên được xây dựng sẽ được sử dụng để xác định các khoảng phủ chính xác vị trí của các tâm tối ưu, cho phép xấp xỉ tốt hơn thông qua việc chia nhỏ các khoảng này kĩ (fine-grained).
 
