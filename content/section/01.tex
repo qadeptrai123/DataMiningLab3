@@ -60,22 +60,77 @@ Với mọi $Q_{ij} = P^*_{ij} \cap P_{ij}$, gọi $Q'_{ij}$ là tập con của
 \[ |G^{\mu}_{ij}| \geq \frac{\mu - 1}{\mu} |Q'_{ij}| \]
 \end{lemma}
 
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[scale=1.8, >=Stealth]
+        % 1. Định nghĩa màu sắc
+        \definecolor{goodgreen}{RGB}{44, 160, 44} 
+        \definecolor{badred}{RGB}{214, 39, 40}   
+        \definecolor{grayline}{RGB}{150, 150, 150}
+
+        % 2. Vẽ trục tọa độ (Không gian 1 chiều R)
+        \draw[->, thick] (-3.5, 0) -- (3.5, 0) node[right] {$\mathbb{R}$};
+        
+        % 3. Trọng tâm (Gốc tọa độ giả định là 0)
+        \coordinate (Centroid) at (0,0);
+        \fill[black] (Centroid) circle (2.5pt);
+        \node[below=13pt, font=\large] at (Centroid) {$G^2_{ij}$};
+
+        % 4. Vẽ vùng "Tốt" (Khoảng cách 2 * r_avg tương ứng bán kính 1.8 đơn vị)
+        \def\radius{1.8}
+        % Vẽ dải màu nhạt phía dưới để minh họa vùng tốt
+        \fill[goodgreen!10] (-\radius, -0.3) rectangle (\radius, 0.3);
+        \draw[dashed, thick, grayline] (-\radius, -0.4) -- (-\radius, 0.4);
+        \draw[dashed, thick, grayline] (\radius, -0.4) -- (\radius, 0.4);
+        % \node[grayline, above] at (0, 0.4) {Vùng tọa độ tốt};
+
+        % 5. Các điểm "Tốt" (Nằm trên trục, trong khoảng [-\radius, \radius])
+        \foreach \x in {-1.4, -1.1, -0.6, -0.3, 0.2, 0.5, 0.9, 1.3, 1.5, -0.8} {
+            \fill[goodgreen] (\x, 0) circle (2pt);
+        }
+
+        % 6. Các điểm "Xa" (Nằm ngoài khoảng)
+        \foreach \x in {-2.8, 2.3, 3.1} {
+            \fill[badred] (\x, 0) circle (2pt);
+        }
+
+        % 7. Minh họa Vector bán kính 1D
+        \draw[<->, thick, black] (0, 0.15) -- (\radius, 0.15) 
+            node[midway, above, font=\scriptsize] {Bán kính $= 2 \times$ khoảng cách trung bình cụm};
+
+        % 8. Dấu ngoặc nhọn tổng quát cho tập Q'
+        \draw [thick, decoration={brace, mirror, amplitude=10pt}, decorate] 
+            (-3.0, -0.8) -- (3.2, -0.8) 
+            node [pos=0.5, anchor=north, yshift=-12pt] {$Q'_{ij}$};
+
+        % 9. Chú thích (Legend)
+        \begin{scope}[shift={(0, -1.8)}]
+            \fill[goodgreen] (-1.2, 0) circle (2pt) node[right, black, font=\small] {: Điểm tốt ($x \in G^{\mu}_{ij}$)};
+            \fill[badred] (1, 0) circle (2pt) node[right, black, font=\small] {: Điểm nằm xa};
+        \end{scope}
+
+    \end{tikzpicture}
+    \caption{Bổ đề 4 trên không gian 1 chiều: Các điểm dữ liệu phân bố trên trục số, tập trung chủ yếu quanh trọng tâm trong một phạm vi ngưỡng xác định.}
+\end{figure}
+
+
 % C 1
+
 
 
 \begin{corollary}
 \label{cor:sampling_success}
-Với xác suất hằng số, đối với mỗi cụm dự đoán  và mỗi chiều , tồn tại ít nhất một tọa độ  sao cho .
+Với xác suất hằng số, đối với mỗi cụm $i \in [k]$ và mỗi chiều $j \in [d]$, tồn tại ít nhất một điểm dữ liệu được lấy mẫu $u \in U_{ij}$ sao cho $u \in G^2_{ij}$. 
 \end{corollary}
 
 % L 5
 
 \begin{lemma} \label{lemma:bound_Nij}
 Cho một tọa độ bất kỳ $u \in G^2_{ij} \cap U_{ij}$, bất đẳng thức sau luôn thỏa mãn:
-\begin{equation} \label{eq:lemma_bound}
+\begin{equation*} \label{eq:lemma_bound}
     \delta^2(Q'_{ij}, \overline{Q'_{ij}}) \leq \delta^2(\mathcal{N}_{ij}(u), \overline{\mathcal{N}_{ij}(u)}) \leq 3\delta^2(Q'_{ij}, \overline{Q'_{ij}})
-\end{equation}
-trong đó $\overline{Q'_{ij}}$ và $\overline{\mathcal{N}_{ij}(u)}$ lần lượt là tâm hình học của tập $Q'_{ij}$ và $\mathcal{N}_{ij}(u)$.
+\end{equation*}
+trong đó $\overline{Q'_{ij}}$ và $\overline{\mathcal{N}_{ij}(u)}$ lần lượt là trọng tâm của tập $Q'_{ij}$ và $\mathcal{N}_{ij}(u)$.
 \end{lemma}
 
 % C 2
@@ -85,10 +140,10 @@ trong đó $\overline{Q'_{ij}}$ và $\overline{\mathcal{N}_{ij}(u)}$ lần lư�
 
 \begin{corollary} \label{cor:candidate_existence}
 Với xác suất hằng số, đối với mỗi chiều $j \in [d]$ của mỗi cụm $i \in [k]$, tồn tại ít nhất một tọa độ $u' \in U'_{ij}$ sao cho:
-\begin{equation}
+\begin{equation*}
     \delta(u', \overline{Q'_{ij}}) \leq \sqrt{\frac{\epsilon\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{2(1-\alpha)m_i}}
-\end{equation}
-trong đó $\overline{Q'_{ij}}$ là tâm hình học của tập tối ưu $Q'_{ij}$.
+\end{equation*}
+trong đó $\overline{Q'_{ij}}$ là trọng tâm của tập tối ưu $Q'_{ij}$.
 \end{corollary}
 
 % L 6
@@ -100,6 +155,61 @@ trong đó $\overline{Q'_{ij}}$ là tâm hình học của tập tối ưu $Q'_{
 Giới hạn sau đây luôn đúng đối với tập hợp các tọa độ $I_{ij}$ được xác định bởi thuật toán Fast-Sampling so với tập giao $Q_{ij}$:
 \[ \delta^2(\overline{I_{ij}}, \overline{Q_{ij}}) \leq \frac{(4\alpha + \alpha\epsilon)\delta^2(Q_{ij}, \overline{Q_{ij}})}{|Q_{ij}|(1-2\alpha)} \]
 \end{lemma}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[scale=2, >=Stealth]
+        % 1. Định nghĩa màu sắc
+        \definecolor{setQ}{RGB}{31, 119, 180}    % Xanh dương cho Q
+        \definecolor{sampleI}{RGB}{44, 160, 44}  % Xanh lá cho mẫu I
+        \definecolor{errorRed}{RGB}{214, 39, 40} % Đỏ cho sai số
+
+        % 2. Vẽ trục tọa độ R
+        \draw[->, thick] (-2.5, 0) -- (2.5, 0) node[right] {$\mathbb{R}$};
+
+        % 3. Vẽ các điểm của tập Q_ij (các điểm xanh mờ)
+        \foreach \x in {-1.8, -1.4, -1.1, -0.7, -0.3, 0.2, 0.6, 1.0, 1.4, 1.9} {
+            \fill[setQ!30] (\x, 0) circle (1.5pt);
+        }
+        
+        % 4. Vẽ các điểm được chọn vào mẫu I_{ij} (các điểm xanh lá đậm)
+        \foreach \x in {-1.4, -0.3, 0.6, 1.4} {
+            \fill[sampleI] (\x, 0) circle (2pt);
+            \draw[sampleI, thin] (\x, 0) circle (3pt); % Khoanh tròn điểm mẫu
+        }
+
+        % 5. Đánh dấu Trọng tâm thực Q_bar (màu đen)
+        \coordinate (Qbar) at (0.02, 0); % Trọng tâm tính toán từ các điểm trên
+        \draw[thick] (Qbar) -- (Qbar |- 0, 0.4);
+        \fill[black] (Qbar) circle (2pt);
+        \node[above, font=\large] at (0.02, 0.4) {$\overline{Q_{ij}}$};
+
+        % 6. Đánh dấu Trọng tâm mẫu I_bar (màu đỏ, lệch một chút)
+        % Tính toán I_bar từ {-1.4, -0.3, 0.6, 1.4} = 0.075
+        \coordinate (Ibar) at (0.35, 0); 
+        \draw[thick, errorRed] (Ibar) -- (Ibar |- 0, 0.4);
+        \fill[errorRed] (Ibar) circle (2pt);
+        \node[above, errorRed, font=\large] at (0.35, 0.4) {$\overline{I_{ij}}$};
+
+        % 7. Minh họa khoảng cách sai lệch (Bound)
+        \draw[<->, errorRed, thick] (Qbar |- 0, 0.2) -- (Ibar |- 0, 0.2) 
+            node[midway, below, font=\tiny, yshift=-2pt] {Sai số chặn bởi $\alpha, \epsilon$};
+
+        % 8. Chú thích các tập hợp
+        \draw [thick, decoration={brace, mirror, amplitude=6pt}, decorate] 
+            (-1.9, -0.2) -- (2.0, -0.2) 
+            node [pos=0.5, anchor=north, yshift=-6pt, font=\small] {Tập giao $Q_{ij}$};
+
+        % 9. Bảng chú thích (Legend)
+        \begin{scope}[shift={(1.0, -0.8)}]
+            \fill[setQ!30] (0,0) circle (2pt) node[right, black, font=\scriptsize] {: Điểm trong $Q_{ij}$};
+            \fill[sampleI] (0,-0.2) circle (2pt) node[right, black, font=\scriptsize] {: Điểm mẫu $I_{ij}$};
+            \node[right, errorRed, font=\scriptsize] at (-0.1,-0.4) {$\bullet$ : Khoảng cách giữa hai trọng tâm};
+        \end{scope}
+
+    \end{tikzpicture}
+    \caption{Trực quan hóa Bổ đề 6: Trọng tâm của tập mẫu $I_{ij}$ (màu đỏ) nằm rất gần trọng tâm thực tế của tập $Q_{ij}$ (màu đen). Khoảng cách này được kiểm soát bởi tham số nhiễu $\alpha$ và sai số cho phép $\epsilon$.}
+\end{figure}
 
 
 % L 7

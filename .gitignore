@@ -16,9 +16,8 @@
 *.bcf
 *.nav
 *.snm
-*.pdf
 # PDF output (keep commented if you want to track PDFs, uncomment to ignore)
-# *.pdf
+*.pdf
 
 # VS Code
 .vscode/

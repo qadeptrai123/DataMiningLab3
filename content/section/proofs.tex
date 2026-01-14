@@ -82,16 +82,16 @@ Như vậy
 
 \begin{corollary}
 \label{cor:sampling_success}
-Với xác suất hằng số, đối với mỗi cụm dự đoán  và mỗi chiều , tồn tại ít nhất một tọa độ  sao cho .
+Với xác suất hằng số, đối với mỗi cụm $i \in [k]$ và mỗi chiều $j \in [d]$, tồn tại ít nhất một điểm dữ liệu được lấy mẫu $u \in U_{ij}$ sao cho $u \in G^2_{ij}$. 
 \end{corollary}
 
 \begin{proof}
-Chứng minh dựa trên việc ước lượng xác suất thất bại và áp dụng chặn hợp (chặn hợp).
+$\text{}$
 
 \begin{enumerate}
 \item \textbf{Ước lượng tỷ lệ điểm tốt:}
-Theo Bổ đề 4, tập các tọa độ "tốt"  chiếm ít nhất một nửa số lượng các tọa độ trong tập tối ưu con . Do , ta có chặn dưới cho tỷ lệ điểm tốt trong :
-\begin{equation}
+Theo Bổ đề 4, tập các tọa độ "tốt" chiếm ít nhất một nửa số lượng các tọa độ trong tập tối ưu con . Do , ta có chặn dưới cho tỷ lệ điểm tốt trong :
+\begin{equation*}
 \frac{|G_2^{ij}|}{|P_{ij}|} = \frac{|G_2^{ij}|}{m_i} \geq \frac{1}{m_i} \cdot \frac{1}{2}|Q'_{ij}| = \frac{1-\alpha}{2}
 \end{equation}
 
@@ -103,12 +103,12 @@ Với kích thước mẫu $|U_{ij}| = \frac{2}{1-\alpha} \ln(\frac{kd}{\eta})$,
     &= e^{|U_{ij}| \ln{\left(1 - \frac{|G_2^{ij}|}{m_i} \right)}}
 \end{align*}
 Áp dụng bất đẳng thức $\ln{(1-x)} \leq -x$ với $x \in (0, 1)$, ta có:
-\begin{equation}
+\begin{equation*}
     \Pr(\text{Thất bại tại } i,j) \leq e^{-\frac{|G_2^{ij}|}{m_i} |U_{ij}|} \leq e^{-\frac{1-\alpha}{2} \cdot \frac{2}{1-\alpha}\ln(\frac{kd}{\eta})} = e^{-\ln(\frac{kd}{\eta})} = \frac{\eta}{kd}
 \end{equation}
 
 \item \textbf{Áp dụng Chặn hợp (chặn hợp):}
-\begin{equation}
+\begin{equation*}
     \Pr(\exists i,j : U_{ij} \cap G_2^{ij} = \emptyset) \leq \sum_{i=1}^k \sum_{j=1}^d \frac{\eta}{kd} = \eta
 \end{equation}
 Do đó, xác suất thành công là ít nhất $1-\eta$.
@@ -122,10 +122,10 @@ Do đó, xác suất thành công là ít nhất $1-\eta$.
 
 \begin{lemma} \label{lemma:bound_Nij}
 Cho một tọa độ bất kỳ $u \in G^2_{ij} \cap U_{ij}$, bất đẳng thức sau luôn thỏa mãn:
-\begin{equation} \label{eq:lemma_bound}
+\begin{equation*} \label{eq:lemma_bound}
     \delta^2(Q'_{ij}, \overline{Q'_{ij}}) \leq \delta^2(\mathcal{N}_{ij}(u), \overline{\mathcal{N}_{ij}(u)}) \leq 3\delta^2(Q'_{ij}, \overline{Q'_{ij}})
 \end{equation}
-trong đó $\overline{Q'_{ij}}$ và $\overline{\mathcal{N}_{ij}(u)}$ lần lượt là tâm hình học của tập $Q'_{ij}$ và $\mathcal{N}_{ij}(u)$.
+trong đó $\overline{Q'_{ij}}$ và $\overline{\mathcal{N}_{ij}(u)}$ lần lượt là trọng tâm của tập $Q'_{ij}$ và $\mathcal{N}_{ij}(u)$.
 \end{lemma}
 
 \begin{proof}
@@ -134,12 +134,12 @@ $\text{}$
 \begin{enumerate}
     \item \textbf{Cận dưới:} \\
     Theo định nghĩa, $Q'_{ij}$ là tập con của $P_{ij}$ có kích thước $(1 - \alpha)m_i$ tối thiểu hóa tổng bình phương khoảng cách đến tâm của nó. Vì $\mathcal{N}_{ij}(u)$ cũng là một tập con của $P_{ij}$ với cùng kích thước $(1 - \alpha)m_i$ (được xác định tại Bước 5 của Thuật toán 1), chi phí phân cụm của $\mathcal{N}_{ij}(u)$ không thể nhỏ hơn chi phí tối ưu của $Q'_{ij}$. Do đó:
-    \begin{equation}
+    \begin{equation*}
         \delta^2(\mathcal{N}_{ij}(u), \overline{\mathcal{N}_{ij}(u)}) \geq \delta^2(Q'_{ij}, \overline{Q'_{ij}})
     \end{equation}
 
     \item \textbf{Cận trên:} \\
-    Ta áp dụng các tính chất của tâm hình học và định nghĩa về lân cận gần nhất để biến đổi biểu thức:
+    Ta áp dụng các tính chất của trọng tâm và định nghĩa về lân cận gần nhất để biến đổi biểu thức:
     \begin{align}
         \delta^2(\mathcal{N}_{ij}(u), \overline{\mathcal{N}_{ij}(u)}) &\leq \delta^2(\mathcal{N}_{ij}(u), u) \label{eq:step1} \\
         &\leq \delta^2(Q'_{ij}, u) \label{eq:step2} \\
@@ -147,14 +147,14 @@ $\text{}$
     \end{align}
     Trong đó:
     \begin{itemize}
-        \item \eqref{eq:step2} đúng vì $\mathcal{N}_{ij}(u)$ là tập hợp các điểm trong $P_{ij}$ gần $u$ nhất, nên tổng khoảng cách từ nó đến $u$ nhỏ hơn hoặc bằng tổng khoảng cách từ bất kỳ tập nào khác cùng kích thước (như $Q'_{ij}$) đến $u$.
-        \item \eqref{eq:step3} sử dụng Bổ đề 1 (phân rã khoảng cách).
+        \item Dòng 2 đúng vì $\mathcal{N}_{ij}(u)$ là tập hợp các điểm trong $P_{ij}$ gần $u$ nhất, nên tổng khoảng cách từ nó đến $u$ nhỏ hơn hoặc bằng tổng khoảng cách từ bất kỳ tập nào khác cùng kích thước (như $Q'_{ij}$) đến $u$.
+        \item Dòng 3 sử dụng Bổ đề 1 (phân rã khoảng cách).
     \end{itemize}
     
     Vì $u \in G^2_{ij}$, theo định nghĩa của tập $G^\mu_{ij}$ với $\mu=2$, ta có điều kiện:
     \[ |Q'_{ij}| \cdot \delta^2(u, \overline{Q'_{ij}}) \leq 2\delta^2(Q'_{ij}, \overline{Q'_{ij}}) \]
     Thay thế chặn trên này vào phương trình \eqref{eq:step3}, ta thu được kết quả cuối cùng:
-    \begin{equation}
+    \begin{equation*}
         \delta^2(\mathcal{N}_{ij}(u), \overline{\mathcal{N}_{ij}(u)}) \leq \delta^2(Q'_{ij}, \overline{Q'_{ij}}) + 2\delta^2(Q'_{ij}, \overline{Q'_{ij}}) = 3\delta^2(Q'_{ij}, \overline{Q'_{ij}})
     \end{equation}
 \end{enumerate}
@@ -168,10 +168,10 @@ Từ hai phần trên, bổ đề được chứng minh hoàn toàn.
 
 \begin{corollary} \label{cor:candidate_existence}
 Với xác suất hằng số, đối với mỗi chiều $j \in [d]$ của mỗi cụm $i \in [k]$, tồn tại ít nhất một tọa độ $u' \in U'_{ij}$ sao cho:
-\begin{equation}
+\begin{equation*}
     \delta(u', \overline{Q'_{ij}}) \leq \sqrt{\frac{\epsilon\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{2(1-\alpha)m_i}}
 \end{equation}
-trong đó $\overline{Q'_{ij}}$ là tâm hình học của tập tối ưu $Q'_{ij}$.
+trong đó $\overline{Q'_{ij}}$ là trọng tâm của tập tối ưu $Q'_{ij}$.
 \end{corollary}
 
 \begin{proof}
@@ -183,13 +183,13 @@ Chứng minh dựa trên sai số lượng tử hóa của lưới tọa độ �
 
     \item \textbf{Sai số do chia lưới:}
     Khoảng này được chia thành các khoảng nhỏ $\epsilon' l_{ij}$. Do lưới bao phủ toàn bộ khoảng, luôn tồn tại một điểm lưới $u' \in U'_{ij}$ nằm đủ gần $\overline{Q'_{ij}}$. Khoảng cách này bị chặn bởi:
-    \begin{equation}
+    \begin{equation*}
         \delta(u', \overline{Q'_{ij}}) \leq \epsilon' l_{ij}
     \end{equation}
 
     \item
     Thay thế các giá trị tham số $\epsilon' = \sqrt{\frac{\epsilon}{48}}$ và chặn trên của $l_{ij} \leq 2\sqrt{\frac{6\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{(1-\alpha)m_i}}$ (từ Bổ đề 5), ta có:
-    \begin{equation}
+    \begin{equation*}
         \delta(u', \overline{Q'_{ij}}) \leq \sqrt{\frac{\epsilon}{48}} \cdot 2 \sqrt{\frac{6\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{(1-\alpha)m_i}} = \sqrt{\frac{24\epsilon \delta^2(Q'_{ij}, \overline{Q'_{ij}})}{48(1-\alpha)m_i}} = \sqrt{\frac{\epsilon \delta^2(Q'_{ij}, \overline{Q'_{ij}})}{2(1-\alpha)m_i}}
     \end{equation}
 \end{enumerate}
@@ -456,7 +456,7 @@ Theo định nghĩa của tập hợp các khối lớn $\mathcal{L}(u)$, kích 
 \end{align*}
 
 Ta thu được:
-\begin{equation}
+\begin{equation*}
     \label{fe:eq-EX}
     \mathbb{E}[|\mathcal{B}_u^l \cap S_{ij}|] \geq \frac{c \log(m^3d \log^3(m\Delta_{\max}^2)/\epsilon_1^2)}{(1+\epsilon_1)\epsilon_1^2}
 \end{equation}
@@ -794,6 +794,61 @@ Gọi tập $G_2(P^*_i) = \{x \in P^*_i : \delta^2(x, c^*_i) \leq 2 \delta^2(P^*
 Tỷ lệ điểm tốt trong $P_i$ là $\zeta_i = \frac{|P_i \cap G_2(P^*_i)|}{|P_i|} \geq (1-\alpha)(\frac{1}{2}-\alpha)$.
 Với kích thước mẫu $R_1 = \Theta\left(\frac{1}{1-2\alpha}\log\left(\frac{k}{\eta}\right)\right)$, xác suất để tập $U_i$ chứa ít nhất một điểm tốt $u_i \in G_2(P^*_i)$ là rất cao.
 % Áp dụng chặn hợp trên $k$ cụm, Hệ quả 3 (Corollary 3) khẳng định rằng với xác suất hằng số, điều này đúng cho mọi cụm $i \in [k]$. 
+
+
+% TODO fig
+% \begin{figure}[H]
+%     \centering
+%     \begin{tikzpicture}[scale=1.5, >=Stealth]
+%         % Định nghĩa màu sắc
+%         \definecolor{goodgreen}{RGB}{44, 160, 44} 
+%         \definecolor{badred}{RGB}{214, 39, 40}   
+%         \definecolor{grayline}{RGB}{150, 150, 150}
+
+%         % 1. Trọng tâm Q' (đã chuẩn hóa về gốc tọa độ 0,0)
+%         \coordinate (Centroid) at (0,0);
+        
+%         % 2. Vẽ vòng tròn ngưỡng với bán kính xác định: R = 2 * r_avg = 1.97cm
+%         \draw[dashed, thick, grayline] (Centroid) circle (1.97cm);
+%         % \node[grayline, above right] at (1.4, 1.4) {Ngưỡng $\mu \cdot \text{Var}$};
+
+%         % 3. Các điểm "Tốt" G_{ij} (Tọa độ đã trừ đi centroid để tâm là 0,0)
+%         \foreach \p in {
+%             (0.34, 0.48), (-0.56, -0.42), (0.84, -0.52), (-0.86, 0.58), 
+%             (0.14, -1.22), (-1.26, -0.02), (0.64, 0.68), (-0.36, 1.08), 
+%             (1.24, 0.08), (-0.16, -0.72)
+%         } {
+%             \fill[goodgreen] \p circle (2pt);
+%         }
+
+%         % 4. Các điểm "Xa" (Nằm ngoài ngưỡng 1.97cm)
+%         \foreach \p in {(1.8, 1.2), (-1.4, -1.6), (2.0, -0.6)} {
+%             \fill[badred] \p circle (2pt);
+%         }
+
+%         % 5. Điểm trọng tâm trung tâm
+%         \fill[black] (Centroid) circle (2.8pt);
+%         \node[below=5pt, font=\large] at (Centroid) {$\overline{Q'_{ij}}$};
+
+%         % 6. Vẽ Vector bán kính minh họa chính xác 2 x r_avg
+%         \draw[<->, thick, black] (Centroid) -- (215:1.97) 
+%             node[midway, above, rotate=35, font=\scriptsize, yshift=2pt] {Bán kính};
+
+%         % 7. Chú thích (Legend)
+%         \begin{scope}[shift={(2.8, 0.8)}]
+%             \draw[draw=black, fill=white, thin] (-0.2,-1) rectangle (2.6, 0.5);
+%             \fill[goodgreen] (0,0) circle (2pt) node[right, black, font=\small] {: $G^{\mu}_{ij}$ (Tọa độ tốt)};
+%             \fill[badred] (0,-0.4) circle (2pt) node[right, black, font=\small] {: Điểm nằm xa};
+          
+%         \end{scope}
+
+%         % Nhãn tên tập hợp
+%         \node[font=\LARGE] at (-2.3, 2.3) {$Q'_{ij}$};
+
+%     \end{tikzpicture}
+%     \caption{Bổ đề 4 với bán kính vùng tốt được xác định chính xác bằng $2 \times$ khoảng cách trung bình cụm.}
+% \end{figure}
+
 
 \textbf{2. Độ tin cậy của bộ ước lượng}
 

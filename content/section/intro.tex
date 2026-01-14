@@ -24,27 +24,41 @@ Việc sử dụng  sắp xếp trong các nghiên cứu trước đây nhằm x
 \resizebox{\textwidth}{!}{
 \begin{tabular}{lccc}
 \hline
-Phương pháp và Tài liệu tham khảo & Tỷ lệ xấp xỉ & Khoảng lỗi nhãn $\alpha$ & Độ phức tạp thời gian \\ \hline
+Phương pháp & Tỷ lệ xấp xỉ & Khoảng lỗi nhãn $\alpha$ & Độ phức tạp thời gian \\ \hline
 Phân vùng và Sắp xếp \cite{Ergun2021} & $1 + 20\alpha$ & $[ \frac{10 \log m}{\sqrt{m}}, 1/7]$ & $O(md \log m)$ \\
 Sắp xếp \cite{Nguyen2022} & $1 + \frac{\alpha}{1-\alpha} + \frac{4\alpha}{(1-2\alpha)(1-\alpha)}$ & $[0, 1/2)$ & $O(md \log m)$ \\
 \textbf{Fast-Sampling (Tác giả)} & $1 + \frac{\alpha}{1-\alpha} + \frac{4\alpha+\alpha\epsilon}{(1-2\alpha)(1-\alpha)}$ & $[0, 1/2)$ & $O(\epsilon^{-1}md \log(kd))$ \\
 \textbf{Fast-Estimation (Tác giả)} & $1 + \frac{\alpha}{1-\alpha} + \frac{13\alpha-15\alpha^2}{(1-3\alpha-\epsilon)(1-2\alpha-\epsilon)}$ & $(0, 1/3-\epsilon)$ & $O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$ \\ 
 % BEGIN PB
-\textbf{Fast-Filtering (Tác giả)} & $1 + 6\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} + \frac{9(\sqrt{\alpha}+\alpha)}{(1-\alpha)(1-(3+\epsilon)\alpha)}$ & $O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$ \\ \hline
+\textbf{Fast-Filtering (Tác giả)} & $1 + 6\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} + \frac{9(\sqrt{\alpha}+\alpha)}{(1-\alpha)(1-(3+\epsilon)\alpha)}$ & $(0, 1/3-\epsilon)$ & $O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$ \\ \hline
 % END PB
 \end{tabular}
 }
 \end{table}
 
 % BEGIN PB
-Nếu so sánh tỷ lệ xấp xỉ theo lý thuyết, các thuật toán của tác giả không tốt hơn so với các thuật toán sắp xếp.
+Nếu so sánh tỷ lệ xấp xỉ theo lý thuyết, 2 thuật toán đầu của tác giả không tốt hơn so với các thuật toán sắp xếp, trừ Fast-Filtering. Tuy nhiên, cả 3 đều cải thiện độ phức tạp thời gian.
 
-Tuy nhiên ở phần thực nghiệm Fast-Filtering cho thấy chi phí phân cụm giảm đi 1.5\%. Điều này có thể do mặc dù theo lí thuyết là tệ nhưng trong thực tế tỷ lệ xấp xỉ thường nhỏ hơn (tốt hơn).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/kmeans-theo-runtime.png}
+    \caption{So sánh tỷ lệ xấp xỉ chi phí phân cụm các thuật toán $k$-means}
+    \label{fig:kmeans-theo-runtime}
+\end{figure}
+\begin{enumerate}
+    \item Đường màu xanh lá cây (Thuật toán Phân vùng và Sắp xếp)
+    \item Đường màu xanh lục bảo (Thuật toán Sắp xếp)
+    \item Đường màu xanh dương (Thuật toán Fast-Estimation)
+    \item Đường màu xám (Thuật toán Fast-Filtering)
+\end{enumerate}
+
+Có thể thấy Fast-Filtering tỷ lệ xấp xỉ càng thấp thấp hơn khi càng gần $1/3$
+
 % END PB
 
 \section{Các công trình liên quan}
 
-Thuật toán $k$-means++ có tỷ lệ xấp xỉ $\Theta(\log k)$ so với đáp án phân cụm tối ưu, đồng thời cải thiện tốc độ, độ chính xác (accuracy) nếu biết nhãn. Mặc dù các thuật toán thời gian tuyến tính như $k$-means++ được sử dụng rộng rãi, nhưng không phừ hợp để dùng nếu cần độ chính xác cao (như kết quả thực nghiệm của bài báo này).  Thuật toán chỉ khác $k$-means ở bước đầu "seeding" (chọn các tâm ban đầu), việc chọn các tâm là lấy mẫu $D^2$ ($D^2$-sampling): 
+Thuật toán $k$-means++ \cite{Arthur2007} có tỷ lệ xấp xỉ cạnh tranh $\Theta(\log k)$  so với đáp án phân cụm tối ưu, đồng thời cải thiện thời gian, độ chính xác (accuracy). Mặc dù $k$-means++ được sử dụng rộng rãi, nhưng không phừ hợp để dùng nếu cần độ chính xác cao (như kết quả thực nghiệm của bài báo này).  Thuật toán chỉ khác $k$-means ở bước đầu "seeding" (chọn các tâm ban đầu), việc chọn các tâm là lấy mẫu $D^2$ ($D^2$-sampling): 
 \begin{enumerate}
     \item Chọn tâm cụm đầu tiên $c_1$  ngẫu nhiên từ tập dữ liệu $P$.
     \item Chọn tâm cụm tiếp theo $c_i$, chọn $c_i = x$ với xác suất $P(x) \propto D(x)^2$:
@@ -65,5 +79,5 @@ Ngoài ra trong 2 bài báo trên, các tác giả còn đề xuất thuật to�
 
 \subsection{Clustering tương tác}
 
-Giống với mô hình của bài báo này yêu cầu có 1 oracle cho biết các nhãn hay các cụm dự đoán $P_i$. 
+Giống với mô hình của bài báo này yêu cầu có 1 "tiên tri" (oracle) cho biết các nhãn hay các cụm dự đoán $P_i$. 
 Thuật toán có thể đưa ra các câu hỏi dạng: "Điểm $p$ và điểm $q$ có thuộc cùng một cụm tối ưu hay không?" \cite{Balcan2008}. Một hướng tiếp cận nâng cao khác là phân cụm phân cấp Bayesian có tương tác \cite{Vikram2016}

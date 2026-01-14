@@ -11,6 +11,10 @@ Gọi $C^* = \{c^*_1, \dots, c^*_k\}$ và $P(C^*) = \{P^*_1, \dots, P^*_k\}$ là
     \delta^2(P, C) = \sum_{x \in P} \delta^2(x, C)
 \end{equation}
 
+% BEGIN PB
+Nếu $P$ là 1 điểm (thay vì 1 tập hợp) thì công thức trên được dùng. Lưu ý ta quan tâm thứ tự trong toán tử $\delta^2$, viết cụm trước và tâm sau.
+% END PB
+
 Cho một tập hợp $L(P) = \{P_1, P_2, \dots, P_k\}$ đóng vai trò là bộ dự đoán, gọi $Q_i = P_i \cap P^*_i$ là tập các điểm dữ liệu trong cụm dự đoán $P_i$ thuộc cụm tối ưu $P^*_i$. Gọi tọa độ chiếu của các điểm dữ liệu trong $P_i$ và $Q_i$ lên chiều thứ $j$ lần lượt là $P_{ij}$ và $Q_{ij}$. Gọi $P^*_{ij}$ là tọa độ chiếu của các điểm trong $P^*_i$ lên chiều thứ $j$. Gọi $m_i$ và $m$ lần lượt là kích thước của $P_i$ và $P$. Với một tập điểm dữ liệu $V \subset \mathbb{R}^d$, gọi $\overline{V}$ là tâm hình học của tập $V$. Gọi $P(j)$ là tọa độ chiếu của toàn bộ các điểm trong $P$ lên chiều thứ $j$. Gọi $\Delta_{max}$ là tỷ lệ chiều tối đa của các điểm dữ liệu được chiếu, được xác định bởi:
 \begin{equation}
     \Delta_{max} = \max_{1 \leq j \leq d} \frac{\max_{x,y \in P(j)} \delta(x,y)}{\min_{x,y \in P(j), x \neq y} \delta(x,y)}
@@ -43,6 +47,49 @@ Cho tập $X \subset \mathbb{R}^d$ có kích thước $m$ và một điểm dữ
 
 % BEGIN PB
 Bổ đề \ref{lemma:1} xuất phát từ quan sát trọng tâm $\overline{P_i}$ của các cụm dự đoán không đủ là nghiệm của bài toán. Vì dự đoán không đúng, có thể tồn tại 1 số điểm trong $P_i$ nằm ngoài $P_i^*$. Nếu các điểm trong $P_i \setminus P_i^*$ nằm \textbf{rất xa} $\overline{P_i^*}$, trọng tâm cụm dự đoán sẽ bị lệch tuỳ ý dẫn đến chi phí tăng cụm tăng lên tuỳ ý. 
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[scale=1.5, >=Stealth]
+        % 1. Định nghĩa màu sắc
+        \definecolor{pointblue}{RGB}{31, 119, 180}
+        \definecolor{centroidred}{RGB}{214, 39, 40}
+        \definecolor{anypointorange}{RGB}{255, 127, 14}
+
+        % 2. Tọa độ trọng tâm (Điểm đỏ)
+        \coordinate (Xbar) at (-1.2, 1.0);
+        
+        % 3. Vẽ đám mây điểm X (Tỏa ra xa điểm đỏ để tránh chồng lấn)
+        % Các tọa độ này được chọn để bao quanh Xbar nhưng có khoảng cách rõ ràng
+        \foreach \pos in {(-2.0,1.5), (-0.6,1.4), (-1.9,0.4), (-0.7,0.3), (-2.2,0.9), (-0.4,0.8)} {
+            \fill[pointblue!60] \pos circle (2pt);
+            \draw[dashed, gray!30, thin] \pos -- (Xbar);
+        }
+        % Nhãn cho tập X
+        \node[pointblue, font=\boldmath] at (-2.3, 1.7) {$X$};
+
+        % 4. Vẽ trọng tâm X_bar (Điểm đỏ)
+        \fill[centroidred] (Xbar) circle (2.8pt);
+        % Nhãn X_bar được dịch chuyển xuống dưới một chút để không bị che khuất
+        \node[centroidred, below left=2pt] at (Xbar) {\large $\overline{X}$};
+
+        % 5. Điểm c bất kỳ (Điểm cam)
+        \coordinate (C) at (1.8, 0.6);
+        \fill[anypointorange] (C) circle (3pt);
+        \node[anypointorange, right=3pt] at (C) {\large $c$};
+
+        % 6. Đường nối và khoảng cách delta(c, X_bar)
+        \draw[line width=1.5pt, anypointorange, <->] (Xbar) -- (C) 
+            node[midway, above=2pt, black, font=\small] {$\delta(c, \overline{X})$};
+
+        % 7. Minh họa một đường từ điểm xanh đến c (để thấy delta(X, c))
+        \draw[dotted, thick, pointblue!80] (-0.4,0.8) -- (C);
+
+    \end{tikzpicture}
+    \caption{Khoảng cách từ các điểm $X$ đến $c$ liên hệ qua trọng tâm $\overline{X}$.}
+\end{figure}
+
+
 % END PB
 
 \begin{lemma}
@@ -61,14 +108,20 @@ Bổ đề \ref{lemma:2} cũng đúng với $J \subset \mathbb{R}^d$, mặc dù 
 \definecolor{rvwvcq}{rgb}{0.08, 0.40, 0.75} % Blue for points
 \begin{figure}[htbp]
     \centering
-\begin{tikzpicture}[line cap=round, line join=round, >=triangle 45, x=1cm, y=1cm]
-    % 1. WIDENED CLIP: Expanded the left boundary from -2.95 to -6.0 to show the whole circle
-    \clip(-6.0, -1.0) rectangle (4.0, 7.0);
+    % Định nghĩa màu sắc
+    \definecolor{wewdxt}{rgb}{0.43, 0.43, 0.45}
+    \definecolor{rvwvcq}{rgb}{0.08, 0.40, 0.75}
 
-    % Draw the Circles and Line
-    \draw [line width=1.5pt, color=wewdxt] (-2.61, 2.96) circle (2.738cm);
-    \draw [line width=1.5pt, color=wewdxt] (-1.83, 3.44) circle (1.387cm);
-    \draw [line width=1.5pt, color=wewdxt] (-1.83, 3.44) -- (-2.61, 2.96);
+    \begin{tikzpicture}[line cap=round, line join=round, >=triangle 45, x=1.2cm, y=1.2cm]
+        % Mở rộng vùng cắt để không bị mất hình bên trái
+        \clip(-6.0, 0.0) rectangle (1.5, 6.5);
+
+        % Vẽ các vòng tròn đại diện cho tập J và J1
+        \draw [line width=1.2pt, color=wewdxt] (-2.61, 2.96) circle (2.738cm); % Tập J
+        \draw [line width=1.2pt, color=wewdxt] (-1.83, 3.44) circle (1.387cm); % Tập J1
+        
+        % Đường nối giữa hai tâm (thể hiện khoảng cách delta)
+        \draw [line width=1.5pt, color=rvwvcq] (-1.83, 3.44) -- (-2.61, 2.96);
 
     % 2. POINTS AND LABELS: 
     % We place the node inside the drawing command for the point so it stays attached.
