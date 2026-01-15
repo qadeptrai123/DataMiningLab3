@@ -11,7 +11,7 @@ Dựa trên các phương pháp thống kê, \cite{Ergun2021} đề xuất thu�
 
 % BEGIN PB
 \hl{\textbf{Đằng sau các thuật toán:}
-Việc sử dụng  sắp xếp trong các nghiên cứu trước đây cũng chung ý tưởng với tác giả bài báo này là tìm các tâm của các cụm gần các tâm tối ưu, nhưng điều này dẫn đến chi phí nhân với $\log m$. Mục tiêu của tác giả trong bài báo này là \textbf{tối ưu thời gian}, thay thế việc sắp xếp bằng các kỹ thuật lấy mẫu (sampling) và ước lượng (estimation), trong thời gian tuyến tính $O(md)$. Ngoài thời gian, có Fast-Filtering \ref{alg:fast_filter} là cải thiện tỷ lệ xấp xỉ (chi phí phân cụm).}
+Việc sử dụng  sắp xếp trong các nghiên cứu trước đây cũng chung ý tưởng với tác giả bài báo này là tìm các tâm của các cụm gần các tâm \textbf{tối ưu}, nhưng điều này dẫn đến chi phí nhân với $\log m$. Mục tiêu của tác giả trong bài báo này là \textbf{tối ưu thời gian}, thay thế việc sắp xếp bằng các kỹ thuật lấy mẫu (sampling) và ước lượng (estimation), trong thời gian tuyến tính $O(md)$. Ngoài thời gian, có Fast-Filtering \ref{alg:fast_filter} là cải thiện tỷ lệ xấp xỉ (chi phí phân cụm).}
 % END PB
 
 % TODO footcite O~, all
@@ -52,7 +52,7 @@ Sắp xếp (\cite{Nguyen2022}) & $1 + \frac{\alpha}{1-\alpha} + \frac{4\alpha}{
     \item \hl{Đường màu xám (Thuật toán Fast-Filtering)}
 \end{enumerate}
 
-\hl{Có thể thấy Fast-Filtering tỷ lệ xấp xỉ càng tệ khi càng gần $1/3$, chỉ tốt hơn Fast-Estimation. Thuật toán Sắp xếp lại tốt hơn cả 2 thuật toán của tác giả.}
+\hl{Có thể thấy Fast-Filtering tỷ lệ xấp xỉ càng tệ khi càng gần $1/3$, chỉ tốt hơn Fast-Estimation. Thuật toán Sắp xếp lại tốt hơn cả 2 thuật toán của tác giả khi gần $1/3$.}
 
 % END PB
 
