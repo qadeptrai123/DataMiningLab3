@@ -2,7 +2,7 @@
 
 Ý tưởng tổng quát của thuật toán Fast-Sampling là xấp xỉ hiệu quả các tâm tối ưu trong từng chiều bằng cách xác định các tọa độ chất lượng cao mà không cần sử dụng các chiến lược dựa trên sắp xếp. Thách thức kỹ thuật chính nằm ở việc xử lý các âm tính giả mà không làm ảnh hưởng đáng kể đến các đảm bảo xấp xỉ. Mặc dù việc lấy mẫu trực tiếp một tập con nhỏ các tọa độ từ mỗi chiều của các cụm dự đoán có thể giúp xác định các điểm gần tâm tối ưu, các tọa độ được lấy mẫu theo phân phối đều có thể không xấp xỉ chính xác các tâm tối ưu, tiềm ẩn nguy cơ dẫn đến mất mát hằng số trong các đảm bảo xấp xỉ. Để giải quyết vấn đề này, thuật toán Fast-Sampling trước tiên xác định các tọa độ ứng viên gần với tọa độ của từng tâm tối ưu trong thời gian chạy tuyến tính đối với quy mô dữ liệu. Sau đó, các tọa độ ứng viên được xây dựng sẽ được sử dụng để xác định các khoảng phủ chính xác vị trí của các tâm tối ưu, cho phép xấp xỉ tốt hơn thông qua việc chia nhỏ các khoảng này kĩ (fine-grained).
 
-Thuật toán Fast-Sampling chủ yếu bao gồm hai giai đoạn sau: (1) ước lượng khoảng (bước 3-6 của Thuật toán 1); (2) xây dựng tọa độ ứng viên (bước 7 của Thuật toán 1). Trong giai đoạn ước lượng khoảng, đối với mỗi chiều của các cụm dự đoán, độ dài khoảng được ước tính thông qua các chiến lược lấy mẫu ngẫu nhiên. Các mẫu sau đó được điều chỉnh đối xứng (qua tâm) dựa trên các ước tính độ dài khoảng để xây dựng các khoảng có thể bao quanh tọa độ của các tâm tối ưu. Trong giai đoạn thứ hai, các khoảng thu được được chia thành các phần nhỏ hơn, mỗi phần tương ứng với một tọa độ ứng viên mới, cho phép xấp xỉ mịn các tâm tối ưu. Dưới đây là phân tích chi tiết cho thuật toán được đề xuất.
+Thuật toán Fast-Sampling chủ yếu bao gồm hai giai đoạn sau: (1) ước lượng khoảng (bước 3-6 của Thuật toán \ref{alg:fast_sampling}); (2) xây dựng tọa độ ứng viên (bước 7 của Thuật toán \ref{alg:fast_sampling}). Trong giai đoạn ước lượng khoảng, đối với mỗi chiều của các cụm dự đoán, độ dài khoảng được ước tính thông qua các chiến lược lấy mẫu ngẫu nhiên. Các mẫu sau đó được điều chỉnh đối xứng (qua tâm) dựa trên các ước tính độ dài khoảng để xây dựng các khoảng có thể bao quanh tọa độ của các tâm tối ưu. Trong giai đoạn thứ hai, các khoảng thu được được chia thành các phần nhỏ hơn, mỗi phần tương ứng với một tọa độ ứng viên mới, cho phép xấp xỉ mịn các tâm tối ưu. Dưới đây là phân tích chi tiết cho thuật toán được đề xuất.
 
 % TODO N_ij, I bar, O(u), \mathbb{E}[], B_l^u, S_ij, L(u) CHO tất cả MỤC bản dịch nd, algo
 \begin{algorithm}[H]
@@ -35,7 +35,7 @@ Thuật toán Fast-Sampling chủ yếu bao gồm hai giai đoạn sau: (1) ư�
 Trình tự của Fast-Sampling dựa trên việc khai thác cấu trúc của tập điểm trong từng chiều không gian. Việc lấy mẫu $O(\log(kd))$ điểm đảm bảo rằng với xác suất cao, ít nhất một điểm ứng viên $u$ sẽ rơi vào vùng mật độ cao của cụm tối ưu. Tại bước 6, giá trị $l_{ij}$ được tính toán dựa trên độ lệch chuẩn của tập lân cận gần nhất $\mathcal{N}_{ij}(u)$, giúp chuyển đổi bài toán tìm kiếm trên tập $P$ thành tìm kiếm tọa độ (ứng viên) với sai số được kiểm soát bởi $\epsilon'$, giúp duy trì độ phức tạp tuyến tính.}
 % END PB
 
-Đầu tiên, tác giả xem xét một chiều đơn lẻ $j \in [d]$ của một cụm dự đoán bất kỳ $P_i$ với $i \in [k]$. Gọi $Q'_{ij} \subseteq Q_{ij}$ là tập hợp các tọa độ có kích thước $(1-\alpha)m_i$ và chi phí phân cụm nhỏ nhất. Bắt đầu từ bước 3 của Thuật toán 1, một tập $U_{ij}$ được xây dựng bằng cách lấy mẫu ngẫu nhiên và độc lập $O(\log(kd))$ mẫu từ $P_{ij}$. Mục tiêu ở đây là tìm các tọa độ gần với tọa độ của các tâm tối ưu. Tác giả sẽ chứng minh rằng, với xác suất nhất định, tồn tại ít nhất một tọa độ $u \in U_{ij}$ có thể xấp xỉ tốt trọng tâm của $Q'_{ij}$. Để phân tích xác suất thành công, tác giả định nghĩa $G^\mu_{ij}$ là tập hợp các tọa độ gần với $Q'_{ij}$. Bằng cách áp dụng chặn Union Bound cho xác suất thành công trên tất cả các chiều và các cụm dự đoán, tác giả có thể lập luận rằng với xác suất hằng số, tồn tại ít nhất một tọa độ $u \in U_{ij}$ sao cho $u \in G^2_{ij} \cap U_{ij}$.
+Đầu tiên, tác giả xem xét một chiều đơn lẻ $j \in [d]$ của một cụm dự đoán bất kỳ $P_i$ với $i \in [k]$. Gọi $Q'_{ij} \subseteq Q_{ij}$ là tập hợp các tọa độ có kích thước $(1-\alpha)m_i$ và chi phí phân cụm nhỏ nhất. Bắt đầu từ bước 3 của Thuật toán \ref{alg:fast_sampling}, một tập $U_{ij}$ được xây dựng bằng cách lấy mẫu ngẫu nhiên và độc lập $O(\log(kd))$ mẫu từ $P_{ij}$. Mục tiêu ở đây là tìm các tọa độ gần với tọa độ của các tâm tối ưu. Tác giả sẽ chứng minh rằng, với xác suất nhất định, tồn tại ít nhất một tọa độ $u \in U_{ij}$ có thể xấp xỉ tốt trọng tâm của $Q'_{ij}$. Để phân tích xác suất thành công, tác giả định nghĩa $G^\mu_{ij}$ là tập hợp các tọa độ gần với $Q'_{ij}$. Bằng cách áp dụng chặn Union Bound cho xác suất thành công trên tất cả các chiều và các cụm dự đoán, tác giả có thể lập luận rằng với xác suất hằng số, tồn tại ít nhất một tọa độ $u \in U_{ij}$ sao cho $u \in G^2_{ij} \cap U_{ij}$.
 
 Dựa trên các tọa độ đã lấy mẫu, trong các bước còn lại của giai đoạn ước lượng khoảng (bước 4-6), thuật toán Fast-Sampling ước tính độ dài khoảng để xác định các vùng tiềm năng có thể bao quanh trọng tâm của $Q'_{ij}$. Theo các hệ quả rút ra, có thể giả định rằng luôn tồn tại ít nhất một tọa độ $u \in U_{ij} \cap G^2_{ij}$. Sau đó, trong bước 5, thuật toán xác định tập $\mathcal{N}_{ij}(u)$ gồm $(1-\alpha)m_i$ tọa độ trong $P_{ij}$ gần $u$ nhất. Các bổ đề cho thấy cả chặn dưới và chặn trên cho $\delta^2(Q'_{ij}, \overline{Q}'_{ij})$ đều có thể được thiết lập bằng cách sử dụng $\mathcal{N}_{ij}(u)$. Nếu điểm được lấy mẫu $u$ thuộc $G^2_{ij}$, bằng cách xác định tập $\mathcal{N}_{ij}(u)$, tác giả có thể thu được các khoảng bao quanh $Q'_{ij}$ với độ dài xác định.
 
@@ -115,13 +115,13 @@ Với mọi $Q_{ij} = P^*_{ij} \cap P_{ij}$, gọi $Q'_{ij}$ là tập con của
 
 
 \begin{corollary}
-\label{cor:sampling_success}
+\label{cor:1}
 Với xác suất hằng số, đối với mỗi cụm $i \in [k]$ và mỗi chiều $j \in [d]$, tồn tại ít nhất một điểm dữ liệu được lấy mẫu $u \in U_{ij}$ sao cho $u \in G^2_{ij}$. 
 \end{corollary}
 
 % L 5
 
-\begin{lemma} \label{lemma:bound_Nij}
+\begin{lemma} \label{lemma:5}
 Cho một tọa độ bất kỳ $u \in G^2_{ij} \cap U_{ij}$, bất đẳng thức sau luôn thỏa mãn:
 \begin{equation*} \label{eq:lemma_bound}
     \delta^2(Q'_{ij}, \overline{Q'_{ij}}) \leq \delta^2(\mathcal{N}_{ij}(u), \overline{\mathcal{N}_{ij}(u)}) \leq 3\delta^2(Q'_{ij}, \overline{Q'_{ij}})
@@ -134,7 +134,7 @@ trong đó $\overline{Q'_{ij}}$ và $\overline{\mathcal{N}_{ij}(u)}$ lần lư�
 % TODO Remove Biến đổi đại số
 
 
-\begin{corollary} \label{cor:candidate_existence}
+\begin{corollary} \label{cor:2}
 Với xác suất hằng số, đối với mỗi chiều $j \in [d]$ của mỗi cụm $i \in [k]$, tồn tại ít nhất một tọa độ $u' \in U'_{ij}$ sao cho:
 \begin{equation*}
     \delta(u', \overline{Q'_{ij}}) \leq \sqrt{\frac{\epsilon\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{2(1-\alpha)m_i}}
@@ -219,12 +219,12 @@ Giới hạn sau đây luôn đúng đối với tập hợp các tọa độ $I
         \end{scope}
 
     \end{tikzpicture}
-    \caption{\hl{Bổ đề 6: Khoảng cách giữa trọng tâm mẫu $I_{ij}$ và trọng tâm thực $Q_{ij}$. $\alpha = 30\%$. Với điều kiện bài toán $\alpha < 1/2$ số điểm trong tập giao lớn dẫn đến chặn trên khoảng cách giữa hai trọng tâm.}}
+    \caption{\hl{Bổ đề \ref{lemma:6}: Khoảng cách giữa trọng tâm mẫu $I_{ij}$ và trọng tâm thực $Q_{ij}$. $\alpha = 30\%$. Với điều kiện bài toán $\alpha < 1/2$ số điểm trong tập giao lớn dẫn đến chặn trên khoảng cách giữa hai trọng tâm.}}
 \end{figure}
 
 % L 7
 \begin{lemma}
-\label{lemma:optimal_center_distance}
+\label{lemma:7}
 Khoảng cách giữa tọa độ của tâm thuật toán $\overline{I_{ij}}$ và tâm tối ưu $\overline{P^*_{ij}}$ bị chặn bởi:
 \[ \delta^2(\overline{I_{ij}}, \overline{P^*_{ij}}) \leq \left( \frac{\alpha}{1-\alpha} + \frac{\alpha(4+\epsilon)}{(1-2\alpha)(1-\alpha)} \right) \frac{\delta^2(P^*_{ij}, \overline{P^*_{ij}})}{|P^*_{ij}|} \]
 \end{lemma}

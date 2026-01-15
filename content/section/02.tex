@@ -35,7 +35,7 @@ Mặc dù thuật toán Fast-Sampling có thời gian chạy tuyến tính trong
 
 % TODO PB: why Không mất tính tổng quát. thay giả định = giả sử 
 
-Trong bước 3, đối với mỗi chiều của cụm dự đoán, thuật toán chọn một mẫu ngẫu nhiên $U_{ij}$ để xấp xỉ tọa độ của các tâm tối ưu. Theo Lemma 4, với xác suất hằng số, tồn tại ít nhất một tọa độ được lấy mẫu $u \in U_{ij}$ sao cho $\delta(u, Q'_{ij}) \leq \sqrt{2\delta^2(Q'_{ij}, \overline{Q'_{ij}})/|Q'_{ij}|}$. Sau đó, từ bước 4 liệt kê tất cả các độ dài khoảng ứng viên để xây dựng tập hợp các tọa độ ứng viên. Không mất tính tổng quát, có thể giả sử khoảng cách cặp tối thiểu giữa các tọa độ trong $P_{ij}$ là 1 và khoảng cách cặp tối đa là $\Delta_{max}$. Do đó, trong bước 5, tồn tại ít nhất một lần đoán $q$ cho độ dài thoả $\sqrt{\frac{2\delta^2(Q'_{ij}, \overline{Q'_{ij})}}{(1-\alpha)m_i}} \leq l_{ij} \leq \sqrt{\frac{4\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{(1-\alpha)m_i}}$. Tiếp theo, trong các bước 7-8, theo Lemma 5, cũng tồn tại ít nhất một tọa độ $u' \in U'_{ij}$ sao cho $u'$ đủ gần với trọng tâm của $Q'_{ij}$, tức là $\delta(u', Q'_{ij}) \leq \sqrt{\epsilon_1\delta^2(Q'_{ij}, \overline{Q'_{ij}})/|Q'_{ij}|}$.
+Trong bước 3, đối với mỗi chiều của cụm dự đoán, thuật toán chọn một mẫu ngẫu nhiên $U_{ij}$ để xấp xỉ tọa độ của các tâm tối ưu. Theo Bổ đề \ref{lemma:4}, với xác suất hằng số, tồn tại ít nhất một tọa độ được lấy mẫu $u \in U_{ij}$ sao cho $\delta(u, Q'_{ij}) \leq \sqrt{2\delta^2(Q'_{ij}, \overline{Q'_{ij}})/|Q'_{ij}|}$. Sau đó, từ bước 4 liệt kê tất cả các độ dài khoảng ứng viên để xây dựng tập hợp các tọa độ ứng viên. Không mất tính tổng quát, có thể giả sử khoảng cách cặp tối thiểu giữa các tọa độ trong $P_{ij}$ là 1 và khoảng cách cặp tối đa là $\Delta_{max}$. Do đó, trong bước 5, tồn tại ít nhất một lần đoán $q$ cho độ dài thoả $\sqrt{\frac{2\delta^2(Q'_{ij}, \overline{Q'_{ij})}}{(1-\alpha)m_i}} \leq l_{ij} \leq \sqrt{\frac{4\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{(1-\alpha)m_i}}$. Tiếp theo, trong các bước 7-8, theo Bổ đề \ref{lemma:5}, cũng tồn tại ít nhất một tọa độ $u' \in U'_{ij}$ sao cho $u'$ đủ gần với trọng tâm của $Q'_{ij}$, tức là $\delta(u', Q'_{ij}) \leq \sqrt{\epsilon_1\delta^2(Q'_{ij}, \overline{Q'_{ij}})/|Q'_{ij}|}$.
 
 Đối với mỗi $u \in U'_{ij}$, gọi $\mathcal{N}_{ij}(u)$ là tập hợp $(1-\alpha)m_i$ tọa độ gần nhất từ $P_{ij}$ đến $u$. Gọi $O(u) = P_{ij} \setminus \mathcal{N}_{ij}(u)$ là tập hợp $\alpha m_i$ tọa độ xa nhất từ $P_{ij}$ đến $u$. Trước khi xây dựng bộ ước lượng $\omega$ (bước 9-10), tác giả bắt đầu bằng cách chia $\mathcal{N}_{ij}(u)$ thành $\gamma = \frac{(1+\epsilon_1) \log(m\Delta_{max}^2)}{\epsilon_1}$ khối. Cụ thể, đối với mỗi $u \in U'_{ij}$, $\mathcal{N}_{ij}(u)$ được phân rã thành $\gamma$ khối (ký hiệu là $\mathcal{B}_u^1, \mathcal{B}_u^2, \dots, \mathcal{B}_u^\gamma$) dựa trên khoảng cách từ các tọa độ trong $\mathcal{N}_{ij}(u)$ đến $u$, trong đó $\mathcal{B}_u^l = \{ x \in \mathcal{N}_{ij}(u) : (1+\epsilon_1)^l \leq \delta^2(x, u) < (1+\epsilon_1)^{l+1} \}$. 
 
@@ -62,11 +62,11 @@ Mục tiêu là xấp xỉ tốt từng khối lớn trong $\mathcal{L}(u)$ đ�
     \item \textbf{Chặn hợp:} Bằng cách lấy tổng xác suất lỗi trên tất cả các khối và các tọa độ ứng viên, tác giả đảm bảo rằng bộ ước lượng $\omega$ hoạt động chính xác với xác suất cao trên toàn không gian ứng viên.
 \end{enumerate}
 
-Với bộ ước lượng đã được chứng minh là hội tụ về giá trị thực, việc tìm $c_{ij}$ tại bước 11 nhanh hơn vì số lượng ứng viên $|U'_{ij}|$ chỉ phụ thuộc logarit vào $\Delta_{max}$ và $m$, trong khi việc tính toán mỗi giá trị $\omega(u)$ chỉ tốn thời gian phụ thuộc vào kích thước mẫu $|S_{ij}|$ thay vì kích thước toàn bộ dữ liệu $m_i$. Cuối cùng, bằng cách sử dụng Lemma 7, Theorem 2 có thể được chứng minh để độ phức tạp thời gian tuyến tính $O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$ cho bài toán có hỗ trợ học.
+Với bộ ước lượng đã được chứng minh là hội tụ về giá trị thực, việc tìm $c_{ij}$ tại bước 11 nhanh hơn vì số lượng ứng viên $|U'_{ij}|$ chỉ phụ thuộc logarit vào $\Delta_{max}$ và $m$, trong khi việc tính toán mỗi giá trị $\omega(u)$ chỉ tốn thời gian phụ thuộc vào kích thước mẫu $|S_{ij}|$ thay vì kích thước toàn bộ dữ liệu $m_i$. Cuối cùng, bằng cách sử dụng Bổ đề \ref{lemma:7}, Định lý \ref{thm:2} có thể được chứng minh để độ phức tạp thời gian tuyến tính $O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$ cho bài toán có hỗ trợ học.
 
 % L 8
 \begin{lemma}
-\label{lemma:large_block_concentration}
+\label{lemma:8}
 Giả sử $S_{ij}$ là một mẫu được lấy ngẫu nhiên từ cụm dự đoán $P_{ij}$ với kích thước mẫu $|S_{ij}| = \tilde{O}(1/\alpha \epsilon_1^4)$. Với xác suất ít nhất $1 - \frac{\epsilon_1}{m^3d \log^2(m\Delta_{\max}^2)}$, các bất đẳng thức sau đây đồng thời xảy ra cho mọi khối lớn $\mathcal{B}_u^l \in \mathcal{L}(u)$ và tập các điểm xa nhất $\mathcal{O}(u)$:
 \[ (1 - \epsilon_1)\mathbb{E}[|\mathcal{B}_u^l \cap S_{ij}|] \leq |\mathcal{B}_u^l \cap S_{ij}| \leq (1 + \epsilon_1)\mathbb{E}[|\mathcal{B}_u^l \cap S_{ij}|] \]
 \[ (1 - \epsilon_1)\mathbb{E}[|\mathcal{O}(u) \cap S_{ij}|] \leq |\mathcal{O}(u) \cap S_{ij}| \leq (1 + \epsilon_1)\mathbb{E}[|\mathcal{O}(u) \cap S_{ij}|] \]
@@ -77,7 +77,7 @@ Giả sử $S_{ij}$ là một mẫu được lấy ngẫu nhiên từ cụm dự
 % L 9
 
 \begin{lemma}
-\label{lemma:small_blocks_bound}
+\label{lemma:9}
 Gọi $\mathcal{J}(u)$ là tập hợp các tọa độ nằm trong các khối nhỏ đối với một tọa độ ứng viên $u$. Với xác suất ít nhất $1 - \frac{\epsilon_1}{m^3d \log^2(m\Delta_{\max}^2)}$, giao của tập mẫu $S_{ij}$ và $\mathcal{J}(u)$ bị chặn như sau:
 \[ |\mathcal{J}(u) \cap S_{ij}| \leq 2\epsilon_1\alpha|S_{ij}| \]
 \end{lemma}
@@ -87,7 +87,7 @@ Gọi $\mathcal{J}(u)$ là tập hợp các tọa độ nằm trong các khối 
 % L 10
 
 \begin{lemma}
-\label{lemma:cost_estimation}
+\label{lemma:10}
 Cho một tọa độ ứng viên bất kỳ $u \in U'_{ij}$. Với xác suất cao (xác suất hằng số), ước lượng $\omega(u)$ thỏa mãn các chặn sau:
 \[ 
 \frac{\delta^2(P_{ij} \setminus \mathcal{F}^\dagger(u), u)}{1 + 7\epsilon_1} \leq \omega(u) \leq (1 + \epsilon_1)^2 \delta^2(\mathcal{N}_{ij}(u), u) 
@@ -104,7 +104,7 @@ trong đó:
 % L 11
 
 \begin{lemma}
-\label{lemma:center_approximation}
+\label{lemma:11}
 Với tập hợp các tọa độ $I_{ij}$ được xác định bởi thuật toán Fast-Estimation, chặn sau đây luôn thỏa mãn:
 \[ \delta^2(\overline{I_{ij}}, \overline{Q_{ij}}) \leq \frac{13\alpha - 15\alpha^2}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)} \frac{\delta^2(Q_{ij}, \overline{Q_{ij}})}{|Q_{ij}|} \]
 \end{lemma}
@@ -114,6 +114,6 @@ Với tập hợp các tọa độ $I_{ij}$ được xác định bởi thuật 
 % T 2
 
 \begin{theorem}
-\label{thm:fast_estimation}
+\label{thm:2}
 Thuật toán Fast-Estimation xấp xỉ $(1 + O(\alpha))$ cho bài toán k-means có hỗ trợ học (learning-augmented) trong thời gian $O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$ với xác suất hằng số, với tỷ lệ lỗi nhãn $\alpha \in (0, 1/3 - \epsilon)$. 
 \end{theorem}

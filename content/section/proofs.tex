@@ -89,7 +89,7 @@ $\text{}$
 
 \begin{enumerate}
 \item \textbf{Ước lượng tỷ lệ điểm tốt:}
-Theo Bổ đề 4, tập các tọa độ "tốt" chiếm ít nhất một nửa số lượng các tọa độ trong tập tối ưu con . Do , ta có chặn dưới cho tỷ lệ điểm tốt trong :
+Theo Bổ đề \ref{lemma:4}, tập các tọa độ "tốt" chiếm ít nhất một nửa số lượng các tọa độ trong tập tối ưu con . Do , ta có chặn dưới cho tỷ lệ điểm tốt trong :
 \begin{equation*}
 \frac{|G_2^{ij}|}{|P_{ij}|} = \frac{|G_2^{ij}|}{m_i} \geq \frac{1}{m_i} \cdot \frac{1}{2}|Q'_{ij}| = \frac{1-\alpha}{2}
 \end{equation*}
@@ -132,7 +132,7 @@ $\text{}$
 
 \begin{enumerate}
     \item \textbf{Cận dưới:} \\
-    Theo định nghĩa, $Q'_{ij}$ là tập con của $P_{ij}$ có kích thước $(1 - \alpha)m_i$ tối thiểu hóa tổng bình phương khoảng cách đến tâm của nó. Vì $\mathcal{N}_{ij}(u)$ cũng là một tập con của $P_{ij}$ với cùng kích thước $(1 - \alpha)m_i$ (được xác định tại Bước 5 của Thuật toán 1), chi phí phân cụm của $\mathcal{N}_{ij}(u)$ không thể nhỏ hơn chi phí tối ưu của $Q'_{ij}$. Do đó:
+    Theo định nghĩa, $Q'_{ij}$ là tập con của $P_{ij}$ có kích thước $(1 - \alpha)m_i$ tối thiểu hóa tổng bình phương khoảng cách đến tâm của nó. Vì $\mathcal{N}_{ij}(u)$ cũng là một tập con của $P_{ij}$ với cùng kích thước $(1 - \alpha)m_i$ (được xác định tại Bước 5 của Thuật toán \ref{alg:fast_sampling}), chi phí phân cụm của $\mathcal{N}_{ij}(u)$ không thể nhỏ hơn chi phí tối ưu của $Q'_{ij}$. Do đó:
     \begin{equation*}
         \delta^2(\mathcal{N}_{ij}(u), \overline{\mathcal{N}_{ij}(u)}) \geq \delta^2(Q'_{ij}, \overline{Q'_{ij}})
     \end{equation*}
@@ -147,7 +147,7 @@ $\text{}$
     Trong đó:
     \begin{itemize}
         \item Dòng 2 đúng vì $\mathcal{N}_{ij}(u)$ là tập hợp các điểm trong $P_{ij}$ gần $u$ nhất, nên tổng khoảng cách từ nó đến $u$ nhỏ hơn hoặc bằng tổng khoảng cách từ bất kỳ tập nào khác cùng kích thước (như $Q'_{ij}$) đến $u$.
-        \item Dòng 3 sử dụng Bổ đề 1 (phân rã khoảng cách).
+        \item Dòng 3 sử dụng Bổ đề \ref{lemma:1} (phân rã khoảng cách).
     \end{itemize}
     
     Vì $u \in G^2_{ij}$, theo định nghĩa của tập $G^\mu_{ij}$ với $\mu=2$, ta có điều kiện:
@@ -178,7 +178,7 @@ Chứng minh dựa trên sai số lượng tử hóa của lưới tọa độ �
 
 \begin{enumerate}
     \item \textbf{Sự tồn tại của khoảng chứa tâm tối ưu:}
-    Theo bổ đề 5, tồn tại $u \in U_{ij} \cap G_2^{ij}$. Từ Bổ đề 5, trọng tâm $\overline{Q'_{ij}}$ nằm trong khoảng $[u - l_{ij}, u + l_{ij}]$ với độ dài $l_{ij}$ được ước lượng từ tập lân cận $\mathcal{N}_{ij}(u)$.
+    Theo Bổ đề \ref{lemma:5}, tồn tại $u \in U_{ij} \cap G_2^{ij}$. Từ Bổ đề \ref{lemma:5}, trọng tâm $\overline{Q'_{ij}}$ nằm trong khoảng $[u - l_{ij}, u + l_{ij}]$ với độ dài $l_{ij}$ được ước lượng từ tập lân cận $\mathcal{N}_{ij}(u)$.
 
     \item \textbf{Sai số do chia lưới:}
     Khoảng này được chia thành các khoảng nhỏ $\epsilon' l_{ij}$. Do lưới bao phủ toàn bộ khoảng, luôn tồn tại một điểm lưới $u' \in U'_{ij}$ nằm đủ gần $\overline{Q'_{ij}}$. Khoảng cách này bị chặn bởi:
@@ -187,7 +187,7 @@ Chứng minh dựa trên sai số lượng tử hóa của lưới tọa độ �
     \end{equation*}
 
     \item
-    Thay thế các giá trị tham số $\epsilon' = \sqrt{\frac{\epsilon}{48}}$ và chặn trên của $l_{ij} \leq 2\sqrt{\frac{6\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{(1-\alpha)m_i}}$ (từ Bổ đề 5), ta có:
+    Thay thế các giá trị tham số $\epsilon' = \sqrt{\frac{\epsilon}{48}}$ và chặn trên của $l_{ij} \leq 2\sqrt{\frac{6\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{(1-\alpha)m_i}}$ (từ Bổ đề \ref{lemma:5}), ta có:
     \begin{equation*}
         \delta(u', \overline{Q'_{ij}}) \leq \sqrt{\frac{\epsilon}{48}} \cdot 2 \sqrt{\frac{6\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{(1-\alpha)m_i}} = \sqrt{\frac{24\epsilon \delta^2(Q'_{ij}, \overline{Q'_{ij}})}{48(1-\alpha)m_i}} = \sqrt{\frac{\epsilon \delta^2(Q'_{ij}, \overline{Q'_{ij}})}{2(1-\alpha)m_i}}
     \end{equation*}
@@ -212,9 +212,9 @@ Chứng minh này dựa trên việc sử dụng một tập hợp trung gian (g
 \begin{enumerate}
 \item \textbf{Chặn trên cho chi phí của tập ứng viên $I_{ij}$}
 
-Trước hết, ta xét tập hợp $I'_{ij}$ bao gồm $(1-\alpha)m_i$ tọa độ trong $P_{ij}$ gần nhất với một điểm mẫu $u' \in U'_{ij}$. Theo Hệ quả 2 (Corollary 2), với xác suất hằng số, tồn tại $u'$ sao cho $u'$ nằm rất gần tâm $\overline{Q'_{ij}}$:
+Trước hết, ta xét tập hợp $I'_{ij}$ bao gồm $(1-\alpha)m_i$ tọa độ trong $P_{ij}$ gần nhất với một điểm mẫu $u' \in U'_{ij}$. Theo Hệ quả \ref{cor:2}, với xác suất hằng số, tồn tại $u'$ sao cho $u'$ nằm rất gần tâm $\overline{Q'_{ij}}$:
 \[ \delta(u', \overline{Q'_{ij}}) \leq \sqrt{\frac{\epsilon \delta^2(Q'_{ij}, \overline{Q'_{ij}})}{2(1-\alpha)m_i}} \]
-Áp dụng Bổ đề 1  và tính tối ưu của trọng tâm, ta có chặn chi phí cho $I'_{ij}$ :
+Áp dụng Bổ đề \ref{lemma:1} và tính tối ưu của trọng tâm, ta có chặn chi phí cho $I'_{ij}$ :
 \begin{align*}
     \delta^2(I'_{ij}, \overline{I'_{ij}}) &\leq \delta^2(I'_{ij}, u') \\
     &\leq \delta^2(Q'_{ij}, u') \quad \text{(Do } I'_{ij} \text{ là tập những điểm gần } u' \text{ nhất)} \\
@@ -223,7 +223,7 @@ Trước hết, ta xét tập hợp $I'_{ij}$ bao gồm $(1-\alpha)m_i$ tọa đ
 \end{align*}
 Vì $|Q'_{ij}| = (1-\alpha)m_i$, ta thu được:
 \[ \delta^2(I'_{ij}, \overline{I'_{ij}}) \leq (1 + \frac{\epsilon}{2})\delta^2(Q'_{ij}, \overline{Q'_{ij}}) \]
-Trong Bước 10 của Thuật toán 1, tập $I_{ij}$ được chọn là tập có chi phí nhỏ nhất trong số các ứng viên. Do đó, chi phí của nó không vượt quá chi phí của $I'_{ij}$ :
+Trong Bước 10 của Thuật toán \ref{alg:fast_sampling}, tập $I_{ij}$ được chọn là tập có chi phí nhỏ nhất trong số các ứng viên. Do đó, chi phí của nó không vượt quá chi phí của $I'_{ij}$ :
 \[ \delta^2(I_{ij}, \overline{I_{ij}}) \leq (1 + \frac{\epsilon}{2})\delta^2(Q'_{ij}, \overline{Q'_{ij}}) \]
 
 \item \textbf{Sử dụng tập giao để bắc cầu}
@@ -232,10 +232,10 @@ Gọi $S = I_{ij} \cap Q_{ij}$ là tập giao giữa tập được chọn và t
 Theo định nghĩa, $|P_{ij} \setminus Q_{ij}| \leq \alpha m_i$. Do đó, khi xét giao của $I_{ij}$ (có kích thước $(1-\alpha)m_i$) với $Q_{ij}$, số lượng phần tử bị mất đi tối đa là $\alpha m_i$. Suy ra kích thước của tập giao:
 % TODO
 \[ |S| \geq |I_{ij}| - \alpha m_i = (1-2\alpha)m_i \]
-Đặt tỷ lệ trùng lặp $\zeta = \frac{|S|}{|I_{ij}|}$. Ta áp dụng Bổ đề 2 (về quan hệ giữa chi phí của tập con và tập cha):
+Đặt tỷ lệ trùng lặp $\zeta = \frac{|S|}{|I_{ij}|}$. Ta áp dụng Bổ đề \ref{lemma:2} (về quan hệ giữa chi phí của tập con và tập cha):
 
 \textit{2a: Khoảng cách từ tâm $\overline{I_{ij}}$ đến tâm giao $\overline{S}$.}
-Áp dụng Bổ đề 2 với $J = I_{ij}$ và $J_1 = S$:
+Áp dụng Bổ đề \ref{lemma:2} với $J = I_{ij}$ và $J_1 = S$:
 \begin{align*}
     \delta^2(\overline{S}, \overline{I_{ij}}) &\leq \frac{1-\zeta}{\zeta} \cdot \frac{\delta^2(I_{ij}, \overline{I_{ij}})}{|I_{ij}|} \\
     &= \frac{|I_{ij}| - |S|}{|S|} \cdot \frac{\delta^2(I_{ij}, \overline{I_{ij}})}{|I_{ij}|}
@@ -246,7 +246,7 @@ Vì $|I_{ij}| - |S| \leq \alpha m_i$ và $|S| \geq (1-2\alpha)m_i$, ta có chặ
 (Lưu ý: Ta có $|I_{ij}| = |Q'_{ij}| = (1 - \alpha)m_i$ và sử dụng tính chất $\delta^2(Q'_{ij}, \overline{Q'_{ij}}) \leq \delta^2(Q_{ij}, \overline{Q_{ij}})$).
 
 \textit{2b: Khoảng cách từ tâm $\overline{Q_{ij}}$ đến tâm giao $\overline{S}$.}
-Tương tự, áp dụng Bổ đề 2 với $J = Q_{ij}$ và $J_1 = S$. Gọi $\zeta' = |S|/|Q_{ij}|$. Phần bù là các điểm thuộc $Q_{ij}$ nhưng không thuộc $I_{ij}$, kích thước tối đa là $\alpha m_i$. Ta có :
+Tương tự, áp dụng Bổ đề \ref{lemma:2} với $J = Q_{ij}$ và $J_1 = S$. Gọi $\zeta' = |S|/|Q_{ij}|$. Phần bù là các điểm thuộc $Q_{ij}$ nhưng không thuộc $I_{ij}$, kích thước tối đa là $\alpha m_i$. Ta có :
 \[ \delta^2(\overline{S}, \overline{Q_{ij}}) \leq \frac{\alpha m_i}{|S|} \cdot \frac{\delta^2(Q_{ij}, \overline{Q_{ij}})}{|Q_{ij}|} \leq \frac{\alpha}{1-2\alpha} \cdot \frac{\delta^2(Q_{ij}, \overline{Q_{ij}})}{|Q_{ij}|} \]
 
 \item \textbf{Kết hợp bằng bất đẳng thức tam giác}
@@ -299,7 +299,7 @@ Bình phương vô hướng hai vế (vì là vô hướng nên cũng là $\delt
 \item \textbf{Phân rã chi phí phân cụm tối ưu}
 
 \[ \delta^2(P^*_{ij}, \overline{P^*_{ij}}) = \delta^2(P^*_{ij} \setminus Q_{ij}, \overline{P^*_{ij}}) + \delta^2(Q_{ij}, \overline{P^*_{ij}}) \]
-Tiếp tục áp dụng Bổ đề 1 cho từng số hạng:
+Tiếp tục áp dụng Bổ đề \ref{lemma:1} cho từng số hạng:
 \begin{itemize}
     \item Với số hạng thứ nhất:
     \[ \delta^2(P^*_{ij} \setminus Q_{ij}, \overline{P^*_{ij}}) = \delta^2(P^*_{ij} \setminus Q_{ij}, \overline{P^*_{ij} \setminus Q_{ij}}) + |P^*_{ij} \setminus Q_{ij}| \delta^2(\overline{P^*_{ij} \setminus Q_{ij}}, \overline{P^*_{ij}}) \]
@@ -365,13 +365,13 @@ Giả sử $C = \{\hat{c}_1, \hat{c}_2, \dots, \hat{c}_k\}$ là tập hợp các
 Tổng chi phí phân cụm $\delta^2(P, C)$ được chặn trên bởi tổng chi phí của từng cụm tối ưu đối với tâm tương ứng được gán:
 \[ \delta^2(P, C) \leq \sum_{i=1}^{k} \sum_{j=1}^{d} \delta^2(P^*_{ij}, c_{ij}) \]
 
-Áp dụng Bổ đề 1:
+Áp dụng Bổ đề \ref{lemma:1}:
 \[ \delta^2(P^*_{ij}, c_{ij}) = \delta^2(P^*_{ij}, \overline{P^*_{ij}}) + |P^*_{ij}| \delta^2(\overline{P^*_{ij}}, c_{ij}) \]
 
-Sử dụng kết quả từ Bổ đề 7, ta có chặn trên cho khoảng cách giữa tâm tối ưu $\overline{P^*_{ij}}$ và tâm thuật toán $c_{ij}$:
+Sử dụng kết quả từ Bổ đề \ref{lemma:7}, ta có chặn trên cho khoảng cách giữa tâm tối ưu $\overline{P^*_{ij}}$ và tâm thuật toán $c_{ij}$:
 \[ \delta^2(\overline{P^*_{ij}}, c_{ij}) \leq \left( \frac{\alpha}{1-\alpha} + \frac{\alpha(4+\epsilon)}{(1-2\alpha)(1-\alpha)} \right) \frac{\delta^2(P^*_{ij}, \overline{P^*_{ij}})}{|P^*_{ij}|} \]
 
-Thay thế  phương trình bổ đề 1 vào bất đẳng thức trên:
+Thay thế phương trình Bổ đề \ref{lemma:1} vào bất đẳng thức trên:
 \begin{align*}
 \delta^2(P^*_{ij}, c_{ij}) &\leq \delta^2(P^*_{ij}, \overline{P^*_{ij}}) + |P^*_{ij}| \left[ \left( \frac{\alpha}{1-\alpha} + \frac{\alpha(4+\epsilon)}{(1-2\alpha)(1-\alpha)} \right) \frac{\delta^2(P^*_{ij}, \overline{P^*_{ij}})}{|P^*_{ij}|} \right] \\
 &= \left( 1 + \frac{\alpha}{1-\alpha} + \frac{\alpha(4+\epsilon)}{(1-2\alpha)(1-\alpha)} \right) \delta^2(P^*_{ij}, \overline{P^*_{ij}})
@@ -387,7 +387,7 @@ Thuật toán thành công nếu trên mỗi chiều $j$ của mỗi cụm $i$, 
 
 \begin{enumerate}
     \item \textbf{Xác suất thất bại trên một mẫu:}
-    Theo Bổ đề 4, tập hợp các tọa độ tốt $G^2_{ij}$ chiếm ít nhất một nửa số lượng các tọa độ trong tập tối ưu con $Q'_{ij}$. Do đó, tỷ lệ phần tử tốt trong toàn bộ $P_{ij}$ là:
+    Theo Bổ đề \ref{lemma:4}, tập hợp các tọa độ tốt $G^2_{ij}$ chiếm ít nhất một nửa số lượng các tọa độ trong tập tối ưu con $Q'_{ij}$. Do đó, tỷ lệ phần tử tốt trong toàn bộ $P_{ij}$ là:
     \[ \frac{|G^2_{ij}|}{|P_{ij}|} \geq \frac{1}{m_i} \cdot \frac{(1-\alpha)m_i}{2} = \frac{1-\alpha}{2} \]
     Khi lấy ngẫu nhiên một mẫu, xác suất \textit{không} chọn được tọa độ tốt là $1 - \frac{|G^2_{ij}|}{m_i}$.
     
@@ -583,7 +583,7 @@ trong đó:
 \end{lemma}
 
 \begin{proof}
-Theo Bổ đề 8 và 9, với xác suất ít nhất $1 - \frac{\epsilon_1}{m^2 d \log^2(m \Delta_{\max}^2)}$, các điều kiện sau đây đồng thời xảy ra đối với tập mẫu ngẫu nhiên $S_{ij}$:
+Theo Bổ đề \ref{lemma:8} và \ref{lemma:9}, với xác suất ít nhất $1 - \frac{\epsilon_1}{m^2 d \log^2(m \Delta_{\max}^2)}$, các điều kiện sau đây đồng thời xảy ra đối với tập mẫu ngẫu nhiên $S_{ij}$:
 \begin{enumerate}
     \item Số lượng phần tử thuộc các khối nhỏ trong mẫu: $|\mathcal{J}(u) \cap S_{ij}| \leq 2\epsilon_1 \alpha |S_{ij}|$.
     \item Số lượng phần tử ngoại lai trong mẫu: $|\mathcal{O}(u) \cap S_{ij}| \leq (1 + \epsilon_1)\alpha |S_{ij}|$.
@@ -606,7 +606,7 @@ Khi loại bỏ $\mathcal{F}'(u)$, phần còn lại của mẫu $S_{ij}$ chỉ 
 % Cụ thể, ta sử dụng chặn trên của khoảng cách và số lượng mẫu:
 \begin{align*}
     \delta^2(\mathcal{B}_u^l \cap S_{ij}, u) &< |\mathcal{B}_u^l \cap S_{ij}| \cdot (1+\epsilon_1)^{l+1} \\
-    &\leq \left( (1+\epsilon_1) \frac{|S_{ij}|}{m_i} |\mathcal{B}_u^l| \right) \cdot (1+\epsilon_1)^{l+1} \quad \text{(từ Bổ đề 8)} \\
+    &\leq \left( (1+\epsilon_1) \frac{|S_{ij}|}{m_i} |\mathcal{B}_u^l| \right) \cdot (1+\epsilon_1)^{l+1} \quad \text{(từ Bổ đề \ref{lemma:8})} \\
     &= \frac{|S_{ij}|}{m_i} (1+\epsilon_1)^2 \left( |\mathcal{B}_u^l| (1+\epsilon_1)^l \right) \\
     &\leq \frac{|S_{ij}|}{m_i} (1+\epsilon_1)^2 \delta^2(\mathcal{B}_u^l, u)
 \end{align*}
@@ -634,7 +634,7 @@ Theo định nghĩa, $\mathcal{F}^\dagger(u)$ là tập hợp gồm $(2+20\epsil
 \[ \delta^2(P_{ij} \setminus \mathcal{F}^\dagger(u), u) \leq \delta^2(P_{ij} \setminus \mathcal{F}''(u), u) \]
 Chi phí còn lại sau khi loại bỏ $\mathcal{F}''(u)$ là tổng chi phí của các khối lớn sau khi trừ đi $\mathcal{H}_u^l$. Sử dụng chặn trên khoảng cách $(1+\epsilon_1)^{l+1}$ trong khối $\mathcal{B}_u^l$:
 \[ \delta^2(P_{ij} \setminus \mathcal{F}''(u), u) = \sum_{\mathcal{B}_u^l} \delta^2(\mathcal{B}_u^l \setminus \mathcal{H}_u^l, u) \leq \sum_{\mathcal{B}_u^l} (1+\epsilon_1)^{l+1} (|\mathcal{B}_u^l| - |\mathcal{H}_u^l|) \]
-Từ Bổ đề 8, ta có $|\mathcal{B}_u^l| \leq \frac{m_i}{|S_{ij}|(1-\epsilon_1)} |\mathcal{B}_u^l \cap S_{ij}|$. Thay thế vào bất đẳng thức:
+Từ Bổ đề \ref{lemma:8}, ta có $|\mathcal{B}_u^l| \leq \frac{m_i}{|S_{ij}|(1-\epsilon_1)} |\mathcal{B}_u^l \cap S_{ij}|$. Thay thế vào bất đẳng thức:
 \begin{align*}
     |\mathcal{B}_u^l| - |\mathcal{H}_u^l| &\leq \frac{m_i}{|S_{ij}|(1-\epsilon_1)} |\mathcal{B}_u^l \cap S_{ij}| - (1+3\epsilon_1)\frac{m_i}{|S_{ij}|} |\mathcal{Z}_u^l| \\
     &= \frac{m_i}{|S_{ij}|} \left( \frac{1}{1-\epsilon_1} |\mathcal{B}_u^l \cap S_{ij}| - (1+3\epsilon_1)|\mathcal{Z}_u^l| \right)
@@ -664,16 +664,16 @@ Chứng minh được chia thành ba giai đoạn chính: xác định sự tồ
 
 \textbf{1. Tọa độ ứng viên tốt}
 
-Theo Bổ đề 4 và Bổ đề 5, với xác suất hằng số, tồn tại ít nhất một tọa độ $u_1 \in U'_{ij}$ nằm rất gần trọng tâm của tập $Q'_{ij}$ (tập con của $Q_{ij}$ có chi phí nhỏ nhất với kích thước $(1-\alpha)m_i$). Cụ thể:
+Theo Bổ đề \ref{lemma:4} và Bổ đề \ref{lemma:5}, với xác suất hằng số, tồn tại ít nhất một tọa độ $u_1 \in U'_{ij}$ nằm rất gần trọng tâm của tập $Q'_{ij}$ (tập con của $Q_{ij}$ có chi phí nhỏ nhất với kích thước $(1-\alpha)m_i$). Cụ thể:
 \[ \delta^2(u_1, \overline{Q'_{ij}}) \leq \frac{\epsilon_1 \delta^2(Q'_{ij}, \overline{Q'_{ij}})}{|Q'_{ij}|} \]
-Sử dụng Bổ đề 1 , ta liên hệ chi phí của tập các điểm lân cận $\mathcal{N}_{ij}(u_1)$ với chi phí tối ưu:
+Sử dụng Bổ đề \ref{lemma:1}, ta liên hệ chi phí của tập các điểm lân cận $\mathcal{N}_{ij}(u_1)$ với chi phí tối ưu:
 \[ \delta^2(\mathcal{N}_{ij}(u_1), u_1) \leq \delta^2(Q'_{ij}, u_1) = \delta^2(Q'_{ij}, \overline{Q'_{ij}}) + |Q'_{ij}| \delta^2(u_1, \overline{Q'_{ij}}) \]
 Thay thế chặn của $u_1$ vào, ta có:
 \[ \delta^2(\mathcal{N}_{ij}(u_1), u_1) \leq (1 + \epsilon_1) \delta^2(Q'_{ij}, \overline{Q'_{ij}}) \]
 
 \textbf{2. Giới hạn chi phí của tập được chọn $I_{ij}$}
 
-Gọi $c_{ij}$ là tọa độ được bộ ước lượng $\omega$ chọn ở Bước 11 của Thuật toán 2. Do $c_{ij}$ tối thiểu hóa $\omega$ trên $U'_{ij}$, ta có $\omega(c_{ij}) \leq \omega(u_1)$. Kết hợp với các chặn của bộ ước lượng từ Bổ đề 10:
+Gọi $c_{ij}$ là tọa độ được bộ ước lượng $\omega$ chọn ở Bước 11 của Thuật toán \ref{alg:fast_estimation}. Do $c_{ij}$ tối thiểu hóa $\omega$ trên $U'_{ij}$, ta có $\omega(c_{ij}) \leq \omega(u_1)$. Kết hợp với các chặn của bộ ước lượng từ Bổ đề \ref{lemma:10}:
 \[ \frac{\delta^2(P_{ij} \setminus \mathcal{F}^\dagger(c_{ij}), c_{ij})}{1 + 7\epsilon_1} \leq \omega(c_{ij}) \leq \omega(u_1) \leq (1 + \epsilon_1)^2 \delta^2(\mathcal{N}_{ij}(u_1), u_1) \]
 Từ đó suy ra chặn trên cho chi phí thực tế của $c_{ij}$:
 \[ \delta^2(I_{ij}, c_{ij}) \leq (1 + 7\epsilon_1)\omega(c_{ij}) \leq (1 + \epsilon_1)^3 (1 + 7\epsilon_1) \delta^2(Q'_{ij}, \overline{Q'_{ij}}) \]
@@ -685,7 +685,7 @@ Bằng cách chọn $\epsilon_1 = \epsilon/126$, và $\delta^2(I_{ij}, \overline
 Để giới hạn $\delta^2(\overline{I_{ij}}, \overline{Q_{ij}})$, ta sử dụng giao tập hợp $S = I_{ij} \cap Q_{ij}$ làm cầu nối và áp dụng Bất đẳng thức tam giác cho khoảng cách Euclid:
 \[ \delta(\overline{I_{ij}}, \overline{Q_{ij}}) \leq \delta(\overline{I_{ij}}, \overline{S}) + \delta(\overline{S}, \overline{Q_{ij}}) \]
 
-Áp dụng Bổ đề 6 (đã được chứng minh cho Fast-Sampling và mở rộng cho Fast-Estimation), ta có các chặn sau cho từng thành phần khoảng cách:
+Áp dụng Bổ đề \ref{lemma:6} (đã được chứng minh cho Fast-Sampling và mở rộng cho Fast-Estimation), ta có các chặn sau cho từng thành phần khoảng cách:
 
 \[ \delta^2(\overline{I_{ij}}, \overline{S}) \leq \frac{(2\alpha + \alpha\epsilon)(1+\epsilon)}{(1 - 3\alpha - \epsilon)} \frac{|Q'_{ij}|}{|I_{ij}||Q_{ij}|} \delta^2(Q_{ij}, \overline{Q_{ij}}) \]
 Do $|I_{ij}| = |Q'_{ij}|$:
@@ -716,7 +716,7 @@ Tổng chi phí phân cụm $\delta^2(P, C)$ có thể được phân rã theo t
 \[ \delta^2(P, C) \leq \sum_{i=1}^{k} \sum_{j=1}^{d} \delta^2(P^*_{ij}, c_{ij}) \]
 \[ \delta^2(P^*_{ij}, c_{ij}) = \delta^2(P^*_{ij}, \overline{P^*_{ij}}) + |P^*_{ij}| \delta^2(\overline{P^*_{ij}}, c_{ij}) \]
 
-Dựa vào Bổ đề 7 (được chứng minh dựa trên kết quả của Bổ đề 11 về khoảng cách giữa $\overline{I_{ij}}$ và $\overline{Q_{ij}}$), ta có chặn trên cho khoảng cách giữa các tâm:
+Dựa vào Bổ đề \ref{lemma:7} (được chứng minh dựa trên kết quả của Bổ đề \ref{lemma:11} về khoảng cách giữa $\overline{I_{ij}}$ và $\overline{Q_{ij}}$), ta có chặn trên cho khoảng cách giữa các tâm:
 \[ \delta^2(\overline{P^*_{ij}}, c_{ij}) \leq \left( \frac{\alpha}{1-\alpha} + \frac{13\alpha - 15\alpha^2}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)} \right) \frac{\delta^2(P^*_{ij}, \overline{P^*_{ij}})}{|P^*_{ij}|} \]
 Dùng với Bổ đề~\ref{lemma:1}
 \begin{align*}
@@ -730,7 +730,7 @@ Lấy tổng trên tất cả các cụm $i$ và các chiều $j$:
 
 \textbf{2. Xác suất thành công}
 
-Sự thành công của Fast-Estimation phụ thuộc vào độ chính xác của bộ ước lượng $\omega(u)$. Điều này được đảm bảo bởi Bổ đề 8 và Bổ đề 9 thông qua việc lấy mẫu ngẫu nhiên.
+Sự thành công của Fast-Estimation phụ thuộc vào độ chính xác của bộ ước lượng $\omega(u)$. Điều này được đảm bảo bởi Bổ đề \ref{lemma:8} và Bổ đề \ref{lemma:9} thông qua việc lấy mẫu ngẫu nhiên.
 
 \begin{enumerate}
     \item \textbf{Biến ngẫu nhiên:} Xét quá trình lấy mẫu $S_{ij}$ từ $P_{ij}$. Gọi biến ngẫu nhiên $X_p$, bằng 1 nếu điểm $p \in P_{ij}$ được chọn vào $S_{ij}$ và 0 nếu ngược lại. Tổng số điểm thuộc một tập con bất kỳ $A \subseteq P_{ij}$ rơi vào mẫu là $X = \sum_{p \in A} X_p$.
@@ -794,7 +794,7 @@ Thời gian chạy của thuật toán được phân tích theo từng giai đo
 \end{algorithm}
 
 \begin{theorem}
-Cho $R_1 = O\left( \frac{\log k}{1 - 2\alpha} \right)$ và $R_2 = O\left( \frac{\log(m^3d \log^3(m\Delta^2)/\epsilon^2) \log(m\Delta^2)}{\alpha \epsilon^4} \right)$, trong đó $\Delta$ là tỷ lệ chiều của tập dữ liệu. Với xác suất hằng số, Thuật toán 4 (Fast-Filtering) trả về nghiệm xấp xỉ $(1 + O(\sqrt{\alpha}))$ cho bài toán k-means có hỗ trợ học trong thời gian $O(md) + \tilde{O}\left( \frac{kd}{\epsilon^4(1-2\alpha)\alpha} \right)$ với $\alpha \in (0, 1/3 - \epsilon)$.
+Cho $R_1 = O\left( \frac{\log k}{1 - 2\alpha} \right)$ và $R_2 = O\left( \frac{\log(m^3d \log^3(m\Delta^2)/\epsilon^2) \log(m\Delta^2)}{\alpha \epsilon^4} \right)$, trong đó $\Delta$ là tỷ lệ chiều của tập dữ liệu. Với xác suất hằng số, Thuật toán Fast-Filtering trả về nghiệm xấp xỉ $(1 + O(\sqrt{\alpha}))$ cho bài toán k-means có hỗ trợ học trong thời gian $O(md) + \tilde{O}\left( \frac{kd}{\epsilon^4(1-2\alpha)\alpha} \right)$ với $\alpha \in (0, 1/3 - \epsilon)$.
 \end{theorem}
 
 \begin{proof}
@@ -804,7 +804,7 @@ Chứng minh được chia thành ba giai đoạn chính: phân tích thành cô
 
 Mục tiêu là đảm bảo tập ứng viên $U_i$ chứa ít nhất một điểm "tốt" nằm gần tâm tối ưu thực sự $c^*_i$ (ký hiệu là $\overline{P^*_i}$ trong các phần trước, ở đây ta dùng $c^*_i$ để đồng nhất với ký hiệu trong bài báo cho Fast-Filtering).
 
-Gọi tập $G_2(P^*_i) = \{x \in P^*_i : \delta^2(x, c^*_i) \leq 2 \delta^2(P^*_i, c^*_i) / |P^*_i|\}$. Theo Bổ đề 4 , $|P_i \cap P^*_i| \geq (1-\alpha)\max(|P_i|, |P^*_i|)$, ta suy ra:
+Gọi tập $G_2(P^*_i) = \{x \in P^*_i : \delta^2(x, c^*_i) \leq 2 \delta^2(P^*_i, c^*_i) / |P^*_i|\}$. Theo Bổ đề \ref{lemma:4} , $|P_i \cap P^*_i| \geq (1-\alpha)\max(|P_i|, |P^*_i|)$, ta suy ra:
 \[ |P_i \cap G_2(P^*_i)| \geq |P_i \cap P^*_i| - |P^*_i \setminus G_2(P^*_i)| \geq (1-\alpha)|P^*_i| - \frac{|P^*_i|}{2} = \left(\frac{1}{2}-\alpha\right)|P^*_i| \]
 Tỷ lệ điểm tốt trong $P_i$ là $\zeta_i = \frac{|P_i \cap G_2(P^*_i)|}{|P_i|} \geq (1-\alpha)(\frac{1}{2}-\alpha)$.
 Với kích thước mẫu $R_1 = \Theta\left(\frac{1}{1-2\alpha}\log\left(\frac{k}{\eta}\right)\right)$, xác suất để tập $U_i$ chứa ít nhất một điểm tốt $u_i \in G_2(P^*_i)$ là rất cao (xem chứng minh Hệ quả~\ref{cor:3}).
@@ -861,19 +861,19 @@ Với kích thước mẫu $R_1 = \Theta\left(\frac{1}{1-2\alpha}\log\left(\frac
 %         \node[font=\LARGE] at (-2.3, 2.3) {$Q'_{ij}$};
 
 %     \end{tikzpicture}
-%     \caption{Bổ đề 4 với bán kính vùng tốt được xác định chính xác bằng $2 \times$ khoảng cách trung bình cụm.}
+%     \caption{Bổ đề \ref{lemma:4} với bán kính vùng tốt được xác định chính xác bằng $2 \times$ khoảng cách trung bình cụm.}
 % \end{figure}
 
 
 \textbf{2. Độ tin cậy của bộ ước lượng}
 
 Tiếp theo, ta cần đảm bảo bộ ước lượng $\omega(u)$ chọn ra được tâm $c_i$ tốt từ tập $U_i$.
-% Với kích thước mẫu $R_2$ được chọn đủ lớn, Hệ quả 4 (Corollary 4) dựa trên Bổ đề 10 cho thấy bộ ước lượng xấp xỉ chính xác chi phí thực tế.
+% Với kích thước mẫu $R_2$ được chọn đủ lớn, Hệ quả 4 (Corollary 4) dựa trên Bổ đề \ref{lemma:10} cho thấy bộ ước lượng xấp xỉ chính xác chi phí thực tế.
 Do tồn tại $u_i \in G_2(P^*_i)$ trong tập ứng viên, chi phí của nó bị chặn bởi:
 \[ \delta^2(H_i(u_i), u_i) \leq \delta^2(Q_i, u_i) \leq 3\delta^2(P^*_i, c^*_i) \]
 Vì thuật toán chọn $c_i$ để tối thiểu hóa $\omega$, ta có kết quả quan trọng:
 \[ \delta^2(P_i \setminus \mathcal{Z}^\dagger(c_i), c_i) \leq 4\delta^2(P^*_i, c^*_i) \]
-Điều này đảm bảo rằng tâm được chọn $c_i$ (và tập hợp sau lọc $I_i$) có chất lượng tốt, làm tiền đề cho Bổ đề 12. 
+Điều này đảm bảo rằng tâm được chọn $c_i$ (và tập hợp sau lọc $I_i$) có chất lượng tốt, làm tiền đề cho Bổ đề \ref{lemma:12}. 
 
 \textbf{3. Tổng chi phí}
 
@@ -905,7 +905,7 @@ Cho kích thước mẫu $R_1 = \Theta\left( \frac{\log k}{1 - 2\alpha} \right)$
 
 % \textbf{Bước 1: Xác định kích thước của tập điểm "tốt"}
 
-% Định nghĩa tập $G_2(P^*_i) = \{x \in P^*_i : \delta^2(x, c^*_i) \leq 2\delta^2(P^*_i, c^*_i) / |P^*_i|\}$. Theo Bổ đề 4, ta biết rằng ít nhất một nửa số điểm trong cụm tối ưu là điểm tốt :
+% Định nghĩa tập $G_2(P^*_i) = \{x \in P^*_i : \delta^2(x, c^*_i) \leq 2\delta^2(P^*_i, c^*_i) / |P^*_i|\}$. Theo Bổ đề \ref{lemma:4}, ta biết rằng ít nhất một nửa số điểm trong cụm tối ưu là điểm tốt :
 % \[ |G_2(P^*_i)| \geq \frac{1}{2}|P^*_i| \]
 % Suy ra, số lượng các điểm "xấu" (nằm xa tâm) trong cụm tối ưu bị chặn bởi $|P^*_i \setminus G_2(P^*_i)| < \frac{1}{2}|P^*_i|$.
 
@@ -918,7 +918,7 @@ Cho kích thước mẫu $R_1 = \Theta\left( \frac{\log k}{1 - 2\alpha} \right)$
 
 % \textbf{Bước 3: Xác suất lấy mẫu thành công}
 
-Hệ quả này tương tự Corollary 1, chứng minh tương tự.
+Hệ quả này tương tự Hệ quả \ref{cor:1}, chứng minh tương tự.
 
 Gọi $\zeta_i$ là xác suất chọn được một điểm thuộc $G_2(P^*_i)$ khi lấy mẫu ngẫu nhiên đều từ $P_i$:
 \begin{align*}
@@ -982,7 +982,7 @@ trong đó $H_i(u)$ là tập hợp $(1-\alpha)m_i$ điểm gần $u$ nhất tro
 % \end{itemize}
 
 % \textbf{2. Thiết lập Chặn trên}
-Hệ quả  này tương tự Lemma 10, chứng minh tương tự.
+Hệ quả  này tương tự Bổ đề \ref{lemma:10}, chứng minh tương tự.
 
 Gọi $\mathcal{F}'(u)$ là tập hợp các điểm thuộc mẫu $S_i$ nằm trong các khối nhỏ hoặc là điểm ngoại lai. Ta đã biết $|\mathcal{F}'(u)| \leq (1 + 3\epsilon_1)\alpha|S_i|$. Khi tính $\omega(u)$, thuật toán loại bỏ một lượng điểm tương ứng, do đó chi phí chỉ còn phụ thuộc vào các khối lớn.
 Xét tổng chi phí trên mẫu:
@@ -1034,7 +1034,7 @@ Thay thế kích thước của $|I_i|$ vào:
 
 \textbf{2. Kẹp tập đã lọc}
 
-Dựa trên Hệ quả 4 (Corollary 4) trong bài báo , tâm $c_i$ được chọn bởi bộ ước lượng thỏa mãn điều kiện về chi phí với xác suất cao:
+Dựa trên Hệ quả \ref{cor:4} trong bài báo , tâm $c_i$ được chọn bởi bộ ước lượng thỏa mãn điều kiện về chi phí với xác suất cao:
 \[ \delta^2(I_i, c_i) \leq 4\delta^2(P^*_i, c^*_i) \]
 Theo tính chất của trọng tâm, tổng bình phương khoảng cách từ các điểm trong một tập hợp đến trọng tâm của nó ($\overline{I_i}$) luôn nhỏ hơn hoặc bằng tổng bình phương khoảng cách đến bất kỳ điểm nào khác ($c_i$). Do đó:
 \[ \delta^2(I_i, \overline{I_i}) \leq \delta^2(I_i, c_i) \leq 4\delta^2(P^*_i, c^*_i) \]
@@ -1108,16 +1108,16 @@ Tổng hợp lại:
 
 \textbf{3. Tổng hợp}
 
-Theo giả thiết bài toán và Bổ đề 12:
+Theo giả thiết bài toán và Bổ đề \ref{lemma:12}:
 \begin{itemize}
     \item Tổng kích thước sai số: $|A_i| + |B_i| \leq 3\alpha m_i + \alpha m_i = 4\alpha m_i$.
     \item Hệ số khoảng cách tâm: 
     \[ \left(1+\frac{1}{\sqrt{\alpha}}\right)(|A_i| + |B_i|) \leq \frac{\sqrt{\alpha}+1}{\sqrt{\alpha}} \cdot 4\alpha m_i = 4\sqrt{\alpha}(1+\sqrt{\alpha}) m_i \]
-    \item Khoảng cách giữa các tâm (từ Lemma 12): $\delta^2(\overline{I_i}, c^*_i) \leq \frac{9\delta^2(P^*_i, c^*_i)}{(1 - (3+\epsilon)\alpha)m_i}$.
+    \item Khoảng cách giữa các tâm (từ Bổ đề \ref{lemma:12}): $\delta^2(\overline{I_i}, c^*_i) \leq \frac{9\delta^2(P^*_i, c^*_i)}{(1 - (3+\epsilon)\alpha)m_i}$.
     \item Chi phí trong cụm: $\delta^2(A_i, c^*_i) \leq \delta^2(P^*_i, c^*_i)$ và $\delta^2(B_i, \overline{I_i}) \leq 4\delta^2(P^*_i, c^*_i)$.
 \end{itemize}
 
-Thay thế các giá trị này vào phương trình Lemma 13:
+Thay thế các giá trị này vào phương trình Bổ đề \ref{lemma:13}:
 \begin{align*}
     \delta^2(Q_i, \overline{I_i}) - \delta^2(Q_i, c^*_i)  &\leq \sqrt{\alpha}[\delta^2(P^*_i, c^*_i) + 4\delta^2(P^*_i, c^*_i)] + 4\sqrt{\alpha}(1+\sqrt{\alpha}) m_i \cdot \frac{9\delta^2(P^*_i, c^*_i)}{(1 - (3+\epsilon)\alpha)m_i} \\
     &= 5\sqrt{\alpha}\delta^2(P^*_i, c^*_i) + \frac{36(\sqrt{\alpha} + \alpha)}{1 - (3+\epsilon)\alpha}\delta^2(P^*_i, c^*_i)
@@ -1140,7 +1140,7 @@ Ta có (theo định nghĩa):
 \[ \delta^2(P^*_i, \overline{I_i}) = \delta^2(Q_i, \overline{I_i}) + \delta^2(R_i, \overline{I_i}) \]
 \begin{enumerate}
 \item \textbf{Chặn trên cho $Q_i$}
-Sử dụng kết quả  từ Bổ đề 13:
+Sử dụng kết quả từ Bổ đề \ref{lemma:13}:
 \[ \delta^2(Q_i, \overline{I_i}) \leq \delta^2(Q_i, c^*_i) + \left( 5\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} \right) \delta^2(P^*_i, c^*_i) \]
 \item \textbf{Chặn trên cho $R_i$ (âm tính giả của dự đoán)}
 Áp dụng bất đẳng thức tam giác nới lỏng \ref{thm:relaxed_triangle} với $\lambda = \sqrt{\alpha}$ cho mỗi $p \in R_i$:
@@ -1197,7 +1197,7 @@ $\\$
 % Ý tưởng: tồn tại một ứng viên "tốt" trong lưới (grid) và tối ưu của quy trình lựa chọn tâm.
 
 \textbf{1. Sự tồn tại của ứng viên tốt trong lưới}
-Theo Bước 6 và 7 của Thuật toán 5, không gian xung quanh các mẫu được phân rã thành các lưới con. Với xác suất cao, tồn tại một điểm ứng viên $u' \in U'_i$ nằm rất gần tâm tối ưu $c^*_i$. Cụ thể, dựa trên kích thước lưới con $(1-\alpha)\alpha\epsilon_1 l_i / \sqrt{d}$, khoảng cách này được chặn bởi:
+Theo Bước 6 và 7 của Thuật toán \ref{alg:kmedian_sampling}, không gian xung quanh các mẫu được phân rã thành các lưới con. Với xác suất cao, tồn tại một điểm ứng viên $u' \in U'_i$ nằm rất gần tâm tối ưu $c^*_i$. Cụ thể, dựa trên kích thước lưới con $(1-\alpha)\alpha\epsilon_1 l_i / \sqrt{d}$, khoảng cách này được chặn bởi:
 \[ \delta(u', c^*_i) \leq \frac{\alpha \epsilon \delta(P^*_i, c^*_i)}{m_i} \]
 
 % (Lưu ý: Trong k-median, chúng ta sử dụng khoảng cách $\delta$ thay vì bình phương khoảng cách $\delta^2$).
@@ -1254,7 +1254,7 @@ Thay thế các giá trị kích thước vào:
 
 \item \textbf{Chặn trên cho chi phí}
 
-Dựa vào tính chất tối ưu trong Bước 9 của Thuật toán 5, $u_i$ là điểm tối thiểu hóa chi phí k-median đối với tập lân cận của nó. Theo Hệ quả 5 (Corollary 5) đã chứng minh trước đó, với xác suất cao, chi phí này bị chặn bởi:
+Dựa vào tính chất tối ưu trong Bước 9 của Thuật toán \ref{alg:kmedian_sampling}, $u_i$ là điểm tối thiểu hóa chi phí k-median đối với tập lân cận của nó. Theo Hệ quả \ref{cor:5} đã chứng minh trước đó, với xác suất cao, chi phí này bị chặn bởi:
 \[ \delta(\mathcal{N}_i(u_i), u_i) \leq (1 + \alpha\epsilon)\delta(P^*_i, c^*_i) \]
 % (Lưu ý: Bất đẳng thức này xuất phát từ việc so sánh $u_i$ với một ứng viên tốt $u'$ trong lưới, và sử dụng tính chất $\delta(u', c^*_i) \leq \alpha\epsilon\delta(P^*_i, c^*_i)/m_i$).
 
@@ -1312,7 +1312,7 @@ Hiệu chi phí phân cụm được viết lại như sau:
 \textbf{2. Từng thành phần}
 
 Thành phần 1 (Tập được chọn):
-    Theo Hệ quả 5 (Corollary 5), với xác suất cao, chi phí của tập được chọn thỏa mãn:
+    Theo Hệ quả \ref{cor:5}, với xác suất cao, chi phí của tập được chọn thỏa mãn:
     \[ \delta(\mathcal{N}_i(u_i), u_i) - \delta(\mathcal{N}_i(u_i), c^*_i) \leq \alpha\epsilon\delta(P^*_i, c^*_i) \]
 
 Thành phần 2 (Dương tính giả $B_i$):
@@ -1338,7 +1338,7 @@ Do đó, tổng kích thước sai số bị chặn bởi:
 
 Thay thế các chặn trên vào phương trình hiệu chi phí:
 \[ \delta(Q_i, u_i) - \delta(Q_i, c^*_i) \leq \alpha\epsilon\delta(P^*_i, c^*_i) + (|A_i| + |B_i|)\delta(u_i, c^*_i) \]
-Thay thế $|A_i| + |B_i| \leq 2\alpha m_i$ và khoảng cách tâm $\delta(u_i, c^*_i)$ từ Bổ đề 15:
+Thay thế $|A_i| + |B_i| \leq 2\alpha m_i$ và khoảng cách tâm $\delta(u_i, c^*_i)$ từ Bổ đề \ref{lemma:15}:
 \[ \delta(u_i, c^*_i) \leq \frac{(2+\alpha\epsilon)\delta(P^*_i, c^*_i)}{(1-2\alpha)m_i} \]
 Ta có:
 \begin{align*}
@@ -1370,7 +1370,7 @@ Chúng ta phân tích tổng chi phí bằng cách chia cụm tối ưu $P^*_i$ 
 \begin{enumerate}
 \item \textbf{Giới hạn chi phí của phần giao (dương tính thật)}
 
-Xét tập hợp $Q_i = P^*_i \cap P_i$. Áp dụng trực tiếp kết quả từ Bổ đề 16, ta có chặn trên cho chi phí của tập này đối với tâm $u_i$:
+Xét tập hợp $Q_i = P^*_i \cap P_i$. Áp dụng trực tiếp kết quả từ Bổ đề \ref{lemma:16}, ta có chặn trên cho chi phí của tập này đối với tâm $u_i$:
 \[ \delta(P^*_i \cap P_i, u_i) \leq \delta(P^*_i \cap P_i, c^*_i) + \frac{\alpha(4 + 3\epsilon)}{1 - 2\alpha} \delta(P^*_i, c^*_i) \]
 
 \item \textbf{Giới hạn chi phí của phần sai lệch (âm tính giả)}
@@ -1389,7 +1389,7 @@ Ta có
 \end{align*}
 
 \[ |P^*_i \setminus P_i| \leq \alpha |P^*_i| \quad \text{hoặc theo } m_i: \quad |P^*_i \setminus P_i| \leq \frac{\alpha m_i}{1-\alpha} \]
-Sử dụng kết quả từ Bổ đề 15 cho khoảng cách giữa hai tâm $\delta(u_i, c^*_i) \leq \frac{(2 + \alpha\epsilon)\delta(P^*_i, c^*_i)}{(1 - 2\alpha)m_i}$.
+Sử dụng kết quả từ Bổ đề \ref{lemma:15} cho khoảng cách giữa hai tâm $\delta(u_i, c^*_i) \leq \frac{(2 + \alpha\epsilon)\delta(P^*_i, c^*_i)}{(1 - 2\alpha)m_i}$.
 Thay thế vào biểu thức ở Bước 2:
 \begin{align*}
     \text{Sai số dịch chuyển} &= |P^*_i \setminus P_i| \delta(c^*_i, u_i) \\

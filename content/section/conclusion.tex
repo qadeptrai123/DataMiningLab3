@@ -1,7 +1,41 @@
-\section{Kết luận và mở rộng}
+\section{Bàn luận và mở rộng}
 
-\subsection{Kết luận}
+\subsection{Bàn luận}
 
-Trong bài báo này, tác giả đã trình bày các thuật toán mới dựa trên phương pháp lấy mẫu với thời gian chạy tuyến tính theo kích thước dữ liệu cho bài toán $k$-means có hỗ trợ học (learning-augmented). Thông qua thực nghiệm, tác giả chứng minh rằng thuật toán đề xuất đạt được hiệu năng tốt hơn trên các tập dữ liệu khác nhau so với các thuật toán tiên tiến nhất hiện nay (state-of-the-art algorithms). Một hướng nghiên cứu thú vị trong tương lai là thiết kế các thuật toán với tỷ lệ xấp xỉ tốt hơn trong khi vẫn duy trì thời gian chạy tuyến tính trong bối cảnh có hỗ trợ học.
+\subsubsection{Kết quả đạt được}
+
+Trong bài báo này, tác giả đã trình bày các thuật toán mới dựa trên phương pháp lấy mẫu với thời gian chạy tuyến tính theo kích thước dữ liệu cho bài toán $k$-means có hỗ trợ học (learning-augmented). Thông qua thực nghiệm, tác giả chứng minh rằng thuật toán đề xuất đạt được hiệu năng tốt hơn trên các tập dữ liệu khác nhau so với các thuật toán tiên tiến nhất hiện nay (state-of-the-art algorithms). 
+
+Qua kết quả lý thuyết và thực nghiệm, nhóm có một số nhận xét sau:
+\begin{itemize}
+    \item Có thể thấy Fast-Filtering tỷ lệ xấp xỉ càng tệ khi càng gần $1/3$, chỉ tốt hơn Fast-Estimation. Tuy vậy tỷ lệ xấp xỉ ở đây là trong trường hợp tệ nhất, thực nghiệm cho thấy tốt hơn.
+
+    \item Theo lí thuyết  Fast-Filtering phải thỏa $\alpha < 1/3$, Trong thực nghiệm của tác giả và nhóm, có thể chạy $\alpha \leq 1/3$ và vẫn cho kết quả tốt hơn.
+\end{itemize}
+
+\subsubsection{Ý nghĩa}
+
+Nghiên cứu của tác giả có ý nghĩa quan trọng trong cả lý thuyết và ứng dụng thực tiễn:
+\begin{enumerate}
+    \item Đóng góp lớn nhất là việc chứng minh được rằng ta không cần phải thực hiện sắp xếp tốn kém ($O(m \log m)$) để tìm các ứng viên tâm cụm tốt. Thay vào đó, chiến lược lấy mẫu (sampling) kết hợp với ước lượng thống kê là đủ để đạt độ chính xác tương đương.
+    \item Với thời gian chạy tuyến tính, các thuật toán này mở ra khả năng áp dụng các mô hình phân cụm phức tạp trên các tập dữ liệu lớn (massive datasets) mà trước đây các phương pháp learning-augmented cũ gặp khó khăn do chi phí thời gian.
+    \item Bài báo khẳng định tính hiệu quả của mô hình learning-augmented ngay cả khi bộ dự đoán có sai số, miễn là sai số $\alpha$ nằm trong giới hạn cho phép.
+\end{enumerate}
+
+\subsubsection{Hạn chế}
+
+Mặc dù đạt được những cải tiến đáng kể, phương pháp đề xuất vẫn tồn tại một số hạn chế cần lưu ý:
+\begin{itemize}
+    \item Để đạt được tốc độ nhanh hơn, các thuật toán lấy mẫu có thể chấp nhận một sự suy giảm nhỏ trong giới hạn xấp xỉ (approximation ratio) so với các phương pháp dựa trên sắp xếp (như của \cite{Nguyen2022}) trong các trường hợp xấu nhất, mặc dù thực nghiệm cho thấy sự suy giảm này là không đáng kể.
+    \item Thuật toán \textsc{Fast-Estimation} dựa trên giả định rằng aspect ratio $\Delta_{\max}$ của dữ liệu bị chặn bởi một hàm đa thức của $m$. Mặc dù hợp lý trong thực tế, nhưng về mặt lý thuyết đây là một ràng buộc so với các thuật toán không phụ thuộc vào hình học dữ liệu.
+    \item Các thuật toán đưa ra kết quả đúng với ``xác suất hằng số'' (constant probability). Mặc dù có thể tăng xác suất thành công bằng cách lặp lại thuật toán, nhưng điều này vẫn mang tính chất ngẫu nhiên so với các giải pháp tất định (deterministic).
+\end{itemize}
 
 \subsection{Mở rộng}
+
+\subsubsection{Mở rộng cho bài toán $k$-median}
+
+Bài báo không chỉ dừng lại ở bài toán $k$-means mà còn mở rộng phương pháp tiếp cận sang các hướng khác. Nhóm tác giả đã chứng minh tính linh hoạt của phương pháp lấy mẫu bằng cách áp dụng nó cho bài toán $k$-median. Xem chi tiết ở phần \ref{sec:fast-sampling-kmedian}.
+
+\subsubsection{Hướng nghiên cứu tương lai}
+Dựa trên kết quả và kết luận của bài báo, một hướng nghiên cứu thú vị trong tương lai là thiết kế các thuật toán với tỷ lệ xấp xỉ tốt hơn trong khi vẫn duy trì thời gian chạy tuyến tính trong bối cảnh có hỗ trợ học.

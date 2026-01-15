@@ -1,4 +1,5 @@
 \section{Thuật toán \textsc{Fast-Sampling} (k-median)}
+\label{sec:fast-sampling-kmedian}
 
 Trong mục này, tác giả trình bày cách mở rộng các phương pháp dựa trên lấy mẫu được đề xuất cho bài toán $k$-median có hỗ trợ học. Thách thức chính ở đây nảy sinh từ sự khác biệt trong các mục tiêu tối ưu hóa. Cụ thể, đối với một tập hợp tọa độ $S \subset \mathbb{R}^d$ bất kỳ, trọng tâm của $S$ không còn đóng vai trò là tâm phân cụm tối ưu cho $S$ theo mục tiêu $k$-median, khiến việc xác định các tọa độ hoặc tâm ứng viên chất lượng cao trở nên khó khăn. Kết quả là, các thuật toán $k$-median có hỗ trợ học hiện có thường gặp khó khăn trong việc đạt được các đảm bảo xấp xỉ chất lượng cao.
 
@@ -23,8 +24,16 @@ Sắp xếp (\cite{Nguyen2022}) & $1 + \frac{\alpha(7+10\alpha-10\alpha^2)}{(1-\
 
 Bảng~\ref{tab:3} cung cấp một so sánh chi tiết các kết quả cho bài toán $k$-median có hỗ trợ học. Tác giả cũng đưa ra một biểu đồ (Hình 2) về tỷ lệ xấp xỉ so với tỷ lệ lỗi $\alpha$. Có thể thấy từ bảng rằng kết quả tốt nhất hiện nay đạt được xấp xỉ $(1 + O(\alpha))$ với $\alpha \in [0, 1/2)$ (\cite{Nguyen2022}). So với các kết quả tiên tiến nhất, thuật toán Fast-Sampling có thể đạt được các đảm bảo chất lượng phân cụm tốt hơn với thời gian chạy kém hơn một chút đối với số chiều $d$ cố định.
 
-Mô tả cụ thể cho thuật toán $k$-median có hỗ trợ học được trình bày trong Thuật toán 5. Ý tưởng chung đằng sau thuật toán là trước tiên tạo ra các tâm ứng viên có thể xấp xỉ chặt chẽ các tâm phân cụm tối ưu cho mỗi cụm dự đoán. Sau đó, bằng cách chọn tâm tốt nhất với chi phí $k$-median nhỏ nhất, tác giả chứng minh rằng thuật toán đề xuất có thể đưa ra các đảm bảo xấp xỉ tốt hơn cho bài toán $k$-median có hỗ trợ học. Dưới đây, tác giả đưa ra phân tích cụ thể cho thuật toán được đề xuất.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/kmedian.png}
+    \caption{Biểu đồ tỷ lệ xấp xỉ theo tỷ lệ lỗi $\alpha$ cho $k$-median.}
+    \label{fig:kmedian}
+\end{figure}
 
+Mô tả cụ thể cho thuật toán $k$-median có hỗ trợ học được trình bày trong Thuật toán \ref{alg:kmedian_sampling}. Ý tưởng chung đằng sau thuật toán là trước tiên tạo ra các tâm ứng viên có thể xấp xỉ chặt chẽ các tâm phân cụm tối ưu cho mỗi cụm dự đoán. Sau đó, bằng cách chọn tâm tốt nhất với chi phí $k$-median nhỏ nhất, tác giả chứng minh rằng thuật toán đề xuất có thể đưa ra các đảm bảo xấp xỉ tốt hơn cho bài toán $k$-median có hỗ trợ học. Dưới đây, tác giả đưa ra phân tích cụ thể cho thuật toán được đề xuất.
+
+\setcounter{algorithm}{4}
 \begin{algorithm}
 \caption{Fast-Sampling ($k$-median)}
 \label{alg:kmedian_sampling}
@@ -48,7 +57,7 @@ Mô tả cụ thể cho thuật toán $k$-median có hỗ trợ học được t
 \end{algorithmic}
 \end{algorithm}
 
-Không mất tính tổng quát, tác giả có thể giả định rằng khoảng cách từng đôi tối thiểu giữa các điểm dữ liệu trong $P$ là 1 trong khi khoảng cách từng đôi tối đa là $\Delta$. Lưu ý rằng điều này có thể thực hiện được bằng các kỹ thuật tỉ lệ chuẩn. Theo Bổ đề 4, trong mỗi bước 2 của Thuật toán 5, với xác suất ít nhất $1 - 1/k$, có thể tìm thấy ít nhất một tâm $u \in U_i$ sao cho $\delta(u, c^*_i) \leq 2\delta(P^*_i, c^*_i)/|P^*_i| \leq \frac{2\delta(P^*_i, c^*_i)}{(1-\alpha)m_i}$, trong đó bước cuối cùng tuân theo thực tế là $|P^*_i| \geq |Q_i| \geq (1 - \alpha)m_i$. Sau đó, trong bước 3 của Thuật toán 5, vì thuật toán liệt kê tất cả các giá trị có thể giữa 1 và $\log(m\Delta)$, tồn tại ít nhất một dự đoán cho bán kính phân cụm (bước 4 của Thuật toán 5) sao cho $\delta(P^*_i, c^*_i)/(1 - \alpha)m_i \leq l_i \leq 2\delta(P^*_i, c^*_i)/(1 - \alpha)m_i$. Do đó, trong bước 6 của Thuật toán 5, lưới có tâm tại $u$ với độ dài cạnh $2l_i$ ($G(u)$) sẽ chứa tâm phân cụm tối ưu $c^*_i$. Sau đó, trong bước 7 của Thuật toán 5, bằng cách phân rã lưới $G(u)$ thành các lưới con nhỏ hơn với độ dài cạnh $(1 - \alpha)\alpha\epsilon_1 l_i / \sqrt{d}$ cho một số $\epsilon_1 < \epsilon/4$, tâm phân cụm tối ưu $c^*_i$ cũng phải thuộc về một trong các lưới con. Vì lưới con có độ dài cạnh $(1 - \alpha)\alpha\epsilon_1 l_i / \sqrt{d}$, cũng tồn tại ít nhất một $u' \in U'_i$ sao cho $u'$ đủ gần với $c^*_i$, tức là $\delta(u', c^*_i) \leq (1 - \alpha)\alpha\epsilon_1 l_i \leq \alpha\epsilon\delta(P^*_i, c^*_i)/m_i$. Gọi $u_i$ là điểm được chọn trong bước 9 của Thuật toán 5. Đối với bất kỳ điểm dữ liệu nào $u \in U'_i$, gọi $N_i(u)$ là tập hợp các điểm gần nhất $(1 - \alpha)m_i$ trong $P_i$ tới $u$. Do đó, ta có
+Không mất tính tổng quát, tác giả có thể giả định rằng khoảng cách từng đôi tối thiểu giữa các điểm dữ liệu trong $P$ là 1 trong khi khoảng cách từng đôi tối đa là $\Delta$. Lưu ý rằng điều này có thể thực hiện được bằng các kỹ thuật tỉ lệ chuẩn. Theo Bổ đề \ref{lemma:4}, trong mỗi bước 2 của Thuật toán \ref{alg:kmedian_sampling}, với xác suất ít nhất $1 - 1/k$, có thể tìm thấy ít nhất một tâm $u \in U_i$ sao cho $\delta(u, c^*_i) \leq 2\delta(P^*_i, c^*_i)/|P^*_i| \leq \frac{2\delta(P^*_i, c^*_i)}{(1-\alpha)m_i}$, trong đó bước cuối cùng tuân theo thực tế là $|P^*_i| \geq |Q_i| \geq (1 - \alpha)m_i$. Sau đó, trong bước 3 của Thuật toán \ref{alg:kmedian_sampling}, vì thuật toán liệt kê tất cả các giá trị có thể giữa 1 và $\log(m\Delta)$, tồn tại ít nhất một dự đoán cho bán kính phân cụm (bước 4 của Thuật toán \ref{alg:kmedian_sampling}) sao cho $\delta(P^*_i, c^*_i)/(1 - \alpha)m_i \leq l_i \leq 2\delta(P^*_i, c^*_i)/(1 - \alpha)m_i$. Do đó, trong bước 6 của Thuật toán \ref{alg:kmedian_sampling}, lưới có tâm tại $u$ với độ dài cạnh $2l_i$ ($G(u)$) sẽ chứa tâm phân cụm tối ưu $c^*_i$. Sau đó, trong bước 7 của Thuật toán \ref{alg:kmedian_sampling}, bằng cách phân rã lưới $G(u)$ thành các lưới con nhỏ hơn với độ dài cạnh $(1 - \alpha)\alpha\epsilon_1 l_i / \sqrt{d}$ cho một số $\epsilon_1 < \epsilon/4$, tâm phân cụm tối ưu $c^*_i$ cũng phải thuộc về một trong các lưới con. Vì lưới con có độ dài cạnh $(1 - \alpha)\alpha\epsilon_1 l_i / \sqrt{d}$, cũng tồn tại ít nhất một $u' \in U'_i$ sao cho $u'$ đủ gần với $c^*_i$, tức là $\delta(u', c^*_i) \leq (1 - \alpha)\alpha\epsilon_1 l_i \leq \alpha\epsilon\delta(P^*_i, c^*_i)/m_i$. Gọi $u_i$ là điểm được chọn trong bước 9 của Thuật toán \ref{alg:kmedian_sampling}. Đối với bất kỳ điểm dữ liệu nào $u \in U'_i$, gọi $N_i(u)$ là tập hợp các điểm gần nhất $(1 - \alpha)m_i$ trong $P_i$ tới $u$. Do đó, ta có
 
 \begin{align*}
 \delta(\mathcal{N}_i(u_i), u_i) &\leq \delta(\mathcal{N}_i(u'), u') \\
@@ -66,7 +75,7 @@ Trong đó:
 
 % C 5
 \begin{corollary}
-\label{cor:k_median_bound}
+\label{cor:5}
 Đối với một cụm dự đoán $P_i$, với xác suất ít nhất $1 - 1/k$, tâm $u_i$ được chọn bởi thuật toán Fast-Sampling cho mục tiêu k-median thỏa mãn:
 \[ \delta(\mathcal{N}_i(u_i), u_i) \leq \delta(\mathcal{N}_i(u_i), c^*_i) + \alpha \epsilon \delta(P^*_i, c^*_i) \]
 trong đó $\mathcal{N}_i(u_i)$ là tập hợp $(1-\alpha)m_i$ điểm gần nhất trong $P_i$ đến $u_i$, và $c^*_i$ là tâm phân cụm tối ưu cho cụm thứ $i$.
@@ -76,7 +85,7 @@ trong đó $\mathcal{N}_i(u_i)$ là tập hợp $(1-\alpha)m_i$ điểm gần nh
 
 % L 15
 \begin{lemma}
-\label{lemma:k_median_center_distance}
+\label{lemma:15}
 Đối với hàm mục tiêu k-median, khoảng cách giữa tâm thuật toán $u_i$ và tâm phân cụm tối ưu $c^*_i$ thỏa mãn:
 \[ \delta(u_i, c^*_i) \leq \frac{(2 + \alpha\epsilon)\delta(P^*_i, c^*_i)}{(1 - 2\alpha)m_i} \]
 \end{lemma}
@@ -86,7 +95,7 @@ trong đó $\mathcal{N}_i(u_i)$ là tập hợp $(1-\alpha)m_i$ điểm gần nh
 % L 16
 
 \begin{lemma}
-\label{lemma:true_positive_cost_k_median}
+\label{lemma:16}
 Đối với hàm mục tiêu k-median, chi phí phân cụm của tập $Q_i$ đối với tâm được chọn $u_i$ thỏa mãn chặn sau:
 \[ \delta(Q_i, u_i) \leq \delta(Q_i, c^*_i) + \frac{\alpha(4+3\epsilon)}{1-2\alpha} \delta(P^*_i, c^*_i) \]
 trong đó $c^*_i$ là tâm tối ưu của cụm thứ $i$.
@@ -96,7 +105,7 @@ trong đó $c^*_i$ là tâm tối ưu của cụm thứ $i$.
 
 % L 17
 \begin{lemma}
-\label{lemma:optimal_cluster_cost_k_median}
+\label{lemma:17}
 Với mỗi cụm $i \in [k]$, với xác suất ít nhất $1 - 1/k$, chi phí phân cụm k-median của cụm tối ưu $P^*_i$ đối với tâm thuật toán $u_i$ bị chặn bởi:
 \[ \delta(P^*_i, u_i) \leq \left( 1 + \frac{6\alpha + 4\alpha\epsilon - 4\alpha^2 - 3\epsilon\alpha^2}{(1-\alpha)(1-2\alpha)} \right) \delta(P^*_i, c^*_i) \]
 trong đó $c^*_i$ là tâm tối ưu của cụm thứ $i$.

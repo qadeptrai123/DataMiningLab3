@@ -40,7 +40,7 @@ Thuật toán này giải quyết vấn đề ``sai số tích lũy''  bằng c�
 % T 3
 \begin{theorem}
 \label{thm:fast_filtering_correctness}
-Cho $R_1 = O\left( \frac{\log k}{1 - 2\alpha} \right)$ và $R_2 = O\left( \frac{\log(m^3d \log^3(m\Delta^2)/\epsilon^2) \log(m\Delta^2)}{\alpha \epsilon^4} \right)$, trong đó $\Delta$ là tỷ lệ chiều của tập dữ liệu. Với xác suất hằng số, Thuật toán 4 (Fast-Filtering) trả về nghiệm xấp xỉ $(1 + O(\sqrt{\alpha}))$ cho bài toán k-means có hỗ trợ học trong thời gian $O(md) + \tilde{O}\left( \frac{kd}{\epsilon^4(1-2\alpha)\alpha} \right)$ với $\alpha \in (0, 1/3 - \epsilon)$.
+Cho $R_1 = O\left( \frac{\log k}{1 - 2\alpha} \right)$ và $R_2 = O\left( \frac{\log(m^3d \log^3(m\Delta^2)/\epsilon^2) \log(m\Delta^2)}{\alpha \epsilon^4} \right)$, trong đó $\Delta$ là tỷ lệ chiều của tập dữ liệu. Với xác suất hằng số, Thuật toán Fast-Filtering trả về nghiệm xấp xỉ $(1 + O(\sqrt{\alpha}))$ cho bài toán k-means có hỗ trợ học trong thời gian $O(md) + \tilde{O}\left( \frac{kd}{\epsilon^4(1-2\alpha)\alpha} \right)$ với $\alpha \in (0, 1/3 - \epsilon)$.
 \end{theorem}
 
 
@@ -56,7 +56,7 @@ Cho kích thước mẫu $R_1 = \Theta\left( \frac{\log k}{1 - 2\alpha} \right)$
 % C 4
 
 \begin{corollary}
-\label{cor:estimator_bounds}
+\label{cor:4}
 Cho 
 \[ R_2 = O\left( \frac{\log(m^3d \log^3(m\Delta^2)/\epsilon_1^2) \log(m\Delta^2)}{\alpha\epsilon_1^4} \right) \]
 Với một điểm dữ liệu bất kỳ $u \in U_i$, với xác suất cao, bộ ước lượng $\omega(u)$ thỏa mãn:
@@ -68,7 +68,7 @@ trong đó $H_i(u)$ là tập hợp $(1-\alpha)m_i$ điểm gần $u$ nhất tro
 
 % L 12
 \begin{lemma}
-\label{lemma:distance_bound_fast_filtering}
+\label{lemma:12}
 Khoảng cách giữa trọng tâm của tập hợp đã lọc $\overline{I_i}$ và tâm tối ưu $c^*_i$ bị chặn như sau:
 \[ \delta^2(\overline{I_i}, c^*_i) \leq \frac{9\delta^2(P^*_i, c^*_i)}{(1 - (3 + \epsilon)\alpha)m_i} \]
 \end{lemma}
