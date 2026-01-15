@@ -30,7 +30,9 @@ quen thuộc nhất thì chúng em sẽ gọi là \textbf{tỷ lệ khung hình}
 
 Với một số nguyên dương $t$, gọi $[t]$ là tập hợp các số nguyên từ 1 đến $t$.
 
-\textbf{Bài toán $k$-means hỗ trợ học:} Cho tập dữ liệu $P \subset \mathbb{R}^d$ gồm $m$ điểm, gọi $C^*$ và $\mathcal{P}(C^*) = \{P^*_1, P^*_2, \dots, P^*_k\}$ lần lượt là một lời giải tối ưu và phân hoạch tương ứng. Trong thiết lập có hỗ trợ học, giả định rằng có quyền truy cập vào một bộ dự đoán dưới dạng phân hoạch nhãn $\mathcal{L}(P) = \{P_1, P_2, \dots, P_k\}$ được tham số hóa bởi tỷ lệ lỗi nhãn $\alpha \in [0, 1)$, thỏa mãn điều kiện $|P_i \cap P^*_i| \geq (1-\alpha) \max\{|P_i|, |P^*_i|\}$. Mục tiêu của bài toán là tìm tập $C \subset \mathbb{R}^d$ các tâm sao cho $\delta^2(P, C)$ đạt giá trị nhỏ nhất.
+\textbf{Bài toán $k$-means hỗ trợ học:} Cho tập dữ liệu $P \subset \mathbb{R}^d$ gồm $m$ điểm, gọi $C^*$ và $P(C^*) = \{P^*_1, P^*_2, \dots, P^*_k\}$ lần lượt là một lời giải tối ưu và phân hoạch tương ứng. Trong thiết lập có hỗ trợ học, giả định rằng có quyền truy cập vào một bộ dự đoán dưới dạng phân hoạch nhãn $L(P) = \{P_1, P_2, \dots, P_k\}$ được tham số hóa bởi tỷ lệ lỗi nhãn $\alpha \in [0, 1)$, thỏa mãn điều kiện $|P_i \cap P^*_i| \geq (1-\alpha) \max\{|P_i|, |P^*_i|\}$. Mục tiêu của bài toán là tìm tập $C \subset \mathbb{R}^d$ các tâm sao cho $\delta^2(P, C)$ đạt giá trị nhỏ nhất.
+
+\hl{Cụm từ ``Learning-Augmented'' chúng em xin được phép dịch là \textbf{hỗ trợ học} để tránh gây hiểu lầm với cụm từ \textbf{học tăng cường}.}
 
 % BEGIN PB
 \hl{
