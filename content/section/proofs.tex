@@ -81,7 +81,6 @@ Như vậy
 
 
 \begin{corollary}
-\label{cor:sampling_success}
 Với xác suất hằng số, đối với mỗi cụm $i \in [k]$ và mỗi chiều $j \in [d]$, tồn tại ít nhất một điểm dữ liệu được lấy mẫu $u \in U_{ij}$ sao cho $u \in G^2_{ij}$. 
 \end{corollary}
 
@@ -120,9 +119,9 @@ Do đó, xác suất thành công là ít nhất $1-\eta$.
 
 % L 5
 
-\begin{lemma} \label{lemma:bound_Nij}
+\begin{lemma} 
 Cho một tọa độ bất kỳ $u \in G^2_{ij} \cap U_{ij}$, bất đẳng thức sau luôn thỏa mãn:
-\begin{equation*} \label{eq:lemma_bound}
+\begin{equation*}
     \delta^2(Q'_{ij}, \overline{Q'_{ij}}) \leq \delta^2(\mathcal{N}_{ij}(u), \overline{\mathcal{N}_{ij}(u)}) \leq 3\delta^2(Q'_{ij}, \overline{Q'_{ij}})
 \end{equation*}
 trong đó $\overline{Q'_{ij}}$ và $\overline{\mathcal{N}_{ij}(u)}$ lần lượt là trọng tâm của tập $Q'_{ij}$ và $\mathcal{N}_{ij}(u)$.
@@ -166,7 +165,7 @@ Từ hai phần trên, bổ đề được chứng minh hoàn toàn.
 % TODO Remove Biến đổi đại số
 
 
-\begin{corollary} \label{cor:candidate_existence}
+\begin{corollary}
 Với xác suất hằng số, đối với mỗi chiều $j \in [d]$ của mỗi cụm $i \in [k]$, tồn tại ít nhất một tọa độ $u' \in U'_{ij}$ sao cho:
 \begin{equation*}
     \delta(u', \overline{Q'_{ij}}) \leq \sqrt{\frac{\epsilon\delta^2(Q'_{ij}, \overline{Q'_{ij}})}{2(1-\alpha)m_i}}
@@ -274,7 +273,6 @@ Thay $K$ trở lại, ta thu được kết quả cuối cùng:
 
 % L 7
 \begin{lemma}
-\label{lemma:optimal_center_distance}
 Khoảng cách giữa tọa độ của tâm thuật toán $\overline{I_{ij}}$ và tâm tối ưu $\overline{P^*_{ij}}$ bị chặn bởi:
 \[ \delta^2(\overline{I_{ij}}, \overline{P^*_{ij}}) \leq \left( \frac{\alpha}{1-\alpha} + \frac{\alpha(4+\epsilon)}{(1-2\alpha)(1-\alpha)} \right) \frac{\delta^2(P^*_{ij}, \overline{P^*_{ij}})}{|P^*_{ij}|} \]
 \end{lemma}
@@ -353,7 +351,6 @@ Cộng lại ta được kết quả cuối cùng :
 % T 1
 
 \begin{theorem}
-\label{thm:fast_sampling_correctness}
 Tồn tại một thuật toán k-means có hỗ trợ học (Fast-Sampling) trả về một giải pháp xấp xỉ $(1+O(\alpha))$ trong thời gian $O(\epsilon^{-1}md \log(kd))$ với xác suất hằng số, trong đó tỷ lệ lỗi nhãn thỏa mãn $\alpha \in [0, 1/2)$.
 \end{theorem}
 
@@ -426,7 +423,6 @@ Lưu ý rằng $\sum_{i=1}^k m_i = m$ (tổng số điểm dữ liệu). Do đó
 \subsection{\textsc{Fast-Estimation}}
 
 \begin{lemma}
-\label{lemma:large_block_concentration}
 Giả sử $S_{ij}$ là một mẫu được lấy ngẫu nhiên từ cụm dự đoán $P_{ij}$ với kích thước mẫu $|S_{ij}| = \tilde{O}(1/\alpha \epsilon_1^4)$. Với xác suất ít nhất $1 - \frac{\epsilon_1}{m^3d \log^2(m\Delta_{\max}^2)}$, các bất đẳng thức sau đây đồng thời xảy ra cho mọi khối lớn $\mathcal{B}_u^l \in \mathcal{L}(u)$ và tập các điểm xa nhất $\mathcal{O}(u)$:
 \[ (1 - \epsilon_1)\mathbb{E}[|\mathcal{B}_u^l \cap S_{ij}|] \leq |\mathcal{B}_u^l \cap S_{ij}| \leq (1 + \epsilon_1)\mathbb{E}[|\mathcal{B}_u^l \cap S_{ij}|] \]
 \[ (1 - \epsilon_1)\mathbb{E}[|\mathcal{O}(u) \cap S_{ij}|] \leq |\mathcal{O}(u) \cap S_{ij}| \leq (1 + \epsilon_1)\mathbb{E}[|\mathcal{O}(u) \cap S_{ij}|] \]
@@ -509,7 +505,6 @@ Bổ đề yêu cầu bất đẳng thức đúng cho \textit{tất cả} các k
 \end{proof}
 
 \begin{lemma}
-\label{lemma:small_blocks_bound}
 Gọi $\mathcal{J}(u)$ là tập hợp các tọa độ nằm trong các khối nhỏ đối với một tọa độ ứng viên $u$. Với xác suất ít nhất $1 - \frac{\epsilon_1}{m^3d \log^2(m\Delta_{\max}^2)}$, giao của tập mẫu $S_{ij}$ và $\mathcal{J}(u)$ bị chặn như sau:
 \[ |\mathcal{J}(u) \cap S_{ij}| \leq 2\epsilon_1\alpha|S_{ij}| \]
 \end{lemma}
@@ -576,7 +571,6 @@ Lấy phần bù, ta có điều phải chứng minh.
 
 
 \begin{lemma}
-\label{lemma:cost_estimation}
 Cho một tọa độ ứng viên bất kỳ $u \in U'_{ij}$. Với xác suất cao (xác suất hằng số), ước lượng $\omega(u)$ thỏa mãn các chặn sau:
 \[ 
 \frac{\delta^2(P_{ij} \setminus \mathcal{F}^\dagger(u), u)}{1 + 7\epsilon_1} \leq \omega(u) \leq (1 + \epsilon_1)^2 \delta^2(\mathcal{N}_{ij}(u), u) 
@@ -661,7 +655,6 @@ Do đó:
 \end{proof}
 
 \begin{lemma}
-\label{lemma:center_approximation}
 Với tập hợp các tọa độ $I_{ij}$ được xác định bởi thuật toán Fast-Estimation, chặn sau đây luôn thỏa mãn:
 \[ \delta^2(\overline{I_{ij}}, \overline{Q_{ij}}) \leq \frac{13\alpha - 15\alpha^2}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)} \frac{\delta^2(Q_{ij}, \overline{Q_{ij}})}{|Q_{ij}|} \]
 \end{lemma}
@@ -709,7 +702,6 @@ Kết hợp lại, bình phương tổng các khoảng cách và thực hiện c
 \end{proof}
 
 \begin{theorem}
-\label{thm:fast_estimation}
 Thuật toán Fast-Estimation xấp xỉ $(1 + O(\alpha))$ cho bài toán k-means có hỗ trợ học (learning-augmented) trong thời gian $O(md) + \tilde{O}(\epsilon^{-5}kd/\alpha)$ với xác suất hằng số, với tỷ lệ lỗi nhãn $\alpha \in (0, 1/3 - \epsilon)$. 
 \end{theorem}
 
@@ -778,7 +770,6 @@ Thời gian chạy của thuật toán được phân tích theo từng giai đo
 \subsection{\textsc{Fast-Filtering}}
 
 \begin{theorem}
-\label{thm:fast_filtering_correctness}
 Cho $R_1 = O\left( \frac{\log k}{1 - 2\alpha} \right)$ và $R_2 = O\left( \frac{\log(m^3d \log^3(m\Delta^2)/\epsilon^2) \log(m\Delta^2)}{\alpha \epsilon^4} \right)$, trong đó $\Delta$ là tỷ lệ chiều của tập dữ liệu. Với xác suất hằng số, Thuật toán 4 (Fast-Filtering) trả về nghiệm xấp xỉ $(1 + O(\sqrt{\alpha}))$ cho bài toán k-means có hỗ trợ học trong thời gian $O(md) + \tilde{O}\left( \frac{kd}{\epsilon^4(1-2\alpha)\alpha} \right)$ với $\alpha \in (0, 1/3 - \epsilon)$.
 \end{theorem}
 
@@ -882,7 +873,6 @@ Tổng hợp lại, độ phức tạp thời gian là $O(md) + \tilde{O}\left( 
 \end{proof}
 
 \begin{corollary}
-\label{cor:sampling_success}
 Cho kích thước mẫu $R_1 = \Theta\left( \frac{\log k}{1 - 2\alpha} \right)$. Với mỗi cụm dự đoán $i \in [k]$, với xác suất hằng số, tồn tại ít nhất một điểm dữ liệu $u$ trong tập mẫu $U_i$ sao cho $u \in G_2(P^*_i)$, trong đó $G_2(P^*_i)$ là tập hợp các điểm nằm gần tâm tối ưu.
 \end{corollary}
 
@@ -945,7 +935,6 @@ Như vậy, với xác suất ít nhất $1-\eta$ (xác suất hằng số), thu
 \end{proof}
 
 \begin{corollary}
-\label{cor:estimator_bounds}
 Cho 
 \[ R_2 = O\left( \frac{\log(m^3d \log^3(m\Delta^2)/\epsilon_1^2) \log(m\Delta^2)}{\alpha\epsilon_1^4} \right) \]
 Với một điểm dữ liệu bất kỳ $u \in U_i$, với xác suất cao, bộ ước lượng $\omega(u)$ thỏa mãn:
@@ -999,7 +988,6 @@ Sắp xếp lại bất đẳng thức ta thu được chặn dưới cần ch�
 \end{proof}
 
 \begin{lemma}
-\label{lemma:distance_bound_fast_filtering}
 Khoảng cách giữa trọng tâm của tập hợp đã lọc $\overline{I_i}$ và tâm tối ưu $c^*_i$ bị chặn như sau:
 \[ \delta^2(\overline{I_i}, c^*_i) \leq \frac{9\delta^2(P^*_i, c^*_i)}{(1 - (3 + \epsilon)\alpha)m_i} \]
 \end{lemma}
@@ -1059,7 +1047,6 @@ Cuối cùng, dựa vào điều kiện thiết lập tham số trong thuật to
 \end{proof}
 
 \begin{lemma}
-\label{lemma:cost_bound_true_positives_explicit}
 Chi phí phân cụm của tập $Q_i$ đối với tâm của tập hợp đã lọc $\overline{I_i}$ thỏa mãn chặn cụ thể sau:
 \[ \delta^2(Q_i, \overline{I_i}) \leq \delta^2(Q_i, c^*_i) + \left( 5\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} \right) \delta^2(P^*_i, c^*_i) \]
 \end{lemma}
@@ -1116,7 +1103,6 @@ Kết luận:
 \end{proof}
 
 \begin{lemma}
-\label{lemma:total_optimal_cost_explicit}
 Tổng chi phí phân cụm của cụm tối ưu $P^*_i$ đối với trọng tâm $\overline{I_i}$ bị chặn bởi:
 \[ \delta^2(P^*_i, \overline{I_i}) \leq \left( 1 + 6\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} + \frac{9(\sqrt{\alpha}+\alpha)}{(1-\alpha)(1-(3+\epsilon)\alpha)} \right) \delta^2(P^*_i, c^*_i) \]
 \end{lemma}
@@ -1175,7 +1161,6 @@ Vậy với $\alpha \in [0, 1)$:
 
 % C 5
 \begin{corollary}
-\label{cor:k_median_bound}
 Đối với một cụm dự đoán $P_i$, với xác suất ít nhất $1 - 1/k$, tâm $u_i$ được chọn bởi thuật toán Fast-Sampling cho mục tiêu k-median thỏa mãn:
 \[ \delta(\mathcal{N}_i(u_i), u_i) \leq \delta(\mathcal{N}_i(u_i), c^*_i) + \alpha \epsilon \delta(P^*_i, c^*_i) \]
 trong đó $\mathcal{N}_i(u_i)$ là tập hợp $(1-\alpha)m_i$ điểm gần nhất trong $P_i$ đến $u_i$, và $c^*_i$ là tâm phân cụm tối ưu cho cụm thứ $i$.
@@ -1224,7 +1209,6 @@ Kết hợp các bất đẳng thức từ Bước 2 và Bước 3:
 
 % L 15
 \begin{lemma}
-\label{lemma:k_median_center_distance}
 Đối với hàm mục tiêu k-median, khoảng cách giữa tâm thuật toán $u_i$ và tâm phân cụm tối ưu $c^*_i$ thỏa mãn:
 \[ \delta(u_i, c^*_i) \leq \frac{(2 + \alpha\epsilon)\delta(P^*_i, c^*_i)}{(1 - 2\alpha)m_i} \]
 \end{lemma}
@@ -1276,7 +1260,6 @@ Thay thế các chặn trên vào tử số và sử dụng chặn dưới của
 % L 16
 
 \begin{lemma}
-\label{lemma:true_positive_cost_k_median}
 Đối với hàm mục tiêu k-median, chi phí phân cụm của tập $Q_i$ đối với tâm được chọn $u_i$ thỏa mãn chặn sau:
 \[ \delta(Q_i, u_i) \leq \delta(Q_i, c^*_i) + \frac{\alpha(4+3\epsilon)}{1-2\alpha} \delta(P^*_i, c^*_i) \]
 trong đó $c^*_i$ là tâm tối ưu của cụm thứ $i$.
@@ -1349,7 +1332,6 @@ Nhận thấy rằng $\frac{\alpha(4+\epsilon)}{1-2\alpha} < \frac{\alpha(4+3\ep
 
 % L 17
 \begin{lemma}
-\label{lemma:optimal_cluster_cost_k_median}
 Với mỗi cụm $i \in [k]$, với xác suất ít nhất $1 - 1/k$, chi phí phân cụm k-median của cụm tối ưu $P^*_i$ đối với tâm thuật toán $u_i$ bị chặn bởi:
 \[ \delta(P^*_i, u_i) \leq \left( 1 + \frac{6\alpha + 4\alpha\epsilon - 4\alpha^2 - 3\epsilon\alpha^2}{(1-\alpha)(1-2\alpha)} \right) \delta(P^*_i, c^*_i) \]
 trong đó $c^*_i$ là tâm tối ưu của cụm thứ $i$.
