@@ -5,7 +5,7 @@
 Thuật toán Fast-Sampling chủ yếu bao gồm hai giai đoạn sau: (1) ước lượng khoảng (bước 3-6 của Thuật toán 1); (2) xây dựng tọa độ ứng viên (bước 7 của Thuật toán 1). Trong giai đoạn ước lượng khoảng, đối với mỗi chiều của các cụm dự đoán, độ dài khoảng được ước tính thông qua các chiến lược lấy mẫu ngẫu nhiên. Các mẫu sau đó được điều chỉnh đối xứng (qua tâm) dựa trên các ước tính độ dài khoảng để xây dựng các khoảng có thể bao quanh tọa độ của các tâm tối ưu. Trong giai đoạn thứ hai, các khoảng thu được được chia thành các phần nhỏ hơn, mỗi phần tương ứng với một tọa độ ứng viên mới, cho phép xấp xỉ mịn các tâm tối ưu. Dưới đây là phân tích chi tiết cho thuật toán được đề xuất.
 
 % TODO N_ij, I bar, O(u), \mathbb{E}[], B_l^u, S_ij, L(u) CHO tất cả MỤC bản dịch nd, algo
-\begin{algorithm}
+\begin{algorithm}[H]
 \setstretch{1.35}
 \caption{Fast-Sampling}
 \label{alg:fast_sampling}

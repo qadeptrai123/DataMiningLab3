@@ -14,14 +14,14 @@ Trong mục này, tác giả trình bày cách mở rộng các phương pháp d
 \begin{tabular}{lccc}
 \hline
 \textbf{Phương pháp và Tài liệu tham khảo} & \textbf{Tỷ lệ xấp xỉ} & \textbf{Khoảng lỗi nhãn $\alpha$} & \textbf{Độ phức tạp thời gian} \\ \hline
-Phân vùng và Sắp xếp \cite{Ergun2021} & $1 + \tilde{O}((k\alpha)^{1/4})$ & Hằng số nhỏ & $O(md \log^3 m + \text{poly}(k, \log m))$ \\
-Sắp xếp \cite{Nguyen2022} & $1 + \frac{\alpha(7+10\alpha-10\alpha^2)}{(1-\alpha)(1-2\alpha)}$ & $[0, 1/2)$ & $O\left(\frac{md \log^3 m \log^2(k/\delta)}{1-2\alpha}\right)$ \\
+Phân vùng và Sắp xếp (\cite{Ergun2021}) & $1 + \tilde{O}((k\alpha)^{1/4})$ & Hằng số nhỏ & $O(md \log^3 m + \text{poly}(k, \log m))$ \\
+Sắp xếp (\cite{Nguyen2022}) & $1 + \frac{\alpha(7+10\alpha-10\alpha^2)}{(1-\alpha)(1-2\alpha)}$ & $[0, 1/2)$ & $O\left(\frac{md \log^3 m \log^2(k/\delta)}{1-2\alpha}\right)$ \\
 \textbf{Fast-Sampling (Tác giả)} & $1 + \frac{\alpha(6+4\epsilon-4\alpha-3\epsilon\alpha)}{(1-\alpha)(1-2\alpha)}$ & $(0, 1/2)$ & $O\left(\frac{md \log(kd) \log(m\Delta)}{1-2\alpha} \cdot \left(\frac{\sqrt{d}}{\epsilon\alpha}\right)^{O(d)}\right)$ \\ \hline
 \end{tabular}%
 }
 \end{table}
 
-Bảng~\ref{tab:3} cung cấp một so sánh chi tiết các kết quả cho bài toán $k$-median có hỗ trợ học. Tác giả cũng đưa ra một biểu đồ (Hình 2) về tỷ lệ xấp xỉ so với tỷ lệ lỗi $\alpha$. Có thể thấy từ bảng rằng kết quả tốt nhất hiện nay đạt được xấp xỉ $(1 + O(\alpha))$ với $\alpha \in [0, 1/2)$ \cite{Nguyen2022}. So với các kết quả tiên tiến nhất, thuật toán Fast-Sampling có thể đạt được các đảm bảo chất lượng phân cụm tốt hơn với thời gian chạy kém hơn một chút đối với số chiều $d$ cố định.
+Bảng~\ref{tab:3} cung cấp một so sánh chi tiết các kết quả cho bài toán $k$-median có hỗ trợ học. Tác giả cũng đưa ra một biểu đồ (Hình 2) về tỷ lệ xấp xỉ so với tỷ lệ lỗi $\alpha$. Có thể thấy từ bảng rằng kết quả tốt nhất hiện nay đạt được xấp xỉ $(1 + O(\alpha))$ với $\alpha \in [0, 1/2)$ (\cite{Nguyen2022}). So với các kết quả tiên tiến nhất, thuật toán Fast-Sampling có thể đạt được các đảm bảo chất lượng phân cụm tốt hơn với thời gian chạy kém hơn một chút đối với số chiều $d$ cố định.
 
 Mô tả cụ thể cho thuật toán $k$-median có hỗ trợ học được trình bày trong Thuật toán 5. Ý tưởng chung đằng sau thuật toán là trước tiên tạo ra các tâm ứng viên có thể xấp xỉ chặt chẽ các tâm phân cụm tối ưu cho mỗi cụm dự đoán. Sau đó, bằng cách chọn tâm tốt nhất với chi phí $k$-median nhỏ nhất, tác giả chứng minh rằng thuật toán đề xuất có thể đưa ra các đảm bảo xấp xỉ tốt hơn cho bài toán $k$-median có hỗ trợ học. Dưới đây, tác giả đưa ra phân tích cụ thể cho thuật toán được đề xuất.
 
