@@ -396,7 +396,7 @@ Thuật toán thành công nếu trên mỗi chiều $j$ của mỗi cụm $i$, 
     \[ \Pr(\text{Thất bại tại } i,j) = \left( 1 - \frac{|G^2_{ij}|}{m_i} \right)^{|U_{ij}|} \]
 
     % TODO prove 
-    Sử dụng bất đẳng thức $1-x \leq e^{-x}$ (suy ra từ Bernoulli), ta có:
+    Sử dụng bất đẳng thức $1-x \leq e^{-x}$ ta có:
     \[ \Pr(\text{Thất bại tại } i,j) \leq e^{-\frac{|G^2_{ij}|}{m_i} |U_{ij}|} \leq e^{-\frac{1-\alpha}{2} \cdot \frac{2}{1-\alpha}\ln(\frac{kd}{\eta})} = e^{-\ln(\frac{kd}{\eta})} = \frac{\eta}{kd} \]
     
     \item \textbf{Áp dụng chặn hợp:}
