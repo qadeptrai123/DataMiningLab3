@@ -6,31 +6,42 @@ Gọi $P \subset \mathbb{R}^d$ và $k$ lần lượt là tập dữ liệu và s
 \hl{Để ý có thể có nhiều cách phân cụm tối ưu nhưng ở đây tác giả chọn 1 cách cố định để phân tích.}
 % END PB
 
-Gọi $C^* = \{c^*_1, \dots, c^*_k\}$ và $P(C^*) = \{P^*_1, \dots, P^*_k\}$ là tập các tâm tối ưu và phân hoạch phân cụm tối ưu tương ứng. Mỗi tâm tối ưu $c^*_i \in C^*$ được biểu diễn bởi $d$ tọa độ, tức là $c^*_i = (c^*_{i1}, c^*_{i2}, \dots, c^*_{id})$. Chi phí phân cụm của tập $P$ đối với tập tâm $C$ được định nghĩa là:
+Gọi $C^* = \{c^*_1, \dots, c^*_k\}$ và $\mathcal{P}(C^*) = \{P^*_1, \dots, P^*_k\}$ là tập các tâm tối ưu và phân hoạch phân cụm tối ưu tương ứng. Mỗi tâm tối ưu $c^*_i \in C^*$ được biểu diễn bởi $d$ tọa độ, tức là $c^*_i = (c^*_{i1}, c^*_{i2}, \dots, c^*_{id})$. Chi phí phân cụm của tập $P$ đối với tập tâm $C$ được định nghĩa là:
 \begin{equation}
+    \label{eq:cost_kmeans}
     \delta^2(P, C) = \sum_{x \in P} \delta^2(x, C)
 \end{equation}
 
 % BEGIN PB
-\hl{Nếu $P$ là 1 điểm (thay vì 1 tập hợp) thì công thức trên được dùng. Lưu ý ta quan tâm thứ tự trong toán tử $\delta^2$, viết cụm trước và tâm sau.}
+\hl{
+Nếu $P$ là 1 điểm (thay vì 1 tập hợp) thì công thức trên được dùng. Lưu ý ta quan tâm thứ tự trong toán tử $\delta^2$, viết cụm trước và tâm sau.
+}
 % END PB
 
-Cho một tập hợp $L(P) = \{P_1, P_2, \dots, P_k\}$ đóng vai trò là bộ dự đoán, gọi $Q_i = P_i \cap P^*_i$ là tập các điểm dữ liệu trong cụm dự đoán $P_i$ thuộc cụm tối ưu $P^*_i$. Gọi tọa độ chiếu của các điểm dữ liệu trong $P_i$ và $Q_i$ lên chiều thứ $j$ lần lượt là $P_{ij}$ và $Q_{ij}$. Gọi $P^*_{ij}$ là tọa độ chiếu của các điểm trong $P^*_i$ lên chiều thứ $j$. Gọi $m_i$ và $m$ lần lượt là kích thước của $P_i$ và $P$. Với một tập điểm dữ liệu $V \subset \mathbb{R}^d$, gọi $\overline{V}$ là tâm hình học của tập $V$. Gọi $P(j)$ là tọa độ chiếu của toàn bộ các điểm trong $P$ lên chiều thứ $j$. Gọi $\Delta_{max}$ là tỷ lệ chiều tối đa của các điểm dữ liệu được chiếu, được xác định bởi:
+Cho một tập hợp $\mathcal{L}(P) = \{P_1, P_2, \dots, P_k\}$ đóng vai trò là bộ dự đoán, gọi $Q_i = P_i \cap P^*_i$ là tập các điểm dữ liệu trong cụm dự đoán $P_i$ thuộc cụm tối ưu $P^*_i$. Gọi tọa độ chiếu của các điểm dữ liệu trong $P_i$ và $Q_i$ lên chiều thứ $j$ lần lượt là $P_{ij}$ và $Q_{ij}$. Gọi $P^*_{ij}$ là tọa độ chiếu của các điểm trong $P^*_i$ lên chiều thứ $j$. Gọi $m_i$ và $m$ lần lượt là kích thước của $P_i$ và $P$. Với một tập điểm dữ liệu $V \subset \mathbb{R}^d$, gọi $\overline{V}$ là trọng tâm \hl{(trung bình của các điểm)} của tập $V$. Gọi $P(j)$ là tọa độ chiếu của toàn bộ các điểm trong $P$ lên chiều thứ $j$. Gọi $\Delta_{max}$ là tỷ lệ chiều tối đa của các điểm dữ liệu được chiếu, được xác định bởi:
 \begin{equation}
     \Delta_{max} = \max_{1 \leq j \leq d} \frac{\max_{x,y \in P(j)} \delta(x,y)}{\min_{x,y \in P(j), x \neq y} \delta(x,y)}
 \end{equation}
 
 % BEGIN PB
-
 \hl{Cụm từ ``Aspect Ratio'' được tác giả đề cập khi dịch về tiếng Việt để
 quen thuộc nhất thì chúng em sẽ gọi là \textbf{tỷ lệ khung hình}. Về bản chất thì cũng chỉ là tỉ lệ giữa khoảng cách lớn nhất của 2 điểm và khoảng cách nhỏ nhất của 2 điểm.}
 % END PB
 
 Với một số nguyên dương $t$, gọi $[t]$ là tập hợp các số nguyên từ 1 đến $t$.
 
-\textbf{Bài toán $k$-means hỗ trợ học:} Cho tập dữ liệu $P \subset \mathbb{R}^d$ gồm $m$ điểm, gọi $C^*$ và $P(C^*) = \{P^*_1, P^*_2, \dots, P^*_k\}$ lần lượt là một lời giải tối ưu và phân hoạch tương ứng. Trong thiết lập có hỗ trợ học, giả định rằng có quyền truy cập vào một bộ dự đoán dưới dạng phân hoạch nhãn $L(P) = \{P_1, P_2, \dots, P_k\}$ được tham số hóa bởi tỷ lệ lỗi nhãn $\alpha \in [0, 1)$, thỏa mãn điều kiện $|P_i \cap P^*_i| \geq (1-\alpha) \max\{|P_i|, |P^*_i|\}$. Mục tiêu của bài toán là tìm tập $C \subset \mathbb{R}^d$ các tâm sao cho $\delta^2(P, C)$ đạt giá trị nhỏ nhất.
+\textbf{Bài toán $k$-means hỗ trợ học:} Cho tập dữ liệu $P \subset \mathbb{R}^d$ gồm $m$ điểm, gọi $C^*$ và $\mathcal{P}(C^*) = \{P^*_1, P^*_2, \dots, P^*_k\}$ lần lượt là một lời giải tối ưu và phân hoạch tương ứng. Trong thiết lập có hỗ trợ học, giả định rằng có quyền truy cập vào một bộ dự đoán dưới dạng phân hoạch nhãn $\mathcal{L}(P) = \{P_1, P_2, \dots, P_k\}$ được tham số hóa bởi tỷ lệ lỗi nhãn $\alpha \in [0, 1)$, thỏa mãn điều kiện $|P_i \cap P^*_i| \geq (1-\alpha) \max\{|P_i|, |P^*_i|\}$. Mục tiêu của bài toán là tìm tập $C \subset \mathbb{R}^d$ các tâm sao cho $\delta^2(P, C)$ đạt giá trị nhỏ nhất.
 
 % BEGIN PB
+\hl{
+Giống với chi phí tối ưu của bài toán $k$-means, chi phí suy ra từ \ref{eq:cost_kmeans}
+}
+
+\begin{align*}
+    \delta^2(P, C) &= \sum_{i=1}^k \sum_{x \in P_i^*} \delta^2(x, c_i^*) \\
+    &= \sum_{i=1}^k \sum_{x \in P_i^*} \delta^2(x, \overline{P_i^*})
+\end{align*}
+
 \hl{Các hệ quả toán học trong phần này dựa trên tính chất cơ bản của không gian Euclid, trọng tâm $\overline{V}$ là điểm duy nhất tối thiểu hóa tổng bình phương khoảng cách (SSE) tới mọi điểm trong tập $V$. Logic của các bổ đề dưới đây cho phép phân rã chi phí phân cụm thành hai thành phần: chi phí trong cụm (độ liên kết - cohesion) và chi phí do khoảng cách từ tâm dự đoán đến tâm tối ưu.}
 % END PB
 
@@ -102,7 +113,7 @@ Cho tập $J \subset \mathbb{R}$, gọi $J_1 \subseteq J$ với $|J_1| \geq (1-\
 \end{lemma}
 
 % BEGIN PB
-\hl{Bổ đề \ref{lemma:2} cũng đúng với $J \subset \mathbb{R}^d$, mặc dù tác giả chỉ ghi trên $\mathbb{R}$, xem chứng minh trong bài báo của Nguyen và tác giả cộng sự} (\cite{Nguyen2022}, \hl{phần chứng minh Bổ đề 3 trong mục Appendix 5.1).}
+\hl{Bổ đề \ref{lemma:2} cũng đúng với $J \subset \mathbb{R}^d$, mặc dù tác giả chỉ ghi trên $\mathbb{R}$, chứng minh tương tự như trong bài báo của Nguyen và tác giả cộng sự} (\cite{Nguyen2022}, \hl{phần chứng minh Bổ đề 3 trong mục Appendix 5.1).}
 
 \definecolor{wewdxt}{rgb}{0.43, 0.43, 0.45} % Grey for lines
 \definecolor{rvwvcq}{rgb}{0.08, 0.40, 0.75} % Blue for points

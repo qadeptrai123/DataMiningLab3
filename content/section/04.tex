@@ -1,6 +1,6 @@
 \section{Thuật toán \textsc{Fast-Sampling} (k-median)}
 
-Trong mục này, tác giả trình bày cách mở rộng các phương pháp dựa trên lấy mẫu được đề xuất cho bài toán $k$-median có hỗ trợ học. Thách thức chính ở đây nảy sinh từ sự khác biệt trong các mục tiêu tối ưu hóa. Cụ thể, đối với một tập hợp tọa độ $S \subset \mathbb{R}^d$ bất kỳ, tâm hình học của $S$ không còn đóng vai trò là tâm phân cụm tối ưu cho $S$ theo mục tiêu $k$-median, khiến việc xác định các tọa độ hoặc tâm ứng viên chất lượng cao trở nên khó khăn. Kết quả là, các thuật toán $k$-median có hỗ trợ học hiện có thường gặp khó khăn trong việc đạt được các đảm bảo xấp xỉ chất lượng cao.
+Trong mục này, tác giả trình bày cách mở rộng các phương pháp dựa trên lấy mẫu được đề xuất cho bài toán $k$-median có hỗ trợ học. Thách thức chính ở đây nảy sinh từ sự khác biệt trong các mục tiêu tối ưu hóa. Cụ thể, đối với một tập hợp tọa độ $S \subset \mathbb{R}^d$ bất kỳ, trọng tâm của $S$ không còn đóng vai trò là tâm phân cụm tối ưu cho $S$ theo mục tiêu $k$-median, khiến việc xác định các tọa độ hoặc tâm ứng viên chất lượng cao trở nên khó khăn. Kết quả là, các thuật toán $k$-median có hỗ trợ học hiện có thường gặp khó khăn trong việc đạt được các đảm bảo xấp xỉ chất lượng cao.
 
 Để vượt qua thách thức này, mục tiêu của tác giả là sử dụng các chiến lược dựa trên lấy mẫu để xây dựng một tập $U_i$ các tâm nằm gần các tâm phân cụm tối ưu cho mỗi cụm dự đoán $P_i$. Sau đó, bằng cách rời rạc hóa lưới, tác giả có thể tạo ra các tâm ứng viên có khả năng xấp xỉ tốt các tâm phân cụm tối ưu. Cuối cùng, bằng cách liệt kê các tâm ứng viên đã xây dựng, tác giả chứng minh rằng chi phí phân cụm của mỗi cụm tối ưu có thể được xấp xỉ tốt bằng cách sử dụng tâm tốt nhất được chọn từ quá trình liệt kê.
 
@@ -61,7 +61,7 @@ Trong đó:
 \begin{itemize}
     \item Bất đẳng thức đầu tiên tuân theo tính tối tiểu của $u_i$ trong tập $U'_i$.
     \item Bất đẳng thức thứ hai áp dụng bất đẳng thức tam giác cho từng điểm trong $\mathcal{N}_i(u')$.
-    \item Bước cuối cùng sử dụng giới hạn $| \mathcal{N}_i(u_i) | \leq m_i$ và khoảng cách tâm $\delta(u', c^*_i)$ đã thiết lập.
+    \item Bước cuối cùng do $| \mathcal{N}_i(u_i) | \leq m_i$ và khoảng cách tâm $\delta(u', c^*_i)$.
 \end{itemize}
 
 % C 5

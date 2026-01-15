@@ -25,17 +25,17 @@ Thuật toán đề xuất được trình bày trong Thuật toán~\ref{alg:fas
 
 \textbf{Giải thích thuật toán:}
 
-Thuật toán này giải quyết vấn đề "sai số tích lũy" bằng cách làm trực tiếp trên vecto thay vì gộp kết quả từ $d$ bài toán đơn chiều.
 
+\hl{
+Thuật toán này giải quyết vấn đề ``sai số tích lũy''  bằng cách làm trực tiếp trên vecto thay vì gộp kết quả từ $d$ bài toán đơn chiều.
+}
 \begin{itemize}
-    \item \textbf{Ước lượng nhanh:} Ý tưởng giống Fast-Estimation. Tại bước 4, thay vì tính toán tổng bình phương khoảng cách $\delta^2$ trên toàn bộ tập dữ liệu $P_i$ (vốn tốn thời gian $O(m_i d)$), tác giả sử dụng tập mẫu $S_i$ có kích thước $R_2$ nhỏ hơn nhiều. Trọng số $\frac{m_i}{|S_i|}$ đảm bảo rằng kỳ vọng của bộ ước lượng $\omega(u)$ sẽ hội tụ về giá trị chi phí thực tế của cụm.
-    
-    \item \textbf{Loại bỏ nhiễu (Filtering):} Một đóng góp quan trọng của tác giả là việc định nghĩa tập $F(u)$ gồm các điểm xa nhất. Trong bài toán có hỗ trợ học, cụm dự đoán $P_i$ có thể chứa tới $\alpha m_i$ điểm âm tính giả (nhiễu). Nếu các điểm nhiễu này nằm rất xa tâm thực, chúng sẽ kéo trọng tâm lệch khỏi vị trí tối ưu. Việc loại bỏ $F(u)$ trong quá trình ước lượng giúp "cô lập" ảnh hưởng của các điểm ngoại lệ này, giúp việc chọn $c_i$ trở nên bền bỉ (robust) hơn.
-    
-    \item \textbf{Trọng tâm:} Sau khi đã xác định được một tâm ứng viên tốt $c_i$, thuật toán thực hiện một bước tinh chỉnh tại bước 6 và 7. Tập $I_i$ đại diện cho phần "lõi" sạch nhất của cụm. Theo Lemma 1, trọng tâm $\bar{I}_i$ là điểm duy nhất tối thiểu hóa tổng bình phương khoảng cách tới tất cả các điểm trong tập đó. Do đó, $\hat{c}_i$ chính là nghiệm tối ưu địa phương cho tập điểm đã được lọc nhiễu.
-\end{itemize}
+    \item \textbf{Lấy mẫu $U_i$:} \hl{Ý tưởng giống Fast-Sampling \ref{alg:fast_sampling}, để tìm các ứng viên mà có quả cầu có tâm tại nó chứa tâm tối ưu.}
 
-Sự kết hợp giữa lấy mẫu ngẫu nhiên để tìm ứng viên và bộ lọc thống kê để đánh giá chi phí cho phép Fast-Filtering đạt được sự cân bằng giữa tốc độ tính toán và độ chính xác phân cụm.
+    \item \textbf{Ước lượng nhanh:} \hl{Ý tưởng giống Fast-Estimation \ref{alg:fast_estimation}. Tại bước 4, thay vì tính toán tổng bình phương khoảng cách $\delta^2$ trên toàn bộ tập dữ liệu $P_i$ (vốn tốn thời gian $O(m_i d)$), tác giả sử dụng tập mẫu $S_i$ có kích thước $R_2$ nhỏ hơn nhiều. Trọng số $\frac{m_i}{|S_i|}$ đảm bảo rằng kỳ vọng của bộ ước lượng $\omega(u)$ sẽ hội tụ về giá trị chi phí thực tế của cụm.}
+    
+    \item \textbf{Loại bỏ nhiễu:} \hl{Ý tưởng hay của tác giả là tập $F(u)$ gồm các điểm xa nhất. Trong bài toán có hỗ trợ học, cụm dự đoán $P_i$ có thể chứa tới $\alpha m_i$ điểm âm tính giả (nhiễu).}
+\end{itemize}
 
 % T 3
 \begin{theorem}
