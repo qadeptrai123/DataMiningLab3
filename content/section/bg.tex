@@ -38,7 +38,6 @@ Với một số nguyên dương $t$, gọi $[t]$ là tập hợp các số nguy
 \hl{
 Giống với chi phí tối ưu của bài toán $k$-means, chi phí suy ra từ \ref{eq:cost_kmeans}
 }
-
 \begin{align*}
     \delta^2(P, C) &= \sum_{i=1}^k \sum_{x \in P_i^*} \delta^2(x, c_i^*) \\
     &= \sum_{i=1}^k \sum_{x \in P_i^*} \delta^2(x, \overline{P_i^*})
@@ -61,7 +60,7 @@ Cho tập $X \subset \mathbb{R}^d$ có kích thước $m$ và một điểm dữ
 % BEGIN PB
 \hl{Bổ đề \ref{lemma:1} xuất phát từ quan sát trọng tâm $\overline{P_i}$ của các cụm dự đoán không đủ là nghiệm của bài toán. Vì dự đoán không đúng, có thể tồn tại 1 số điểm trong $P_i$ nằm ngoài $P_i^*$. Nếu các điểm trong $P_i \setminus P_i^*$ nằm \textbf{rất xa} $\overline{P_i^*}$, trọng tâm cụm dự đoán sẽ bị lệch tuỳ ý dẫn đến chi phí tăng cụm tăng lên tuỳ ý.} 
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}[scale=1.5, >=Stealth]
         % 1. Định nghĩa màu sắc
@@ -93,7 +92,7 @@ Cho tập $X \subset \mathbb{R}^d$ có kích thước $m$ và một điểm dữ
 
         % 6. Đường nối và khoảng cách delta(c, X_bar)
         \draw[line width=1.5pt, anypointorange, <->] (Xbar) -- (C) 
-            node[midway, above=2pt, black, font=\small] {$\delta(c, \overline{X})$};
+            node[midway, above=2pt, black, font=\small] {$\delta(\overline{X}, c)$};
 
         % 7.  một đường từ điểm xanh đến c (để thấy delta(X, c))
         \draw[dotted, thick, pointblue!80] (-0.4,0.8) -- (C);
@@ -119,7 +118,7 @@ Cho tập $J \subset \mathbb{R}$, gọi $J_1 \subseteq J$ với $|J_1| \geq (1-\
 
 \definecolor{wewdxt}{rgb}{0.43, 0.43, 0.45} % Grey for lines
 \definecolor{rvwvcq}{rgb}{0.08, 0.40, 0.75} % Blue for points
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     % Định nghĩa màu sắc
     \definecolor{wewdxt}{rgb}{0.43, 0.43, 0.45}
@@ -223,7 +222,7 @@ Nếu $A_1, A_2, \dots, A_n$  là các sự kiện thì xác suất để ít nh
 % BEGIN PB
 \hl{Định lý \ref{thm:union_bound} khá tự nhiên và dễ thấy. Xét ví dụ với hai sự kiện $A$ và $B$. Xác suất để ít nhất một trong hai sự kiện xảy ra là xác suất của hợp $A \cup B$. Ta có thể biểu diễn mối quan hệ này trên biểu đồ Venn như Hình \ref{fig:union_bound}.}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}[line cap=round, line join=round, >=triangle 45, x=1cm, y=1cm]
         \def\firstcircle{(-1.2,0) circle (1.8cm)}

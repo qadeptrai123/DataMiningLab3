@@ -106,7 +106,7 @@ Với kích thước mẫu $|U_{ij}| = \frac{2}{1-\alpha} \ln(\frac{kd}{\eta})$,
     \Pr(\text{Thất bại tại } i,j) \leq e^{-\frac{|G_2^{ij}|}{m_i} |U_{ij}|} \leq e^{-\frac{1-\alpha}{2} \cdot \frac{2}{1-\alpha}\ln(\frac{kd}{\eta})} = e^{-\ln(\frac{kd}{\eta})} = \frac{\eta}{kd}
 \end{equation*}
 
-\item \textbf{Áp dụng Chặn hợp (chặn hợp):}
+\item \textbf{Áp dụng chặn hợp:}
 \begin{equation*}
     \Pr(\exists i,j : U_{ij} \cap G_2^{ij} = \emptyset) \leq \sum_{i=1}^k \sum_{j=1}^d \frac{\eta}{kd} = \eta
 \end{equation*}
@@ -315,9 +315,9 @@ Thay thế các kết quả từ Bước 1 vào (lưu ý $|P^*_{ij} \setminus Q_
 Bỏ qua số hạng đầu tiên (không âm) và sử dụng giả thiết mô hình $\gamma \leq \alpha$ (do đó $\frac{1-\gamma}{\gamma} \geq \frac{1-\alpha}{\alpha}$), ta có chặn dưới:
 \[ \delta^2(P^*_{ij}, \overline{P^*_{ij}}) \geq \delta^2(Q_{ij}, \overline{Q_{ij}}) + \frac{1-\alpha}{\alpha}|P^*_{ij}| \delta^2(\overline{Q_{ij}}, \overline{P^*_{ij}}) \]
 
-\item \textbf{Kết hợp với Bổ đề 6}
+\item \textbf{Kết hợp với Bổ đề \ref{lemma:6}}
 
-Từ Bổ đề 6, ta có:
+Ta có:
 \[ \delta^2(\overline{I_{ij}}, \overline{Q_{ij}}) \leq \frac{(4\alpha + \alpha\epsilon)\delta^2(Q_{ij}, \overline{Q_{ij}})}{|Q_{ij}|(1-2\alpha)} \]
 Suy ra:
 %TODO
@@ -351,7 +351,8 @@ Cộng lại ta được kết quả cuối cùng :
 % T 1
 
 \begin{theorem}
-Tồn tại một thuật toán k-means có hỗ trợ học (Fast-Sampling) trả về một giải pháp xấp xỉ $(1+O(\alpha))$ trong thời gian $O(\epsilon^{-1}md \log(kd))$ với xác suất hằng số, trong đó tỷ lệ lỗi nhãn thỏa mãn $\alpha \in [0, 1/2)$.
+\label{thm:fast_sampling_correctness}
+Tồn tại một thuật toán k-means có hỗ trợ học (Fast-Sampling) trả về một nghiệm xấp xỉ $(1+O(\alpha))$ trong thời gian $O(\epsilon^{-1}md \log(kd))$ với xác suất hằng số, trong đó tỷ lệ lỗi nhãn thỏa mãn $\alpha \in [0, 1/2)$.
 \end{theorem}
 
 \begin{proof}
@@ -540,7 +541,6 @@ vì $|\mathcal{J}(u)| \leq \epsilon_1\alpha m_i$, ta có tỷ số $\frac{\epsil
 Ta xét số mũ $\mathcal{E} = \frac{\mathbb{E}[X](\lambda')^2}{3}$. Thay thế $\mathbb{E}[X] = \frac{|S_{ij}||\mathcal{J}(u)|}{m_i}$ và giá trị của $\lambda'$:
 \[ \mathcal{E} = \frac{|S_{ij}||\mathcal{J}(u)|}{3m_i} \left( \frac{2\epsilon_1\alpha m_i}{|\mathcal{J}(u)|} - 1 \right)^2 \]
 
-Để tìm chặn dưới cho số mũ $\mathcal{E}$, ta thực hiện biến đổi đại số sau.
 Đặt $A = \frac{\epsilon_1\alpha m_i}{|\mathcal{J}(u)|}$.
 Theo định nghĩa khối nhỏ, $|\mathcal{J}(u)| \leq \epsilon_1\alpha m_i$, suy ra $A \geq 1$.
 Ta có: $(2A - 1)^2 \geq A^2 \Leftrightarrow A \geq 1$.
@@ -694,7 +694,7 @@ Do $|I_{ij}| = |Q'_{ij}|$:
 Tương tự:
 \[ \delta^2(\overline{Q_{ij}}, \overline{S}) \leq \frac{2\alpha + \alpha\epsilon}{1 - 3\alpha - \epsilon} \frac{\delta^2(Q_{ij}, \overline{Q_{ij}})}{|Q_{ij}|} \]
 
-Kết hợp lại, bình phương tổng các khoảng cách và thực hiện các phép biến đổi đại số với điều kiện $\epsilon < 0.5$ và $\alpha < 1/3$, ta thu được chặn cuối cùng:
+Kết hợp lại, bình phương tổng các khoảng cách với điều kiện $\epsilon < 0.5$ và $\alpha < 1/3$, ta thu được chặn cuối cùng:
 \begin{align*}
 \delta^2(\overline{I_{ij}}, \overline{Q_{ij}}) &\leq \left( \sqrt{\delta^2(\overline{I_{ij}}, \overline{S})} + \sqrt{\delta^2(\overline{S}, \overline{Q_{ij}})} \right)^2 \\
 &\leq \frac{13\alpha - 15\alpha^2}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)} \frac{\delta^2(Q_{ij}, \overline{Q_{ij}})}{|Q_{ij}|}
@@ -718,7 +718,7 @@ Tổng chi phí phân cụm $\delta^2(P, C)$ có thể được phân rã theo t
 
 Dựa vào Bổ đề 7 (được chứng minh dựa trên kết quả của Bổ đề 11 về khoảng cách giữa $\overline{I_{ij}}$ và $\overline{Q_{ij}}$), ta có chặn trên cho khoảng cách giữa các tâm:
 \[ \delta^2(\overline{P^*_{ij}}, c_{ij}) \leq \left( \frac{\alpha}{1-\alpha} + \frac{13\alpha - 15\alpha^2}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)} \right) \frac{\delta^2(P^*_{ij}, \overline{P^*_{ij}})}{|P^*_{ij}|} \]
-Dùng với \ref{lemma:1}
+Dùng với Bổ đề~\ref{lemma:1}
 \begin{align*}
 \delta^2(P^*_{ij}, c_{ij}) &\leq \delta^2(P^*_{ij}, \overline{P^*_{ij}}) + |P^*_{ij}| \left[ \left( \frac{\alpha}{1-\alpha} + \frac{13\alpha - 15\alpha^2}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)} \right) \frac{\delta^2(P^*_{ij}, \overline{P^*_{ij}})}{|P^*_{ij}|} \right] \\
 &= \left( 1 + \frac{\alpha}{1-\alpha} + \frac{13\alpha - 15\alpha^2}{(1 - 3\alpha - \epsilon)(1 - 2\alpha - \epsilon)} \right) \delta^2(P^*_{ij}, \overline{P^*_{ij}})
@@ -769,6 +769,30 @@ Thời gian chạy của thuật toán được phân tích theo từng giai đo
 
 \subsection{\textsc{Fast-Filtering}}
 
+
+\begin{algorithm}[H]
+\caption{Fast-Filtering (cụ thể)}
+\label{alg:fast_filtering}
+\begin{algorithmic}[1]
+\Require Một bài toán $k$-means $(P, k, d)$, một tập các phân vùng $(P_1, P_2, \dots, P_k)$ với tỷ lệ lỗi $\alpha$, tham số $0 < \epsilon < 1/3$.
+\Ensure Một tập $C \subset \mathbb{R}^d$ các tâm sao cho $|C| \leq k$.
+
+\For{mỗi $i \in [k]$}
+    \State Lấy mẫu ngẫu nhiên và độc lập một tập $U_i$ từ $P_i$ với kích thước $R_1 = O\left(\frac{\log k}{1-2\alpha}\right)$.
+    \State Lấy mẫu ngẫu nhiên và độc lập một tập $S_i$ từ $P_i$ với kích thước:
+    \[ R_2 = O\left( \frac{\log(m^3 d \log^3(m\Delta^2)/\epsilon^2) \log(m\Delta^2)}{\alpha\epsilon^4} \right) \]
+    và gán cho mỗi điểm trong $S_i$ một trọng số $\frac{m_i}{|S_i|}$.
+    \State Xây dựng một bộ ước lượng $\omega$ sao cho với mọi $u \in U_i$:
+    \[ \omega(u) = \sum_{p \in S_i \setminus \mathcal{F}(u)} \frac{m_i}{|S_i|} \delta^2(p, u) \]
+    trong đó $\mathcal{F}(u)$ là tập hợp $(1 + 3\epsilon_1)\alpha |S_i|$ điểm xa nhất từ $S_i$ tới $u$, với $\epsilon_1 = \epsilon/126$.
+    \State Tìm tâm ứng viên $c_i = \arg \min_{u \in U_i} \omega(u)$.
+    \State Gọi $I_i$ là tập hợp gồm $(1 - 2\alpha - 20\alpha\epsilon_1)m_i$ điểm trong $P_i$ gần $c_i$ nhất.
+    \State $\hat{c}_i = \overline{I_i}$
+\EndFor
+\State \Return $\{\hat{c}_1, \hat{c}_2, \dots, \hat{c}_k\}$.
+\end{algorithmic}
+\end{algorithm}
+
 \begin{theorem}
 Cho $R_1 = O\left( \frac{\log k}{1 - 2\alpha} \right)$ và $R_2 = O\left( \frac{\log(m^3d \log^3(m\Delta^2)/\epsilon^2) \log(m\Delta^2)}{\alpha \epsilon^4} \right)$, trong đó $\Delta$ là tỷ lệ chiều của tập dữ liệu. Với xác suất hằng số, Thuật toán 4 (Fast-Filtering) trả về nghiệm xấp xỉ $(1 + O(\sqrt{\alpha}))$ cho bài toán k-means có hỗ trợ học trong thời gian $O(md) + \tilde{O}\left( \frac{kd}{\epsilon^4(1-2\alpha)\alpha} \right)$ với $\alpha \in (0, 1/3 - \epsilon)$.
 \end{theorem}
@@ -783,7 +807,7 @@ Mục tiêu là đảm bảo tập ứng viên $U_i$ chứa ít nhất một đi
 Gọi tập $G_2(P^*_i) = \{x \in P^*_i : \delta^2(x, c^*_i) \leq 2 \delta^2(P^*_i, c^*_i) / |P^*_i|\}$. Theo Bổ đề 4 , $|P_i \cap P^*_i| \geq (1-\alpha)\max(|P_i|, |P^*_i|)$, ta suy ra:
 \[ |P_i \cap G_2(P^*_i)| \geq |P_i \cap P^*_i| - |P^*_i \setminus G_2(P^*_i)| \geq (1-\alpha)|P^*_i| - \frac{|P^*_i|}{2} = \left(\frac{1}{2}-\alpha\right)|P^*_i| \]
 Tỷ lệ điểm tốt trong $P_i$ là $\zeta_i = \frac{|P_i \cap G_2(P^*_i)|}{|P_i|} \geq (1-\alpha)(\frac{1}{2}-\alpha)$.
-Với kích thước mẫu $R_1 = \Theta\left(\frac{1}{1-2\alpha}\log\left(\frac{k}{\eta}\right)\right)$, xác suất để tập $U_i$ chứa ít nhất một điểm tốt $u_i \in G_2(P^*_i)$ là rất cao.
+Với kích thước mẫu $R_1 = \Theta\left(\frac{1}{1-2\alpha}\log\left(\frac{k}{\eta}\right)\right)$, xác suất để tập $U_i$ chứa ít nhất một điểm tốt $u_i \in G_2(P^*_i)$ là rất cao (xem chứng minh Hệ quả~\ref{cor:3}).
 % Áp dụng chặn hợp trên $k$ cụm, Hệ quả 3 (Corollary 3) khẳng định rằng với xác suất hằng số, điều này đúng cho mọi cụm $i \in [k]$. 
 
 
@@ -853,9 +877,9 @@ Vì thuật toán chọn $c_i$ để tối thiểu hóa $\omega$, ta có kết q
 
 \textbf{3. Tổng chi phí}
 
-Ta đánh giá tổng chi phí của giải pháp cuối cùng $C = \{\overline{I_1}, \dots, \overline{I_k}\}$. Tổng chi phí là tổng chi phí của từng cụm tối ưu $P^*_i$ được gán cho tâm tương ứng $\overline{I_i}$:
+Ta đánh giá tổng chi phí của nghiệm cuối cùng $C = \{\overline{I_1}, \dots, \overline{I_k}\}$. Tổng chi phí là tổng chi phí của từng cụm tối ưu $P^*_i$ được gán cho tâm tương ứng $\overline{I_i}$:
 \[ \delta^2(P, C) \leq \sum_{i=1}^k \delta^2(P^*_i, \overline{I_i}) \]
-Sử dụng kết quả trực tiếp từ Bổ đề 14 (Lemma 14), ta có chặn trên cho từng cụm:
+Sử dụng kết quả trực tiếp từ Bổ đề~\ref{lemma:p14}, ta có chặn trên cho từng cụm:
 \[ \delta^2(P^*_i, \overline{I_i}) \leq \left( 1 + \frac{O(\sqrt{\alpha})}{(1-\alpha)(1-(3+\epsilon)\alpha)} \right) \delta^2(P^*_i, c^*_i) \]
 Lấy tổng trên tất cả $k$ cụm:
 \[ \delta^2(P, C) \leq \left( 1 + \frac{O(\sqrt{\alpha})}{(1-\alpha)(1-(3+\epsilon)\alpha)} \right) \sum_{i=1}^k \delta^2(P^*_i, c^*_i) \]
@@ -873,6 +897,7 @@ Tổng hợp lại, độ phức tạp thời gian là $O(md) + \tilde{O}\left( 
 \end{proof}
 
 \begin{corollary}
+\label{cor:3}
 Cho kích thước mẫu $R_1 = \Theta\left( \frac{\log k}{1 - 2\alpha} \right)$. Với mỗi cụm dự đoán $i \in [k]$, với xác suất hằng số, tồn tại ít nhất một điểm dữ liệu $u$ trong tập mẫu $U_i$ sao cho $u \in G_2(P^*_i)$, trong đó $G_2(P^*_i)$ là tập hợp các điểm nằm gần tâm tối ưu.
 \end{corollary}
 
@@ -1103,6 +1128,7 @@ Kết luận:
 \end{proof}
 
 \begin{lemma}
+\label{lemma:p14}
 Tổng chi phí phân cụm của cụm tối ưu $P^*_i$ đối với trọng tâm $\overline{I_i}$ bị chặn bởi:
 \[ \delta^2(P^*_i, \overline{I_i}) \leq \left( 1 + 6\sqrt{\alpha} + \frac{36(\sqrt{\alpha} + \alpha)}{1-(3+\epsilon)\alpha} + \frac{9(\sqrt{\alpha}+\alpha)}{(1-\alpha)(1-(3+\epsilon)\alpha)} \right) \delta^2(P^*_i, c^*_i) \]
 \end{lemma}

@@ -48,14 +48,16 @@ Trong bước 3, đối với mỗi chiều của cụm dự đoán, thuật to�
 
 % END PB
 
-Sau đó, các khối này được chia tiếp thành hai nhóm dựa trên kích thước: $\mathcal{L}(u) = \{ \mathcal{B}_u^l : |\mathcal{B}_u^l| \geq \frac{\epsilon_1^2 \alpha m_i}{(1+\epsilon_1) \log(m_i\Delta_{max}^2)}, l \in [\gamma] \}$ là nhóm các khối lớn và $\mathcal{S}(u) = \{ \mathcal{B}_u^1, \dots, \mathcal{B}_u^\gamma \} \setminus \mathcal{L}(u)$ là nhóm các khối nhỏ. 
+Sau đó, các khối này được chia tiếp thành hai nhóm dựa trên kích thước: 
+
+$\mathcal{L}(u) = \{ \mathcal{B}_u^l : |\mathcal{B}_u^l| \geq \frac{\epsilon_1^2 \alpha m_i}{(1+\epsilon_1) \log(m_i\Delta_{max}^2)}, l \in [\gamma] \}$ là nhóm các khối lớn và $\mathcal{S}(u) = \{ \mathcal{B}_u^1, \dots, \mathcal{B}_u^\gamma \} \setminus \mathcal{L}(u)$ là nhóm các khối nhỏ. 
 
 \textbf{Sự hội tụ xác suất:}
 
 Mục tiêu là xấp xỉ tốt từng khối lớn trong $\mathcal{L}(u)$ đồng thời cho phép bỏ qua các tọa độ trong các khối nhỏ.
 
 \begin{enumerate}
-    \item \textbf{Biến ngẫu nhiên:} Đối với mỗi mẫu $p \in S_{ij}$, xét biến ngẫu nhiên chỉ thị cho việc $p$ rơi vào một khối cụ thể.
+    \item \textbf{Biến ngẫu nhiên:} Đối với mỗi $p \in S_{ij}$, xét biến ngẫu nhiên Bernoulli cho việc $p$ rơi vào một khối cụ thể.
     \item \textbf{Bất đẳng thức Chernoff:} Với kích thước mẫu $|S_{ij}|$ được chọn, kỳ vọng số điểm rơi vào mỗi khối lớn đủ lớn để xác suất sai lệch quá $\epsilon_1$ lần kỳ vọng bị chặn bởi một hàm mũ âm. Cụ thể, $Pr(|X - \mathbb{E}[X]| \geq \epsilon_1 \mathbb{E}[X]) \leq 2e^{-\epsilon_1^2 \mathbb{E}[X]/3}$.
     \item \textbf{Chặn hợp:} Bằng cách lấy tổng xác suất lỗi trên tất cả các khối và các tọa độ ứng viên, tác giả đảm bảo rằng bộ ước lượng $\omega$ hoạt động chính xác với xác suất cao trên toàn không gian ứng viên.
 \end{enumerate}
